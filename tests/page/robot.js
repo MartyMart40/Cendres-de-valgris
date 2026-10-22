@@ -7,7 +7,8 @@
   const STYLES = {
     feu: { sort: 'fire', poids: { fire: 4, combust: 3, mind: 1, vigor: 2, skin: 1, meteor: 2, embers: 1, cataclysm: 1, lore: 4, regen: 1, bulwark: 1, bastion: 1 } },
     givre: { sort: 'nova', poids: { nova: 4, combust: 3, mind: 2, vigor: 2, skin: 1, meteor: 1, embers: 1, cataclysm: 1, lore: 4, regen: 1, bulwark: 1, bastion: 1 } },
-    eclairs: { sort: 'chain', poids: { chain: 4, combust: 3, mind: 2, vigor: 2, skin: 1, meteor: 1, embers: 1, cataclysm: 1, lore: 4, regen: 1, bulwark: 1, bastion: 1 } },
+    // La chaîne d'éclairs est au palier 3 : comme un joueur, le robot ouvre la branche avec la boule de feu
+    eclairs: { sort: 'chain', poids: { chain: 4, fire: 1, combust: 3, mind: 2, vigor: 2, skin: 1, meteor: 1, embers: 1, cataclysm: 1, lore: 4, regen: 1, bulwark: 1, bastion: 1 } },
     tourbillon: { sort: 'whirl', poids: { whirl: 4, mastery: 3, thirst: 1, frenzy: 2, cry: 1, vigor: 2, skin: 2, execute: 1, avatar: 1, fury: 4, regen: 1, bulwark: 1, bastion: 1 } },
   };
   // Ordre des zones : acte I zones 0 à 5, puis acte II zones 0 à 5
@@ -35,7 +36,8 @@
       if (!best) { const any = Object.keys(SK).find(k => SK[k].pas && canRank(k)); if (!any) break; best = any; }
       rankUp(best, 1);
     }
-    const sort = STYLES[R.style].sort; if (p.sk[sort] && p.bar[0] !== sort) { const j = p.bar.indexOf(sort); if (j >= 0) p.bar[j] = p.bar[0]; p.bar[0] = sort; }
+    const sort = STYLES[R.style].sort; if (p.sk[sort]) marque('sort');
+    if (p.sk[sort] && p.bar[0] !== sort) { const j = p.bar.indexOf(sort); if (j >= 0) p.bar[j] = p.bar[0]; p.bar[0] = sort; }
     for (const id of ACTIVE) if (p.sk[id] && !p.bar.includes(id)) { const e = p.bar.indexOf(null); if (e >= 0) p.bar[e] = id; }
   }
 
@@ -43,6 +45,8 @@
   function auCamp() {
     doAct('best', {}); closePanel();
     for (let i = p.bag.length - 1; i >= 0; i--) { const it = p.bag[i]; if (compareItem(it) <= .5) { p.gold += it.val; p.bag.splice(i, 1); } }
+    // Sac encore plein (que des objets prometteurs) : vend le moins bon jusqu'à faire de la place, sinon il rentrerait en boucle
+    while ((!bagFits({ type: 'armor' }) || p.bag.length > 6) && p.bag.length) { let j = 0; p.bag.forEach((it, i) => { if (compareItem(it) < compareItem(p.bag[j])) j = i; }); p.gold += p.bag[j].val; p.bag.splice(j, 1); }
     while (p.pot < 10 && p.gold >= potPrice() + 40) doAct('buyp', {});
     while (p.scroll < 3 && p.gold >= scrollPrice() + 40) doAct('buys', {});
     closePanel(); depenser();
@@ -112,16 +116,22 @@
 
   function cibleMonstre(rayon) {
     const z = S.cur; let best = null, bd = rayon;
-    for (const m of z.mons) { if (m.dead || m.beaten || m.robotNon > S.t) continue; let d = dist(m, p); if (m.t === 'etendard') d -= 3; if (m.boss) d -= 1; if (m.aggro) d -= 1; if (d < bd) { bd = d; best = m; } }
-    return best;
+    for (const m of z.mons) { if (m.dead || m.beaten || m.robotNon > S.t) continue; let d = dist(m, p); if (m.t === 'etendard') d -= 3; if (m.boss) d -= 1; if (m.aggro) d -= 1; if (m === R.derniere) d -= 4; if (d < bd) { bd = d; best = m; } }
+    // Le robot garde sa cible tant qu'elle reste proche (sinon il hésite à la limite de sa vue)
+    R.derniere = best; return best;
   }
 
-  // Ligne de vue : aucun mur entre le héros et la cible
-  function vue(m) { const z = S.cur, n = Math.ceil(dist(m, p) * 3); for (let i = 1; i < n; i++) { const t = i / n; if (isWall(z, Math.floor(p.x + (m.x - p.x) * t), Math.floor(p.y + (m.y - p.y) * t))) return false; } return true; }
+  // Ligne de vue : aucun mur entre le héros et la cible, sur la largeur d'un projectile
+  // (sinon la boule de feu frôle un coin de mur, y explose, et le robot tire sans fin)
+  function vue(m) {
+    const z = S.cur, d = dist(m, p) || 1, n = Math.ceil(d * 4), ox = -(m.y - p.y) / d * .25, oy = (m.x - p.x) / d * .25;
+    for (const k of [-1, 0, 1]) for (let i = 1; i < n; i++) { const t = i / n; if (isWall(z, Math.floor(p.x + (m.x - p.x) * t + k * ox), Math.floor(p.y + (m.y - p.y) * t + k * oy))) return false; }
+    return true;
+  }
 
   function combattre(m) {
     const st = STYLES[R.style], d = dist(m, p);
-    if (!vue(m) && d > 1.2) { if (p.hp < p.maxHp * .45 && p.pot > 0) drink(); if (!allerVers(m.x, m.y)) m.robotNon = S.t + 10; return; }
+    if (!vue(m) && d > 1.2) { if (p.hp < p.maxHp * .45 && p.pot > 0) drink(); if (!allerVers(m.x, m.y) || !p.path) m.robotNon = S.t + 10; return; } // sans chemin ni vue, sinon le robot resterait planté là
     if (p.hp < p.maxHp * .45 && p.pot > 0) drink();
     if (p.hp < p.maxHp * .35 && skLvl('aegis') && !(p.cds.aegis > 0)) castSkill('aegis');
     for (const id of p.bar) { if (!id || id === st.sort) continue;
@@ -140,7 +150,8 @@
     // Une fois décidé, le robot garde son objet en vue (sinon il hésite à la limite des 9 cases)
     if (R.visee && R.visee !== best && z.items.includes(R.visee) && !R.visee.robotNon && Math.hypot(R.visee.x - p.x, R.visee.y - p.y) < 14) { best = R.visee; bd = Math.hypot(best.x - p.x, best.y - p.y); }
     if (!best) return false;
-    if ((R.essais = best === R.visee ? (R.essais || 0) + 1 : 0) > 150) { best.robotNon = true; return false; }
+    // Essais comptés sur l'objet lui-même : un objet à la limite de la vue ne fait plus hésiter le robot sans fin
+    if ((best.robotEssais = (best.robotEssais || 0) + 1) > 150) { best.robotNon = true; return false; }
     // Arrivé sur la case sans le ramasser (objet posé au bord), ou inatteignable : le robot passe son chemin
     if ((!p.path || !p.path.length) && bd < 1.5 && R.visee === best) { best.robotNon = true; return false; }
     R.visee = best; if (!allerVers(best.x, best.y)) { best.robotNon = true; return false; } return true;
@@ -164,8 +175,8 @@
     if (z.def.last && parseZ(z.id) && parseZ(z.id).a === 2) marque('sanctuaire');
     if (S.q.q3.s >= 2) marque('varsha');
     if (z.id === 'rift') marque('failles');
-    // Retour au camp : sac plein ou plus de fioles et blessé
-    if (R.retour || (!bagFits({ type: 'armor' }) && p.bag.length > 8) || (p.pot === 0 && p.hp < p.maxHp * .5)) {
+    // Retour au camp : sac plein (pas en pleine faille, qui repartirait à zéro) ou plus de fioles et blessé
+    if (R.retour || (z.id !== 'rift' && !bagFits({ type: 'armor' }) && p.bag.length > 8) || (p.pot === 0 && p.hp < p.maxHp * .5)) {
       R.retour = true; const m = cibleMonstre(2.5); if (m) combattre(m); else rentrer(); return;
     }
     const m = cibleMonstre(z.id === 'rift' || b.chasse || b.boss || b.mini || z.arena && !z.arena.done ? 9 : 6);
@@ -192,6 +203,9 @@
         // Coincé = immobile sans que les monstres de la zone perdent de la vie
         const vie = S.cur.mons.reduce((a, m) => a + (m.dead ? 0 : m.hp + (m.shell || 0)), 0) + S.cur.mons.filter(m => m.dead).length * 1e9;
         if (Math.hypot(p.x - R.dernier.x, p.y - R.dernier.y) < .05 && !S.paused && vie === R.vie) R.bloque += .2; else { R.bloque = 0; R.dernier = { x: p.x, y: p.y }; }
+        // Tourne en rond = bouge, mais aucun monstre vivant de la zone ne perd de vie pendant 40 s
+        if (vie === R.vie && !S.paused && S.cur.id !== 'town' && S.cur.mons.some(m => !m.dead)) R.rond = (R.rond || 0) + .2; else R.rond = 0;
+        if (R.rond > 40) { R.rond = 0; R.tourne = (R.tourne || 0) + 1; if (!R.premierTourne) R.premierTourne = R.journal.slice(-12); closePanel(); enterZone('town', 'spawn'); }
         R.vie = vie;
         if (R.bloque > 15) { R.bloque = 0; R.coince = (R.coince || 0) + 1; if (!R.premierCoince) R.premierCoince = R.journal.slice(-12); if (S.cur.id !== 'town') { if (p.scroll > 0) useScroll(); else { closePanel(); enterZone('town', 'spawn'); } } }
       }
@@ -205,7 +219,7 @@
   }
 
   function bilan() {
-    return { style: R.style, min: +(R.t / 60).toFixed(1), niveau: p.lvl, morts: S.deaths || 0, failleMax: S.riftMax, zone: S.cur.id, etapes: R.etapes, coince: R.coince || 0, fini: R.fini, erreur: R.erreur || null, puissance: Math.round(powerOf(p.st, p.lvl)) };
+    return { style: R.style, min: +(R.t / 60).toFixed(1), niveau: p.lvl, morts: S.deaths || 0, failleMax: S.riftMax, zone: S.cur.id, etapes: R.etapes, coince: R.coince || 0, tourne: R.tourne || 0, fini: R.fini, erreur: R.erreur || null, puissance: Math.round(powerOf(p.st, p.lvl)), sort: skLvl(STYLES[R.style].sort) };
   }
 
   window.ROBOT = { demarrer, jouer, bilan, STYLES, etat: () => R };

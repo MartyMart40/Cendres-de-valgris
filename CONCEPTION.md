@@ -121,7 +121,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - Portail d'invasion : un portail s'ouvre sans prévenir en pleine zone, et des monstres d'un autre thème (exemple : licornes) envahissent. Un compte à rebours démarre pour fermer le portail. En cas d'échec, la zone se transforme dans le thème envahisseur, avec des monstres plus durs et un meilleur butin, jusqu'à ce qu'on la quitte. L'échec reste amusant, il ne punit pas la progression.
 
-## État actuel du jeu (v5.9)
+## État actuel du jeu (v5.10)
 
 ### Monde
 
@@ -157,6 +157,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Un ultime par branche (Avatar des Cendres, Cataclysme, Égide divine) et un talent sans fin par branche.
 - Rangs jusqu'à 1 000 000. Points : 1 par niveau, 1 de plus tous les 5 niveaux, 1 par nouvelle faille vaincue.
 - Barre de 4 compétences.
+- Sorts des 4 styles (v5.10) : Boule de feu 170 % (+17 % par rang, 6 mana) ; Nova de givre 130 % (+12 %, 10 mana) ; Chaîne d'éclairs 95 % (+9,5 %, 9 mana), sur 3 ennemis plus 1 tous les 5 rangs, 9 au plus ; Tourbillon 230 % (+23 %, 10 mana).
 
 ### Autres
 
@@ -176,16 +177,16 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Acte I (v5.5) : zones de niveau 1 à 7, antre niveau 10, Varsha niveau 12 avec 1200 points de vie de base. Acolytes : un niveau au-dessus de leur zone, 200 à 320 points de vie de base, butin de boss. Arène : 4 vagues de 5, 7, 9 et 11 monstres. Mesure du robot (style Feu, sans esquive) : antre atteinte en 9 min au niveau 11, Varsha battue en 60 s. Le robot joue plus vite qu'un humain : ces chiffres servent à comparer les versions, pas à prédire les 4 heures visées.
 - Acte II (v5.6) : zones de niveau 11 à 17, Sanctuaire niveau 19, Valgris niveau 20 avec 1000 points de vie de base (9 729 au niveau 20 ; le document disait 18 000 par erreur, corrigé au transfert). Lieutenants : 260 à 380 points de vie de base, un niveau au-dessus de leur zone. Mesure du robot (Feu, sans esquive, 5 parties) : acte II atteint vers 10 min au niveau 12, Valgris vers 20 min au niveau 19, amené à zéro 5 fois sur 5 en 60 à 280 s (médiane d'environ 2 minutes), 0 à 7 morts selon le butin trouvé.
 - Monde 2 (v5.8) : même gabarit d'actes, niveaux +17 (acte I de 18 à 24, antre 27, Varsha des Glaces niveau 29), vie des monstres × 1,25, dégâts × 1,12, vie des boss d'acte × 0,55 en plus. Robot (Feu, sans esquive) : arrivée niveau 22, 0 à 2 morts sur la route, Varsha des Glaces battue 3 fois sur 3 en 1,5 à 5,5 min (0 à 7 morts). Un robot qui rush le monde 1 met 10 à 22 min contre elle : le rush est puni comme prévu.
-- Mesures de référence du nouveau robot du dépôt (v5.8, graine 1, 2 heures de jeu simulé). Ce robot n'est pas celui des versions d'avant : ses chiffres servent de point de comparaison à partir d'ici.
+- Mesures de référence du robot (v5.10, graine 1, 2 heures de jeu simulé). Le robot a été corrigé en v5.10 (voir le journal) : ses chiffres d'avant ne se comparent plus.
 
   | Style | Antre | Varsha | Valgris à zéro | Niveau à 2 h | Faille à 2 h | Morts |
   | --- | --- | --- | --- | --- | --- | --- |
-  | Feu | 11,5 min | 12,0 min | 21,3 min | 64 | 61 | 1 |
-  | Givre | 12,8 min | 13,2 min | 20,2 min | 56 | 53 | 1 |
-  | Éclairs | 10,1 min | 10,8 min | 19,6 min | 49 | 42 | 1 |
-  | Tourbillon | 7,9 min | 8,4 min | 17,5 min | 59 | 58 | 0 |
+  | Feu | 19,8 min | 20,6 min | 29,6 min | 65 | 63 | 0 |
+  | Givre | 7,7 min | 8,3 min | 16,6 min | 69 | 70 | 1 |
+  | Éclairs | 7,8 min | 8,3 min | 14,8 min | 73 | 71 | 4 |
+  | Tourbillon | 8,7 min | 9,2 min | 14,1 min | 66 | 65 | 1 |
 
-  Feu est dans la cible (faille 60 à 70). Écart entre styles : 45 %, au-dessus de la cible de 20 % (Éclairs traîne).
+  Écart entre styles : 13 % avec la graine 1. Sur 3 graines (1, 2 et 3), faille moyenne à 2 h : Éclairs 73, Givre 69, Feu 65, Tourbillon 61, soit 19 % d'écart (cible : moins de 20 %). Une graine seule peut aller jusqu'à 29 % : comparer les styles sur plusieurs graines (`node tests/robot.js --graine 2`). Tous les styles sont dans la cible de faille 60 à 70 ou juste au-dessus. Avec la graine 1, le robot Feu perd du temps dans l'acte I (il se coince), d'où son antre tardive.
 
 ## Méthode de travail
 
@@ -198,8 +199,8 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
   - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
   - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
 - Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
-  - Banc d'essai : 118 tests en 14 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
-  - Robot (`tests/robot.js`) : joue les deux actes puis les failles, 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres.
+  - Banc d'essai : 133 tests en 15 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Robot (`tests/robot.js`) : joue les deux actes puis les failles, 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres (à une faille près quand l'ordinateur est très chargé). Le bilan signale un robot « coincé » (immobile) ou qui « tourne en rond » (aucun dégât pendant 40 s), et un style dont le sort n'a jamais été débloqué.
   - Rendu en image (`tests/rendu.js`) : 7 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
   - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
 - Outils : Node.js portable dans `C:\Users\martin.laliberte\outils\node`, installé sans droits d'administrateur. Les tests pilotent Edge, déjà sur l'ordinateur.
@@ -250,12 +251,14 @@ Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change p
 - [x] (corrigé en v5.9) Ancienne partie convertie : les points de talent sont remboursés, mais le message « Nouvel arbre de talents » ne s'affiche jamais (il est mis en attente juste avant l'entrée au camp, qui vide les messages en attente).
 - [x] (corrigé en v5.9) Les récompenses des quêtes 2 et 3 donnent 3 fioles sans respecter le maximum de 15 (la quête 4, elle, le respecte). En fait seule la quête 2 était en cause : la quête 3 ne donne pas de fioles.
 - [ ] À vérifier au doigt : un objet tombé au bord d'une case peut ne pas se ramasser quand on le touche, car le héros s'arrête au centre de la case (le robot s'y est fait prendre).
-- [ ] Équilibre des styles : avec le robot du dépôt, Éclairs est 49 % derrière Feu à 2 heures en v5.9 (45 % en v5.8 ; cible : moins de 20 %).
+- [x] (réglé en v5.10) Équilibre des styles : avec le robot du dépôt, Éclairs était 49 % derrière Feu à 2 heures en v5.9 (cible : moins de 20 %). Cause principale : le robot Éclairs ne débloquait jamais la Chaîne d'éclairs.
+- [ ] Robot : avec la graine 1, le robot Feu se coince encore une trentaine de fois dans l'acte I (antre vers 20 min au lieu de 10). À examiner, sans urgence.
 
 ## Journal des versions
 
 | Version | Contenu |
 | --- | --- |
+| v5.10 | Chantier Moteur et équilibre : équilibre des 4 styles. Le robot avait plusieurs défauts qui faussaient les mesures, corrigés : le robot Éclairs ne débloquait jamais la Chaîne d'éclairs (il jouait toute la partie avec la Boule de feu de départ) ; il quittait une faille en cours quand son sac était plein (la faille repartait à zéro) ; il hésitait sans fin entre deux objets ou deux monstres à la limite de sa vue ; il tirait dans un coin de mur. Nouveau filet de sécurité : un robot qui tourne en rond 40 s rentre au camp et c'est signalé. Réglages du jeu : Boule de feu 150 à 170 % (+17 par rang), Tourbillon 150 à 230 % (+23 par rang), Chaîne d'éclairs 115 à 95 % (+9,5 par rang) et 9 ennemis au plus au lieu de 15, Nova de givre 12 à 10 mana. Écart entre styles : 19 % en moyenne sur 3 graines (13 % avec la graine 1). 133 tests réussis (15 nouveaux, suite « styles »). |
 | v5.9 | Chantier Moteur et équilibre : deux bogues trouvés au transfert. Une ancienne partie convertie affiche enfin le message « Nouvel arbre de talents » (il était effacé à l'entrée au camp) ; après une conversion v1, il vient juste après « Nouvelle version ». La récompense de la quête 2 respecte le maximum de 15 fioles, comme la quête 4. 118 tests réussis (5 nouveaux). Robot : Feu inchangé (faille 61), Tourbillon inchangé ; Givre faille 52 (53 avant), Éclairs faille 41 (42 avant), car le robot ne garde plus de fioles au-delà de 15. Écart entre styles : 49 %. |
 | Transfert (v5.8) | Passage à GitHub et Claude Code, aucun changement de jeu. Le fichier unique est découpé en 39 fichiers selon les catalogues (chaque ligne de la v5.8 retrouvée une seule fois, intacte). Banc d'essai de 113 tests, robot (2 actes puis failles, 2 heures, 4 styles) et rendu en image enregistrés dans le dépôt, lancés par `npm test`. Comparaison avec la v5.8 d'un seul fichier : 113 tests réussis des deux côtés, robot identique au chiffre près, 7 images identiques au pixel près. Jeu en ligne sur GitHub Pages. Vie de Valgris corrigée dans ce document (9 729, pas 18 000). |
 | v5.8 | Passage au monde suivant. « Accepter le défi » mène au monde 2, Givre éternel : camp Refuge de Brumegel (Vieille Maren, Torvald, Sœur Nivé, Kolbe), zones et monstres au thème du givre (mêmes comportements, nouvelles allures), Varsha des Glaces, nouvelles répliques de Valgris. Saut de difficulté (niveaux +17, vie × 1,25, dégâts × 1,12). Gros butin à l'arrivée. Quêtes et acolytes propres à chaque monde ; voyage entre mondes par la pierre de faille. 113 tests réussis. |

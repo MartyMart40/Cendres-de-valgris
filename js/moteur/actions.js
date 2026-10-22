@@ -32,10 +32,10 @@ function castSkill(id,tx,ty,free){
     if(p.mp<cost){say('Pas assez de mana.');return false;}p.mp-=cost;p.cd=.35;if(sk.cd)p.cds[id]=sk.cd;}
   if(tx==null){const a=autoAim();tx=a.x;ty=a.y;}if(!free)sfx('cast');
   const dx=tx-p.x,dy=ty-p.y,ln=Math.hypot(dx,dy)||1;p.face=Math.atan2(dy,dx);p.swing=.2;
-  if(id==='fire'){const mult=1.5+.15*(l-1),n=p.st.legs.fire3?3:1;for(let k=0;k<n;k++){const a=Math.atan2(dy,dx)+(k-(n-1)/2)*.28;S.proj.push({x:p.x+Math.cos(a)*.4,y:p.y+Math.sin(a)*.4,vx:Math.cos(a)*9,vy:Math.sin(a)*9,from:'p',kind:'fire',mult,life:1.4});}}
+  if(id==='fire'){const mult=1.7+.17*(l-1),n=p.st.legs.fire3?3:1;for(let k=0;k<n;k++){const a=Math.atan2(dy,dx)+(k-(n-1)/2)*.28;S.proj.push({x:p.x+Math.cos(a)*.4,y:p.y+Math.sin(a)*.4,vx:Math.cos(a)*9,vy:Math.sin(a)*9,from:'p',kind:'fire',mult,life:1.4});}}
   else if(id==='nova'){const mult=(1.3+.12*(l-1))*(p.st.legs.freeNova?1.4:1);S.novas.push({x:p.x,y:p.y,r:0,max:3.6,col:'170,220,255'});for(const m of S.cur.mons){if(m.dead)continue;if(dist(m,p)<3.6){hitMon(m,mult,true,'#9fd4ff');m.slow=2.5;}}}
-  else if(id==='whirl'){const mult=1.5+.15*(l-1);p.spin=.4;S.novas.push({x:p.x,y:p.y,r:0,max:2.7,col:'240,230,210'});for(const m of S.cur.mons)if(!m.dead&&dist(m,p)<2.6+m.size*.3)hitMon(m,mult,false);}
-  else if(id==='chain'){const mult=1.15+.11*(l-1),n=3+Math.min(12,Math.floor(l/3));let from={x:p.x,y:p.y},hit=new Set();let cur=(p.target&&!p.target.dead&&dist(p.target,p)<9)?p.target:nearestMon(tx,ty,4)||nearestMon(p.x,p.y,8);
+  else if(id==='whirl'){const mult=2.3+.23*(l-1);p.spin=.4;S.novas.push({x:p.x,y:p.y,r:0,max:2.7,col:'240,230,210'});for(const m of S.cur.mons)if(!m.dead&&dist(m,p)<2.6+m.size*.3)hitMon(m,mult,false);}
+  else if(id==='chain'){const mult=.95+.095*(l-1),n=3+Math.min(6,Math.floor(l/5));let from={x:p.x,y:p.y},hit=new Set();let cur=(p.target&&!p.target.dead&&dist(p.target,p)<9)?p.target:nearestMon(tx,ty,4)||nearestMon(p.x,p.y,8);
     for(let k=0;k<n&&cur;k++){S.bolts.push({a:{x:from.x,y:from.y},b:{x:cur.x,y:cur.y},t:.25});hit.add(cur);hitMon(cur,k&&hit.size===1?mult*.5:mult,true,'#bfe0ff');from=cur;cur=nearestMon(cur.x,cur.y,5,hit)||(k<2&&!cur.dead?cur:null);}}
   else if(id==='cry'){p.buff=8*(p.st.legs.warlord?2:1);p.buffPct=25+5*(l-1);S.novas.push({x:p.x,y:p.y,r:0,max:3,col:'255,200,90'});toast('Cri de guerre');}
   else if(id==='meteor'){const r=Math.min(ln,9);S.mets.push({x:p.x+dx/ln*r,y:p.y+dy/ln*r,t:.8,mult:3.2+.28*(l-1)});}

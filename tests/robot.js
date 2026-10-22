@@ -34,7 +34,7 @@ async function roulerRobot({ reference = false, styles = ['feu', 'givre', 'eclai
 function resume(parties) {
   const l = ['style       niveau  faille  morts  antre      Varsha     acte II    Valgris'];
   const e = (b, k) => b.etapes[k] ? `${b.etapes[k].min} min`.padEnd(11) : '-'.padEnd(11);
-  for (const b of parties) l.push(`${b.style.padEnd(12)}${String(b.niveau).padEnd(8)}${String(b.failleMax).padEnd(8)}${String(b.morts).padEnd(7)}${e(b, 'antre')}${e(b, 'varsha')}${e(b, 'acte2')}${e(b, 'valgris')}${b.erreur ? '  ERREUR' : ''}${b.coince ? `  (coincé ${b.coince} fois)` : ''}`);
+  for (const b of parties) l.push(`${b.style.padEnd(12)}${String(b.niveau).padEnd(8)}${String(b.failleMax).padEnd(8)}${String(b.morts).padEnd(7)}${e(b, 'antre')}${e(b, 'varsha')}${e(b, 'acte2')}${e(b, 'valgris')}${b.erreur ? '  ERREUR' : ''}${b.coince ? `  (coincé ${b.coince} fois)` : ''}${b.tourne ? `  (tourne en rond ${b.tourne} fois)` : ''}${b.sort ? '' : '  (SORT DU STYLE JAMAIS DÉBLOQUÉ)'}`);
   const f = parties.map(b => b.failleMax), ecart = f.length > 1 ? (Math.max(...f) / Math.max(1, Math.min(...f)) - 1) * 100 : 0;
   l.push(`Écart entre styles (faille la plus haute) : ${ecart.toFixed(0)} %`);
   return l.join('\n');
