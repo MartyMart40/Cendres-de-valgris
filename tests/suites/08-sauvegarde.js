@@ -28,11 +28,24 @@ test('une sauvegarde abîmée ne bloque pas le jeu', () => {
   localStorage.clear(); localStorage.setItem(SAVE, '{pas du json'); egal(loadSave(), null);
   startGame(loadSave()); egal([S.cur.id, p.lvl], ['town', 1]);
 });
-// Bogue connu de la v5.8 : le message « Nouvel arbre de talents » est mis en attente avant
-// l'entrée au camp, qui vide les messages en attente. Il ne s'affiche donc jamais.
 test('ancien arbre de compétences : points remboursés', () => {
   nouvellePartie(); heros(20); save(); const sv = loadSave(); sv.p.tv = 1; sv.p.sk = { fire: 9, nova: 9, vieux: 4 }; sv.p.pts = 0;
   startGame(sv); egal(p.sk, { fire: 1, nova: 1 }); egal(p.pts, ptsEarned()); egal(p.tv, 2); egal(p.bar, ['fire', 'nova', null, null]);
+});
+// Corrigé en v5.9 : le message était mis en attente avant l'entrée au camp, qui vidait les messages.
+test('ancien arbre de compétences : le message « Nouvel arbre de talents » s’affiche après la conversion', () => {
+  nouvellePartie(); heros(20); save(); const sv = loadSave(); sv.p.tv = 1; sv.p.sk = { fire: 9 }; sv.p.pts = 0;
+  startGame(sv); ok(!panneauOuvert(), 'message affiché trop tôt'); avancer(1.5);
+  ok(textePanneau().includes('Nouvel arbre de talents'), 'pas de message'); ok(textePanneau().includes(String(p.pts)), 'nombre de points absent');
+  cliquer('tab', { t: 'comp' }); ok(panneauOuvert(), 'l’onglet Talents ne s’ouvre pas');
+});
+test('arbre déjà à jour : pas de message « Nouvel arbre de talents »', () => {
+  nouvellePartie(); heros(20); recharger(); avancer(2); ok(!textePanneau().includes('Nouvel arbre'), 'message en trop');
+});
+test('conversion v1 : « Nouvelle version » puis « Nouvel arbre de talents », l’un après l’autre', () => {
+  localStorage.clear(); localStorage.setItem(SAVE_OLD, JSON.stringify({ p: { lvl: 6, gold: 50, pot: 3, scroll: 1 }, q: { q1: { s: 3, n: 12 } }, wps: { town: 1, plain: 1 }, done: false }));
+  startGame(loadSave()); avancer(1.5); ok(textePanneau().includes('Nouvelle version'), 'premier message absent');
+  cliquer('close'); avancer(1); ok(textePanneau().includes('Nouvel arbre de talents'), 'second message absent');
 });
 test('objets qui se chevauchent dans le sac : rangés ailleurs, aucun perdu', () => {
   nouvellePartie(); save(); const sv = loadSave();

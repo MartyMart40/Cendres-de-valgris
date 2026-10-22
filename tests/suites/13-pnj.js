@@ -27,3 +27,15 @@ test('la pierre de faille ne répond qu’après Varsha', async () => {
   nouvellePartie(); const r = objetsDe('rift')[0]; egal(await toucher(r), false, 'la pierre répond avant Varsha');
   quete('q3', 3); ok(await toucher(r), 'la pierre ne répond pas'); ok(textePanneau().includes('Pierre de faille'));
 });
+
+// Corrigé en v5.9 : la récompense de la quête 2 dépassait le maximum de fioles.
+test('récompenses de quêtes : jamais plus de fioles que le maximum', () => {
+  const max = POTIONS.fiole.max;
+  for (const [k, s] of [['q2', 2], ['q4', 2]]) for (const depart of [0, max - 2, max]) {
+    nouvellePartie(); quete(k, s); p.pot = depart; QUESTS[k].ret(); closePanel(); egal(p.pot, Math.min(max, depart + 3), k + ' depuis ' + depart);
+  }
+});
+test('récompense de la quête 2 par le dialogue de Corvel, sac de fioles plein', async () => {
+  nouvellePartie(); quete('q1', 3); battreAcolytes(1, 2); quete('q2', 2); p.pot = POTIONS.fiole.max;
+  ok(await toucher(pnj('corvel')), 'pas de dialogue'); cliquer('qret'); egal([p.pot, S.q.q2.s], [POTIONS.fiole.max, 3]);
+});

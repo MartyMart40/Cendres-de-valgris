@@ -121,7 +121,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - Portail d'invasion : un portail s'ouvre sans prévenir en pleine zone, et des monstres d'un autre thème (exemple : licornes) envahissent. Un compte à rebours démarre pour fermer le portail. En cas d'échec, la zone se transforme dans le thème envahisseur, avec des monstres plus durs et un meilleur butin, jusqu'à ce qu'on la quitte. L'échec reste amusant, il ne punit pas la progression.
 
-## État actuel du jeu (v5.8)
+## État actuel du jeu (v5.9)
 
 ### Monde
 
@@ -198,7 +198,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
   - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
   - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
 - Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
-  - Banc d'essai : 113 tests en 14 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Banc d'essai : 118 tests en 14 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
   - Robot (`tests/robot.js`) : joue les deux actes puis les failles, 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres.
   - Rendu en image (`tests/rendu.js`) : 7 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
   - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
@@ -247,15 +247,16 @@ En attente : tutoriel court au premier lancement.
 
 Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change pas le jeu) :
 
-- [ ] Ancienne partie convertie : les points de talent sont remboursés, mais le message « Nouvel arbre de talents » ne s'affiche jamais (il est mis en attente juste avant l'entrée au camp, qui vide les messages en attente).
-- [ ] Les récompenses des quêtes 2 et 3 donnent 3 fioles sans respecter le maximum de 15 (la quête 4, elle, le respecte).
+- [x] (corrigé en v5.9) Ancienne partie convertie : les points de talent sont remboursés, mais le message « Nouvel arbre de talents » ne s'affiche jamais (il est mis en attente juste avant l'entrée au camp, qui vide les messages en attente).
+- [x] (corrigé en v5.9) Les récompenses des quêtes 2 et 3 donnent 3 fioles sans respecter le maximum de 15 (la quête 4, elle, le respecte). En fait seule la quête 2 était en cause : la quête 3 ne donne pas de fioles.
 - [ ] À vérifier au doigt : un objet tombé au bord d'une case peut ne pas se ramasser quand on le touche, car le héros s'arrête au centre de la case (le robot s'y est fait prendre).
-- [ ] Équilibre des styles : avec le robot du dépôt, Éclairs est 45 % derrière Feu à 2 heures (cible : moins de 20 %).
+- [ ] Équilibre des styles : avec le robot du dépôt, Éclairs est 49 % derrière Feu à 2 heures en v5.9 (45 % en v5.8 ; cible : moins de 20 %).
 
 ## Journal des versions
 
 | Version | Contenu |
 | --- | --- |
+| v5.9 | Chantier Moteur et équilibre : deux bogues trouvés au transfert. Une ancienne partie convertie affiche enfin le message « Nouvel arbre de talents » (il était effacé à l'entrée au camp) ; après une conversion v1, il vient juste après « Nouvelle version ». La récompense de la quête 2 respecte le maximum de 15 fioles, comme la quête 4. 118 tests réussis (5 nouveaux). Robot : Feu inchangé (faille 61), Tourbillon inchangé ; Givre faille 52 (53 avant), Éclairs faille 41 (42 avant), car le robot ne garde plus de fioles au-delà de 15. Écart entre styles : 49 %. |
 | Transfert (v5.8) | Passage à GitHub et Claude Code, aucun changement de jeu. Le fichier unique est découpé en 39 fichiers selon les catalogues (chaque ligne de la v5.8 retrouvée une seule fois, intacte). Banc d'essai de 113 tests, robot (2 actes puis failles, 2 heures, 4 styles) et rendu en image enregistrés dans le dépôt, lancés par `npm test`. Comparaison avec la v5.8 d'un seul fichier : 113 tests réussis des deux côtés, robot identique au chiffre près, 7 images identiques au pixel près. Jeu en ligne sur GitHub Pages. Vie de Valgris corrigée dans ce document (9 729, pas 18 000). |
 | v5.8 | Passage au monde suivant. « Accepter le défi » mène au monde 2, Givre éternel : camp Refuge de Brumegel (Vieille Maren, Torvald, Sœur Nivé, Kolbe), zones et monstres au thème du givre (mêmes comportements, nouvelles allures), Varsha des Glaces, nouvelles répliques de Valgris. Saut de difficulté (niveaux +17, vie × 1,25, dégâts × 1,12). Gros butin à l'arrivée. Quêtes et acolytes propres à chaque monde ; voyage entre mondes par la pierre de faille. 113 tests réussis. |
 | v5.7 | Nouvelle fin de Valgris, à la demande de Martin : il ne plie plus. À zéro de vie, il tombe (« Valgris est tombé », le héros pense « Enfin… j'ai réussi »), puis se relève sous sa vraie forme : une immensité de cendre, d'ailes et de lumière blanche, couronnée de feu. Il dit que ce n'était qu'un test et que d'autres l'attendent. Scène d'environ 7 s, héros intouchable. Correction de grammaire. 96 tests réussis. |

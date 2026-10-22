@@ -26,11 +26,12 @@ function startGame(sv){
   curWorld().acts.forEach((a,i)=>{const q=a.quest&&S.q[a.quest];if(q&&q.s===1&&acoCount(i+1)>=acoNeed(i+1))q.s=2;});
   if(!p.stash)p.stash=[[],[],[],[]];S.stab=0;
   while(p.bar.length<4)p.bar.push(null);
-  if(sv&&sv.p.tv!==2){resetTree();S.pend.push({t:1.2,fn:()=>openPanel(`<h2>Nouvel arbre de talents</h2><p>Les compétences sont maintenant un arbre de 26 talents en trois branches, avec des ultimes et des talents sans fin. Tes points ont été remboursés : tu en as <b>${p.pts}</b> à placer.</p><p class="st">Menu, onglet Talents.</p><button data-a="tab" data-t="comp">Voir l’arbre</button><button data-a="close">Plus tard</button>`)});}
+  let treeMsg=null;if(sv&&sv.p.tv!==2){resetTree();treeMsg={t:1.2,fn:()=>openPanel(`<h2>Nouvel arbre de talents</h2><p>Les compétences sont maintenant un arbre de 26 talents en trois branches, avec des ultimes et des talents sans fin. Tes points ont été remboursés : tu en as <b>${p.pts}</b> à placer.</p><p class="st">Menu, onglet Talents.</p><button data-a="tab" data-t="comp">Voir l’arbre</button><button data-a="close">Plus tard</button>`)};}
   S.riftSel=S.riftMax;
   recalc();p.hp=p.maxHp;p.mp=p.maxMp;
   $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');
   enterZone('town','spawn');
+  if(treeMsg)S.pend.push(treeMsg);
   if(!sv)S.pend.push({t:.9,fn:()=>say(`Parle à ${npcA('corvel').replace(/<\/?b>/g,'')}, près du feu.`)});
   if(sv&&sv.migr)S.pend.push({t:1,fn:()=>openPanel('<h2>Nouvelle version</h2><p>Le jeu a maintenant dix emplacements d’équipement, des compétences et des failles sans fin. Ton niveau et tes quêtes sont gardés. Ton ancien équipement est remplacé par un équipement neuf et 200 pièces d’or.</p><p class="st">Tu as des points de compétence à placer dans Menu, onglet Compétences.</p><button data-a="close">Compris</button>')});
 }
