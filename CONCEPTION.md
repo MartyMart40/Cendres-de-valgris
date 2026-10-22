@@ -6,7 +6,8 @@ Document de référence du jeu. Chaque chantier le lit au début et le met à jo
 
 ## Liens
 
-- Dépôt : https://github.com/MartyMart40/Cendres-de-valgris (seule source de vérité depuis la v5.8).
+- Jouer (téléphone ou ordinateur) : https://martymart40.github.io/Cendres-de-valgris/ (GitHub Pages, mis à jour tout seul à chaque envoi sur GitHub).
+- Dépôt : https://github.com/MartyMart40/Cendres-de-valgris (public, seule source de vérité depuis la v5.8).
 - Archives, à ne plus modifier : l'ancien artefact du jeu (https://claude.ai/artifact/R197THvp93MsnVjV9UxNoM) et l'ancien Claude Doc de conception (https://claude.ai/artifact/V9aKNqAvSoWKEfmtQd3ZKA).
 - Un seul chantier modifie le jeu à la fois.
 
@@ -173,16 +174,37 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Objectif mesuré par le robot : environ la faille 60 à 70 après 2 heures, avec un mur qui commence vers 45 à 55. Les 4 styles (Tourbillon, Feu, Givre, Éclairs) doivent rester à moins de 20 % d'écart.
 - Durées cibles du monde 1 : Varsha vers 4 heures, Valgris vers 8 heures, en ayant battu les mini-boss. Le robot doit aussi vérifier qu'un joueur qui rush est trop faible pour le monde suivant.
 - Acte I (v5.5) : zones de niveau 1 à 7, antre niveau 10, Varsha niveau 12 avec 1200 points de vie de base. Acolytes : un niveau au-dessus de leur zone, 200 à 320 points de vie de base, butin de boss. Arène : 4 vagues de 5, 7, 9 et 11 monstres. Mesure du robot (style Feu, sans esquive) : antre atteinte en 9 min au niveau 11, Varsha battue en 60 s. Le robot joue plus vite qu'un humain : ces chiffres servent à comparer les versions, pas à prédire les 4 heures visées.
-- Acte II (v5.6) : zones de niveau 11 à 17, Sanctuaire niveau 19, Valgris niveau 20 avec 1000 points de vie de base (environ 18 000 au niveau 20). Lieutenants : 260 à 380 points de vie de base, un niveau au-dessus de leur zone. Mesure du robot (Feu, sans esquive, 5 parties) : acte II atteint vers 10 min au niveau 12, Valgris vers 20 min au niveau 19, amené à zéro 5 fois sur 5 en 60 à 280 s (médiane d'environ 2 minutes), 0 à 7 morts selon le butin trouvé.
+- Acte II (v5.6) : zones de niveau 11 à 17, Sanctuaire niveau 19, Valgris niveau 20 avec 1000 points de vie de base (9 729 au niveau 20 ; le document disait 18 000 par erreur, corrigé au transfert). Lieutenants : 260 à 380 points de vie de base, un niveau au-dessus de leur zone. Mesure du robot (Feu, sans esquive, 5 parties) : acte II atteint vers 10 min au niveau 12, Valgris vers 20 min au niveau 19, amené à zéro 5 fois sur 5 en 60 à 280 s (médiane d'environ 2 minutes), 0 à 7 morts selon le butin trouvé.
 - Monde 2 (v5.8) : même gabarit d'actes, niveaux +17 (acte I de 18 à 24, antre 27, Varsha des Glaces niveau 29), vie des monstres × 1,25, dégâts × 1,12, vie des boss d'acte × 0,55 en plus. Robot (Feu, sans esquive) : arrivée niveau 22, 0 à 2 morts sur la route, Varsha des Glaces battue 3 fois sur 3 en 1,5 à 5,5 min (0 à 7 morts). Un robot qui rush le monde 1 met 10 à 22 min contre elle : le rush est puni comme prévu.
+- Mesures de référence du nouveau robot du dépôt (v5.8, graine 1, 2 heures de jeu simulé). Ce robot n'est pas celui des versions d'avant : ses chiffres servent de point de comparaison à partir d'ici.
+
+  | Style | Antre | Varsha | Valgris à zéro | Niveau à 2 h | Faille à 2 h | Morts |
+  | --- | --- | --- | --- | --- | --- | --- |
+  | Feu | 11,5 min | 12,0 min | 21,3 min | 64 | 61 | 1 |
+  | Givre | 12,8 min | 13,2 min | 20,2 min | 56 | 53 | 1 |
+  | Éclairs | 10,1 min | 10,8 min | 19,6 min | 49 | 42 | 1 |
+  | Tourbillon | 7,9 min | 8,4 min | 17,5 min | 59 | 58 | 0 |
+
+  Feu est dans la cible (faille 60 à 70). Écart entre styles : 45 %, au-dessus de la cible de 20 % (Éclairs traîne).
 
 ## Méthode de travail
 
-- Le code vit dans le dépôt GitHub. Le jeu est publié sur GitHub Pages pour y jouer au téléphone.
-- Tests à chaque étape : 30 à 40 tests ciblés sur la nouveauté, plus toute la non-régression. Banc d'essai v5.8 : 113 tests automatiques (catalogues, tirage de l'acte, couloir, arène, acolytes, porte scellée, acte II, Valgris, monde 2, sauvegardes et conversions, plus la non-régression inventaire, coffre, talents, forge, PNJ, failles), un robot qui joue les deux actes en entier et un rendu en image réel du canvas. À partir du transfert, les tests et le robot sont enregistrés dans le dépôt.
-- Simulations : un robot joue les actes puis les failles, avec 4 styles de talents.
-- Rendus en image pour vérifier le héros, les icônes et l'inventaire.
-- Fin de chantier : les tests passent, on fait un commit, on publie, puis on met à jour ce document (journal des versions, état du jeu, feuille de route).
+- Le code vit dans le dépôt GitHub, travaillé avec Claude Code. Chaque envoi sur GitHub met à jour le jeu en ligne (GitHub Pages) en une ou deux minutes.
+- Le jeu s'ouvre sans compilation : `index.html` charge `css/style.css` puis les fichiers de `js/` dans l'ordre, avec de simples balises `<script>`.
+  - `js/base.js` : outils communs et courbe G.
+  - `js/catalogues/` : décors, formes de zone, thèmes, monstres, comportements, boss, mondes et actes, quêtes, fioles, répliques, failles, objets, talents. Ajouter du contenu = ajouter une entrée ici.
+  - `js/moteur/` : génération des zones, combat, mise à jour, sauvegarde, statistiques, forge, sons, apparence du héros, icônes, rendu.
+  - `js/interface/` : HUD, panneaux, touchers et clavier, inventaire et coffre.
+  - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
+  - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
+- Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
+  - Banc d'essai : 113 tests en 14 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Robot (`tests/robot.js`) : joue les deux actes puis les failles, 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres.
+  - Rendu en image (`tests/rendu.js`) : 7 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
+  - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
+- Outils : Node.js portable dans `C:\Users\martin.laliberte\outils\node`, installé sans droits d'administrateur. Les tests pilotent Edge, déjà sur l'ordinateur.
+- `tests/reference/v5.8.html` garde la v5.8 d'un seul fichier, et `outils/transfert/` les scripts du transfert : utiles seulement pour refaire la comparaison du transfert.
+- Fin de chantier : `npm test` passe, commit, envoi sur GitHub (le jeu en ligne se met à jour), puis mise à jour de ce document (journal des versions, état du jeu, feuille de route).
 
 ### Chantiers
 
@@ -198,7 +220,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 ## Feuille de route
 
-0. Transfert vers GitHub et Claude Code (en cours) : découpage en fichiers, tests et robot enregistrés, GitHub Pages.
+0. Transfert vers GitHub et Claude Code (fait, 22 octobre 2026) : découpage en fichiers, tests et robot enregistrés, GitHub Pages.
 1. Moteur : Mondes et actes (étapes 1 et 2 faites : v5.2 à v5.8)
    - Gabarit d'un monde : 2 actes, zones générées, mini-boss, boss d'acte, porte scellée (fait)
    - Acte II du monde 1 avec Valgris et ses lieutenants (fait, v5.6)
@@ -223,10 +245,18 @@ En attente : tutoriel court au premier lancement.
 - [ ] Équilibre des objets : plafonner les bonus. Aucun objet ne doit donner des valeurs absurdes (ex. plus de 90 000 % de dégâts). Revoir les formules de génération et ajouter des bornes.
 - [ ] Bouton « Vendre tout » chez le marchand : vendre d'un coup tout l'inventaire, sauf l'équipement porté et les objets verrouillés (prévoir une confirmation).
 
+Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change pas le jeu) :
+
+- [ ] Ancienne partie convertie : les points de talent sont remboursés, mais le message « Nouvel arbre de talents » ne s'affiche jamais (il est mis en attente juste avant l'entrée au camp, qui vide les messages en attente).
+- [ ] Les récompenses des quêtes 2 et 3 donnent 3 fioles sans respecter le maximum de 15 (la quête 4, elle, le respecte).
+- [ ] À vérifier au doigt : un objet tombé au bord d'une case peut ne pas se ramasser quand on le touche, car le héros s'arrête au centre de la case (le robot s'y est fait prendre).
+- [ ] Équilibre des styles : avec le robot du dépôt, Éclairs est 45 % derrière Feu à 2 heures (cible : moins de 20 %).
+
 ## Journal des versions
 
 | Version | Contenu |
 | --- | --- |
+| Transfert (v5.8) | Passage à GitHub et Claude Code, aucun changement de jeu. Le fichier unique est découpé en 39 fichiers selon les catalogues (chaque ligne de la v5.8 retrouvée une seule fois, intacte). Banc d'essai de 113 tests, robot (2 actes puis failles, 2 heures, 4 styles) et rendu en image enregistrés dans le dépôt, lancés par `npm test`. Comparaison avec la v5.8 d'un seul fichier : 113 tests réussis des deux côtés, robot identique au chiffre près, 7 images identiques au pixel près. Jeu en ligne sur GitHub Pages. Vie de Valgris corrigée dans ce document (9 729, pas 18 000). |
 | v5.8 | Passage au monde suivant. « Accepter le défi » mène au monde 2, Givre éternel : camp Refuge de Brumegel (Vieille Maren, Torvald, Sœur Nivé, Kolbe), zones et monstres au thème du givre (mêmes comportements, nouvelles allures), Varsha des Glaces, nouvelles répliques de Valgris. Saut de difficulté (niveaux +17, vie × 1,25, dégâts × 1,12). Gros butin à l'arrivée. Quêtes et acolytes propres à chaque monde ; voyage entre mondes par la pierre de faille. 113 tests réussis. |
 | v5.7 | Nouvelle fin de Valgris, à la demande de Martin : il ne plie plus. À zéro de vie, il tombe (« Valgris est tombé », le héros pense « Enfin… j'ai réussi »), puis se relève sous sa vraie forme : une immensité de cendre, d'ailes et de lumière blanche, couronnée de feu. Il dit que ce n'était qu'un test et que d'autres l'attendent. Scène d'environ 7 s, héros intouchable. Correction de grammaire. 96 tests réussis. |
 | v5.6 | Acte II du monde 1 : 5 zones tirées (niveaux 11 à 17) puis le Sanctuaire de Valgris, ouvert après 2 des 3 lieutenants. Valgris en 3 phases. « Pas encore » fonctionne, « Accepter le défi » grisé en attendant le monde suivant. Quêtes 4 et 5. 90 tests réussis ; robot : Valgris amené à zéro 5 fois sur 5. |

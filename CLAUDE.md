@@ -20,6 +20,13 @@ Tu es le développeur et le coach de Martin pour « Les Cendres de Valgris », u
 - Pas de personnages, noms ou images copiés de jeux existants.
 - Ne casse jamais une partie sauvegardée : prévois une conversion des anciennes sauvegardes.
 
+## Commandes
+
+- Node.js est la version portable de `C:\Users\martin.laliberte\outils\node` (pas de droits d'administrateur) : l'ajouter au PATH du terminal au besoin.
+- `npm test` : banc d'essai, robot et rendu en image (`tester.cmd` fait la même chose en double-clic). `npm run tests -- --suite nom` pour une seule suite.
+- `npm run jouer` : sert le jeu sur http://127.0.0.1:8080/ (le navigateur intégré l'ouvre aussi avec la configuration « jeu »).
+- Le code du jeu est dans `js/`, chargé dans l'ordre par `index.html` : un nouveau fichier doit y être ajouté à la bonne place.
+
 ## Tests, obligatoires avant chaque commit publié
 
 - 30 à 40 tests ciblés sur la nouveauté, plus toute la non-régression (sauvegarde, inventaire, coffre, talents, failles, PNJ, mondes et actes).
