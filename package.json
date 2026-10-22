@@ -1,0 +1,16 @@
+{
+  "name": "cendres-de-valgris",
+  "private": true,
+  "description": "Les Cendres de Valgris : le jeu, son banc d'essai et son robot",
+  "scripts": {
+    "test": "node tests/tout.js",
+    "test:reference": "node tests/tout.js --reference",
+    "tests": "node tests/banc.js",
+    "robot": "node tests/robot.js",
+    "rendu": "node tests/rendu.js",
+    "jouer": "node tests/serveur.js --ouvrir"
+  },
+  "devDependencies": {
+    "playwright-core": "1.63.0"
+  }
+}
