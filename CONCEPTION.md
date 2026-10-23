@@ -257,9 +257,11 @@ En attente : tutoriel court au premier lancement.
 1. (fait) v5.11 : actes à 8 zones, conversion des parties à 5 zones, mode « complet » du robot. Elle montre que le monde 1 dure environ 1 à 2 heures pour un humain, loin des 8 heures visées : la cible est à rediscuter (étape 4).
 2. (fait) Dépôt déménagé hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : 145 tests réussis. Supprimer l'ancien dossier OneDrive le 29 octobre.
 3. (fait) Nouvelle règle : au plus 2 chantiers en parallèle, chacun sur sa branche et son worktree, une fusion à la fois, ce document mis à jour à la fusion (voir Méthode de travail).
-4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre). Martin peut le faire pendant le chantier de l'étape 5 : il joue sur le jeu en ligne, rien ne change dans le code.
+4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre). Reporté (Martin n'a pas le temps avant le 24 octobre) : on passe à l'étape 6 et on ajustera ensuite. Profiter de la partie de 30 minutes pour essayer les portails v5.12 au doigt.
 5. (fait) v5.12 : portails pris seulement par un geste voulu, bornes des bonus d'objets (notes de Martin).
-6. Butin rare propre à chaque boss, puis le Marais putride en monde 3 (un thème à la fois).
+6. Chantier Équipement (lancé le 22 octobre) : butin rare propre à chaque boss (Varsha, acolytes, lieutenants, Valgris).
+7. Après l'étape 4 : chantier d'équilibre des styles (le robot corrigé mesure 33 % d'écart, cible 20 %), réglé avec les nouvelles cibles de durée. Pas avant : régler les styles sur de vieilles cibles serait à refaire.
+8. Le Marais putride en monde 3 (un thème à la fois).
 
 ### Notes de Martin à traiter
 
