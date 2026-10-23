@@ -75,7 +75,7 @@ Valgris, forme du monde 1, en 3 phases (en jeu depuis v5.6) :
 2. Il rappelle les échos des lieutenants que tu as battus : plus tu en as battu, plus il en rappelle.
 3. L'arène rétrécit sous les cendres, il faut finir vite.
 
-Chaque acolyte, lieutenant et forme de Valgris a son butin rare propre, à faible chance.
+Chaque acolyte, lieutenant et forme de Valgris a son butin rare propre, à faible chance (en jeu depuis v5.13, voir Objets).
 
 ### Valgris ne meurt jamais
 
@@ -121,7 +121,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - Portail d'invasion : un portail s'ouvre sans prévenir en pleine zone, et des monstres d'un autre thème (exemple : licornes) envahissent. Un compte à rebours démarre pour fermer le portail. En cas d'échec, la zone se transforme dans le thème envahisseur, avec des monstres plus durs et un meilleur butin, jusqu'à ce qu'on la quitte. L'échec reste amusant, il ne punit pas la progression.
 
-## État actuel du jeu (v5.12)
+## État actuel du jeu (v5.13)
 
 ### Monde
 
@@ -142,6 +142,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - 10 emplacements : arme, main gauche, casque, armure, gants, bottes, ceinture, amulette, deux anneaux.
 - Raretés : normal (gris), magique (bleu), rare (jaune), légendaire (orange, 11 légendaires avec pouvoir unique).
+- Butin des boss (v5.13, catalogue `BOSSLOOT`) : chaque boss du monde 1 a son légendaire, qui ne tombe que sur lui, marqué « Légendaire de boss » et « Butin de … » dans l'infobulle. Fileuses d'Ossira (gants : les coups ralentissent de 30 %), Semelles du Brûle-Tombes (bottes : traînée de feu), Larme de Méliane (amulette : téléportation sous 35 % de vie), Mue de la Mère des Cendres (armure : salve de 8 braises toutes les 8 s), Pavois du Héraut (bouclier : étendard, +25 % de dégâts et 15 % de dégâts subis en moins), Voile de Cendre vive (casque : les sorts laissent une flaque brûlante), Marteau sans visage (masse : +4 % de dégâts par coup sur le même ennemi, jusqu'à 40 %), Sceau de l'Imbattable (anneau : un coup mortel relève à 50 % de vie, toutes les 2 min). Au monde 2, même objet renommé au thème (Semelles du Brise-Glace…). « Accepter le défi » garantit l'objet de Valgris dans le gros butin d'arrivée.
 - 17 types de bonus (dégâts, vie, armure, critique, vol de vie, vitesse, sorts, découverte d'objets, blocage, +1 à toutes les compétences, etc.). Chaque type a une borne dans le catalogue des objets (v5.12) : un objet ne la dépasse jamais, même forgé, et les objets trop forts des anciennes sauvegardes y sont ramenés au chargement (avec un message).
 - 5 paliers d'allure selon le niveau de l'objet : Cuir (moins de 12), Fer (12 à 27), Acier (28 à 49), Chevalier (50 à 79), Paladin (80 et plus). Le nom, l'icône et l'apparence du héros suivent le palier.
 - Inventaire en grille de 12 × 5 cases. Tailles : anneau, amulette, orbe 1×1 ; ceinture 2×1 ; casque, gants, bottes, bouclier 2×2 ; armure, hache 2×3 ; épée, masse 1×3 ; dague 1×2 ; bâton 1×4.
@@ -170,6 +171,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Niveau des monstres d'une faille n : 6 + n.
 - Durcissement des failles : vie × 1,10^n, dégâts × 1,055^n.
 - Réduction par l'armure : armure ÷ (armure + 30 × G(niveau du monstre)), au plus 85 %.
+- Butin des boss (v5.13) : 1 chance sur 12 par victoire pour un acolyte ou un lieutenant, 1 sur 10 pour Varsha et Valgris (« Pas encore »). La découverte d'objets l'augmente un peu, au plus × 1,5. Garantie : au 25e combat sans l'objet, il tombe à coup sûr (compteur par boss, gardé dans la sauvegarde). L'objet est au niveau du boss + 1, bonus de légendaire (× 1,3) dans les bornes v5.12, avec 2 bonus fixes propres à chaque objet.
 - Plafonds : 6 attaques par seconde (7,8 avec l'Avatar), 60 % de blocage, 20 % de vol de vie, 75 % de critique, 6 % de vie regagnée par seconde.
 - Bornes des bonus d'objets (v5.12) : le plus haut tirage possible, légendaire compris (× 1,3). Bonus en % : dégâts 260 % au plus (selon le niveau de l'objet), sorts 215 %, critique 13 %, dégâts critiques 72 %, vitesse d'attaque 21 %, vol de vie 4 %, vie 16 %, armure 39 %, blocage 13 %, +1 à toutes les compétences. Bonus fixes (dégâts, vie, armure) : suivent la courbe G, avec 25 % de marge pour les arrondis et la forge. Ces bornes ne touchent aucun objet normal : elles protègent contre les objets abîmés ou trop forts. Elles ne rendent pas le jeu plus difficile ; le « scaling trop facile » se réglera avec les nouvelles cibles du robot (étape 4).
 - Expérience : 50 × niveau^1,6 pour monter.
@@ -202,9 +204,9 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
   - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
   - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
 - Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
-  - Banc d'essai : 182 tests en 16 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles, portails et bornes des objets). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Banc d'essai : 221 tests en 17 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles, portails et bornes des objets, butin des boss). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
   - Robot (`tests/robot.js`) : joue les deux actes puis les failles (avec `--complet`, il nettoie chaque zone d'acte avant d'avancer, comme un joueur qui explore), 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres (à une faille près quand l'ordinateur est très chargé). Le bilan signale un robot « coincé » (immobile) ou qui « tourne en rond » (aucun dégât pendant 40 s), et un style dont le sort n'a jamais été débloqué.
-  - Rendu en image (`tests/rendu.js`) : 8 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
+  - Rendu en image (`tests/rendu.js`) : 10 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
   - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
 - Outils : Node.js portable dans `C:\Users\martin.laliberte\outils\node`, installé sans droits d'administrateur. Les tests pilotent Edge, déjà sur l'ordinateur.
 - `tests/reference/v5.8.html` garde la v5.8 d'un seul fichier, et `outils/transfert/` les scripts du transfert : utiles seulement pour refaire la comparaison du transfert.
@@ -238,7 +240,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
    - Gabarit d'un monde : 2 actes, zones générées, mini-boss, boss d'acte, porte scellée (fait)
    - Acte II du monde 1 avec Valgris et ses lieutenants (fait, v5.6)
    - Acolytes de Varsha ajoutés à l'Acte I ; 4 formes de zone pour commencer (labyrinthe, grand couloir, arène, grande plaine) (fait), les autres ensuite
-   - Butin rare propre à chaque boss
+   - Butin rare propre à chaque boss (fait, v5.13)
    - Passage au monde suivant : nouveau thème et saut de difficulté (fait, v5.8)
    - Banque de 4 ou 5 thèmes de départ (Givre éternel fait ; Marais putride, Royaume des licornes, Forge céleste à faire)
    - Mutation de la semaine (tirage automatique le lundi)
@@ -259,7 +261,7 @@ En attente : tutoriel court au premier lancement.
 3. (fait) Nouvelle règle : au plus 2 chantiers en parallèle, chacun sur sa branche et son worktree, une fusion à la fois, ce document mis à jour à la fusion (voir Méthode de travail).
 4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre). Reporté (Martin n'a pas le temps avant le 24 octobre) : on passe à l'étape 6 et on ajustera ensuite. Profiter de la partie de 30 minutes pour essayer les portails v5.12 au doigt.
 5. (fait) v5.12 : portails pris seulement par un geste voulu, bornes des bonus d'objets (notes de Martin).
-6. Chantier Équipement (lancé le 22 octobre) : butin rare propre à chaque boss (Varsha, acolytes, lieutenants, Valgris).
+6. (fait) v5.13 : butin rare propre à chaque boss (Varsha, acolytes, lieutenants, Valgris).
 7. Après l'étape 4 : chantier d'équilibre des styles (le robot corrigé mesure 33 % d'écart, cible 20 %), réglé avec les nouvelles cibles de durée. Pas avant : régler les styles sur de vieilles cibles serait à refaire.
 8. Le Marais putride en monde 3 (un thème à la fois).
 
@@ -283,6 +285,7 @@ Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change p
 
 | Version | Contenu |
 | --- | --- |
+| v5.13 | Chantier Équipement : butin rare propre à chaque boss. Un légendaire par boss du monde 1 (catalogue `BOSSLOOT`, voir Objets), avec un pouvoir tiré de sa façon de se battre et « Butin de … » dans sa description. 1 chance sur 12 (1 sur 10 pour Varsha et Valgris), garanti au 25e combat sans lui ; renommé au thème du monde 2 ; objet de Valgris garanti avec « Accepter le défi ». Il se sauvegarde, va au coffre et se forge chez Hilde ; les anciennes sauvegardes se chargent sans changement. Robot (graine 1) : failles à 2 h Feu 68, Givre 71, Éclairs 75, Tourbillon 61, Valgris à zéro en 17 à 20 min. Ces écarts avec la mesure précédente (65 / 68 / 79 / 57) viennent surtout du hasard décalé : avec le butin coupé mais le même tirage, Feu, Givre et Éclairs donnent les mêmes chiffres ; seul le robot Tourbillon a trouvé un objet de boss (Marteau sans visage, porté 2 min, Valgris battu plus vite). 221 tests réussis (39 nouveaux, suite « butin-boss »), 10 images (scènes « butin » et « pouvoirs »). |
 | Robot (22 oct.) | Chantier Moteur et équilibre, robot seulement (aucun changement de jeu, pas de nouveau numéro). Le robot visait un monstre proche à vol d'oiseau mais caché derrière un mur ; en faisant le long détour, il le perdait de vue, revenait vers la sortie, le revoyait et tournait en rond. Il laisse maintenant de côté 10 s un monstre hors de vue dont le chemin est bien plus long que la distance (sauf un boss). Givre atteint l'antre en 11 à 13 min sur les graines 1, 2 et 3 (avant : 47 et 88 min avec les graines 2 et 3) ; Feu graine 1 en 9,6 min (avant : 19,8). Il reste 0 à 2 robots « coincés » ou qui « tournent en rond » par partie. Écart entre styles, mesuré sans robots coincés : 33 % sur 3 graines (Éclairs 77, Tourbillon 58). 182 tests réussis, 8 images. |
 | v5.12 | Chantier Moteur et équilibre : portails et bornes des objets. Marcher sur un portail ne téléporte plus (fini le portail de retour sur le seul chemin d'un Grand couloir, ou le rebond au camp) : on entre en touchant le portail lui-même, ou avec le bouton « Entrer » qui apparaît tout près ; le portail ne capte plus les touchers à côté de lui. Chaque type de bonus d'objet a une borne dans le catalogue ; la génération, la forge et le chargement des sauvegardes y ramènent tout objet trop fort (480 000 objets simulés : aucun objet normal ni forgé n'est touché). Robot (graine 1) : actes identiques à la v5.11 à la seconde près, failles à 2 h de 61 à 76 (Feu 63, Givre 65, Éclairs 76, Tourbillon 61) ; sur les graines 2 et 3, mêmes chiffres que la v5.11 à 0 à 4 failles près. 182 tests réussis (37 nouveaux, suite « portails-objets »), 8 images (nouvelle scène « portail »). |
 | v5.11 | Chantier Moteur et équilibre : actes plus longs. Chaque acte a maintenant 8 zones tirées au lieu de 5, avec 5 points de passage (zones 1, 3, 5, 7 et 8). Mêmes niveaux de monstres, répartis sur les 8 zones. Les parties déjà commencées gardent leurs actes tirés à 5 zones ; un acte pas encore tiré en aura 8. Robot : nouveau mode `--complet` (nettoie chaque zone, pour estimer le temps d'un joueur) ; il oubliait le portail qu'il avait choisi en changeant de zone, et la détection « tourne en rond » ne compte plus une longue marche. Robot (graine 1) : Valgris à zéro en 20 à 28 min (mode normal), 28 à 36 min (mode complet) ; écart entre styles 18 %. 145 tests réussis (12 nouveaux). |
