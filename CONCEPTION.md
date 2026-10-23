@@ -121,14 +121,14 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - Portail d'invasion : un portail s'ouvre sans prévenir en pleine zone, et des monstres d'un autre thème (exemple : licornes) envahissent. Un compte à rebours démarre pour fermer le portail. En cas d'échec, la zone se transforme dans le thème envahisseur, avec des monstres plus durs et un meilleur butin, jusqu'à ce qu'on la quitte. L'échec reste amusant, il ne punit pas la progression.
 
-## État actuel du jeu (v5.11)
+## État actuel du jeu (v5.12)
 
 ### Monde
 
 - Camp de Halveth : Ancien Corvel (quêtes), Bram le colporteur (achat et vente), Sœur Éline (soins), Hilde la forgeronne (monte un objet au niveau du héros), coffre, pierre de faille, point de passage.
 - Deux mondes jouables, chacun à 2 actes. Monde 1 : Cendres. Monde 2 : Givre éternel (camp Refuge de Brumegel, niveaux de 18 à 38 environ), atteint en acceptant le défi de Valgris ; retour possible par la pierre de faille. Acte I : 8 zones tirées avec la graine de la partie, puis l'Antre de Varsha (les parties commencées avant la v5.11 gardent leurs 5 zones). La première zone est toujours la Plaine des Cendres ; les autres tirent une forme (grande plaine, labyrinthe, grand couloir, arène), un nom et un décor, sans jamais deux formes pareilles de suite ; les 4 formes sont toujours présentes, l'arène une seule fois. Niveaux 1 à 7, antre niveau 10. Points de passage en zones 1, 3, 5, 7 et 8. Acte II : 8 zones tirées (niveaux 11 à 17, noms propres à l'acte II) puis le Sanctuaire de Valgris (niveau 19). On y descend par une sortie qui s'ouvre au fond de l'antre de Varsha une fois celle-ci vaincue.
 - Quêtes : les plaines souillées (12 créatures), les acolytes de Varsha (2 sur 3 brisent le sceau de l'antre, qui reste ouvert), la Mère des Cendres (boss Varsha) ; acte II : les lieutenants de Valgris (2 sur 3 ouvrent le Sanctuaire), puis Valgris.
-- Points de passage, parchemins de portail, sorties entre zones.
+- Points de passage, parchemins de portail, sorties entre zones. Depuis la v5.12, marcher sur un portail ne fait rien : on entre en touchant le portail lui-même (son ovale lumineux seulement), ou avec le bouton « Entrer » qui remplace son étiquette quand on est tout près (touche Entrée au clavier). Les sorties entre zones, elles, se prennent toujours en marchant.
 - Failles sans fin : ouvertes après Varsha. 50 monstres puis un gardien. Chaque gardien vaincu ouvre le niveau suivant et donne un point de talent la première fois. Records de temps par faille.
 
 ### Monstres
@@ -142,7 +142,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - 10 emplacements : arme, main gauche, casque, armure, gants, bottes, ceinture, amulette, deux anneaux.
 - Raretés : normal (gris), magique (bleu), rare (jaune), légendaire (orange, 11 légendaires avec pouvoir unique).
-- 17 types de bonus (dégâts, vie, armure, critique, vol de vie, vitesse, sorts, découverte d'objets, blocage, +1 à toutes les compétences, etc.).
+- 17 types de bonus (dégâts, vie, armure, critique, vol de vie, vitesse, sorts, découverte d'objets, blocage, +1 à toutes les compétences, etc.). Chaque type a une borne dans le catalogue des objets (v5.12) : un objet ne la dépasse jamais, même forgé, et les objets trop forts des anciennes sauvegardes y sont ramenés au chargement (avec un message).
 - 5 paliers d'allure selon le niveau de l'objet : Cuir (moins de 12), Fer (12 à 27), Acier (28 à 49), Chevalier (50 à 79), Paladin (80 et plus). Le nom, l'icône et l'apparence du héros suivent le palier.
 - Inventaire en grille de 12 × 5 cases. Tailles : anneau, amulette, orbe 1×1 ; ceinture 2×1 ; casque, gants, bottes, bouclier 2×2 ; armure, hache 2×3 ; épée, masse 1×3 ; dague 1×2 ; bâton 1×4.
 - Coffre : 4 onglets de 12 × 8 cases.
@@ -171,6 +171,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Durcissement des failles : vie × 1,10^n, dégâts × 1,055^n.
 - Réduction par l'armure : armure ÷ (armure + 30 × G(niveau du monstre)), au plus 85 %.
 - Plafonds : 6 attaques par seconde (7,8 avec l'Avatar), 60 % de blocage, 20 % de vol de vie, 75 % de critique, 6 % de vie regagnée par seconde.
+- Bornes des bonus d'objets (v5.12) : le plus haut tirage possible, légendaire compris (× 1,3). Bonus en % : dégâts 260 % au plus (selon le niveau de l'objet), sorts 215 %, critique 13 %, dégâts critiques 72 %, vitesse d'attaque 21 %, vol de vie 4 %, vie 16 %, armure 39 %, blocage 13 %, +1 à toutes les compétences. Bonus fixes (dégâts, vie, armure) : suivent la courbe G, avec 25 % de marge pour les arrondis et la forge. Ces bornes ne touchent aucun objet normal : elles protègent contre les objets abîmés ou trop forts. Elles ne rendent pas le jeu plus difficile ; le « scaling trop facile » se réglera avec les nouvelles cibles du robot (étape 4).
 - Expérience : 50 × niveau^1,6 pour monter.
 - Objectif mesuré par le robot : environ la faille 60 à 70 après 2 heures, avec un mur qui commence vers 45 à 55. Les 4 styles (Tourbillon, Feu, Givre, Éclairs) doivent rester à moins de 20 % d'écart.
   - À revoir (Coach, 22 oct.) : cette cible date d'avant les mondes de 8 heures. Elle restera un banc de comparaison (entre versions et entre styles, règle des 20 %), pas une cible de difficulté. La vraie durée se réglera avec le robot « complet » et un facteur de vitesse robot / humain, mesuré par Martin (30 minutes de jeu au téléphone, nouvelle partie, noter le niveau et la zone atteints).
@@ -201,9 +202,9 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
   - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
   - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
 - Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
-  - Banc d'essai : 145 tests en 15 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Banc d'essai : 182 tests en 16 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles, portails et bornes des objets). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
   - Robot (`tests/robot.js`) : joue les deux actes puis les failles (avec `--complet`, il nettoie chaque zone d'acte avant d'avancer, comme un joueur qui explore), 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres (à une faille près quand l'ordinateur est très chargé). Le bilan signale un robot « coincé » (immobile) ou qui « tourne en rond » (aucun dégât pendant 40 s), et un style dont le sort n'a jamais été débloqué.
-  - Rendu en image (`tests/rendu.js`) : 7 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
+  - Rendu en image (`tests/rendu.js`) : 8 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
   - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
 - Outils : Node.js portable dans `C:\Users\martin.laliberte\outils\node`, installé sans droits d'administrateur. Les tests pilotent Edge, déjà sur l'ordinateur.
 - `tests/reference/v5.8.html` garde la v5.8 d'un seul fichier, et `outils/transfert/` les scripts du transfert : utiles seulement pour refaire la comparaison du transfert.
@@ -257,13 +258,13 @@ En attente : tutoriel court au premier lancement.
 2. (fait) Dépôt déménagé hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : 145 tests réussis. Supprimer l'ancien dossier OneDrive le 29 octobre.
 3. (fait) Nouvelle règle : au plus 2 chantiers en parallèle, chacun sur sa branche et son worktree, une fusion à la fois, ce document mis à jour à la fusion (voir Méthode de travail).
 4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre). Martin peut le faire pendant le chantier de l'étape 5 : il joue sur le jeu en ligne, rien ne change dans le code.
-5. Chantier Moteur et équilibre (prochain, message de départ prêt) : corriger les portails qui coincent le joueur et plafonner les bonus d'objets (notes de Martin).
+5. (fait) v5.12 : portails pris seulement par un geste voulu, bornes des bonus d'objets (notes de Martin).
 6. Butin rare propre à chaque boss, puis le Marais putride en monde 3 (un thème à la fois).
 
 ### Notes de Martin à traiter
 
-- [ ] Portails : vérifier leur fonctionnement. Vu par le robot en v5.11 : dans un Grand couloir, le portail de retour peut se trouver sur le seul chemin, et passer dessus renvoie au camp. Ils empiètent sur l'écran et bloquent les clics ailleurs ; quand un portail apparaît automatiquement, le joueur se retrouve coincé. Il faut distinguer clairement « je veux entrer dans le portail » de « je passe à côté » (ex. entrée seulement sur un geste voulu ou une confirmation).
-- [ ] Équilibre des objets : plafonner les bonus. Aucun objet ne doit donner des valeurs absurdes (ex. plus de 90 000 % de dégâts). Revoir les formules de génération et ajouter des bornes.
+- [x] (corrigé en v5.12) Portails : vérifier leur fonctionnement. Vu par le robot en v5.11 : dans un Grand couloir, le portail de retour peut se trouver sur le seul chemin, et passer dessus renvoie au camp. Ils empiètent sur l'écran et bloquent les clics ailleurs ; quand un portail apparaît automatiquement, le joueur se retrouve coincé. Il faut distinguer clairement « je veux entrer dans le portail » de « je passe à côté » (ex. entrée seulement sur un geste voulu ou une confirmation).
+- [x] (corrigé en v5.12 ; « 90 000 % » était une exagération de Martin : le vrai sujet est un scaling trop facile, à régler à l'étape 4) Équilibre des objets : plafonner les bonus. Aucun objet ne doit donner des valeurs absurdes (ex. plus de 90 000 % de dégâts). Revoir les formules de génération et ajouter des bornes.
 - [ ] Bouton « Vendre tout » chez le marchand : vendre d'un coup tout l'inventaire, sauf l'équipement porté et les objets verrouillés (prévoir une confirmation).
 
 Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change pas le jeu) :
@@ -272,12 +273,14 @@ Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change p
 - [x] (corrigé en v5.9) Les récompenses des quêtes 2 et 3 donnent 3 fioles sans respecter le maximum de 15 (la quête 4, elle, le respecte). En fait seule la quête 2 était en cause : la quête 3 ne donne pas de fioles.
 - [ ] À vérifier au doigt : un objet tombé au bord d'une case peut ne pas se ramasser quand on le touche, car le héros s'arrête au centre de la case (le robot s'y est fait prendre).
 - [x] (réglé en v5.10) Équilibre des styles : avec le robot du dépôt, Éclairs était 49 % derrière Feu à 2 heures en v5.9 (cible : moins de 20 %). Cause principale : le robot Éclairs ne débloquait jamais la Chaîne d'éclairs.
+- [ ] Robot (vu en v5.12, existe déjà en v5.11) : avec les graines 2 et 3, le robot Givre se coince dans l'acte I (antre à 47 et 88 min, faille 41 et 21 à 2 h au lieu d'environ 60). Les comparaisons sur 3 graines sont faussées tant que ce n'est pas corrigé.
 - [ ] Robot : avec la graine 1, le robot Feu se coince encore une trentaine de fois dans l'acte I (antre vers 20 min au lieu de 10). À examiner, sans urgence.
 
 ## Journal des versions
 
 | Version | Contenu |
 | --- | --- |
+| v5.12 | Chantier Moteur et équilibre : portails et bornes des objets. Marcher sur un portail ne téléporte plus (fini le portail de retour sur le seul chemin d'un Grand couloir, ou le rebond au camp) : on entre en touchant le portail lui-même, ou avec le bouton « Entrer » qui apparaît tout près ; le portail ne capte plus les touchers à côté de lui. Chaque type de bonus d'objet a une borne dans le catalogue ; la génération, la forge et le chargement des sauvegardes y ramènent tout objet trop fort (480 000 objets simulés : aucun objet normal ni forgé n'est touché). Robot (graine 1) : actes identiques à la v5.11 à la seconde près, failles à 2 h de 61 à 76 (Feu 63, Givre 65, Éclairs 76, Tourbillon 61) ; sur les graines 2 et 3, mêmes chiffres que la v5.11 à 0 à 4 failles près. 182 tests réussis (37 nouveaux, suite « portails-objets »), 8 images (nouvelle scène « portail »). |
 | v5.11 | Chantier Moteur et équilibre : actes plus longs. Chaque acte a maintenant 8 zones tirées au lieu de 5, avec 5 points de passage (zones 1, 3, 5, 7 et 8). Mêmes niveaux de monstres, répartis sur les 8 zones. Les parties déjà commencées gardent leurs actes tirés à 5 zones ; un acte pas encore tiré en aura 8. Robot : nouveau mode `--complet` (nettoie chaque zone, pour estimer le temps d'un joueur) ; il oubliait le portail qu'il avait choisi en changeant de zone, et la détection « tourne en rond » ne compte plus une longue marche. Robot (graine 1) : Valgris à zéro en 20 à 28 min (mode normal), 28 à 36 min (mode complet) ; écart entre styles 18 %. 145 tests réussis (12 nouveaux). |
 | v5.10 | Chantier Moteur et équilibre : équilibre des 4 styles. Le robot avait plusieurs défauts qui faussaient les mesures, corrigés : le robot Éclairs ne débloquait jamais la Chaîne d'éclairs (il jouait toute la partie avec la Boule de feu de départ) ; il quittait une faille en cours quand son sac était plein (la faille repartait à zéro) ; il hésitait sans fin entre deux objets ou deux monstres à la limite de sa vue ; il tirait dans un coin de mur. Nouveau filet de sécurité : un robot qui tourne en rond 40 s rentre au camp et c'est signalé. Réglages du jeu : Boule de feu 150 à 170 % (+17 par rang), Tourbillon 150 à 230 % (+23 par rang), Chaîne d'éclairs 115 à 95 % (+9,5 par rang) et 9 ennemis au plus au lieu de 15, Nova de givre 12 à 10 mana. Écart entre styles : 19 % en moyenne sur 3 graines (13 % avec la graine 1). 133 tests réussis (15 nouveaux, suite « styles »). |
 | v5.9 | Chantier Moteur et équilibre : deux bogues trouvés au transfert. Une ancienne partie convertie affiche enfin le message « Nouvel arbre de talents » (il était effacé à l'entrée au camp) ; après une conversion v1, il vient juste après « Nouvelle version ». La récompense de la quête 2 respecte le maximum de 15 fioles, comme la quête 4. 118 tests réussis (5 nouveaux). Robot : Feu inchangé (faille 61), Tourbillon inchangé ; Givre faille 52 (53 avant), Éclairs faille 41 (42 avant), car le robot ne garde plus de fioles au-delà de 15. Écart entre styles : 49 %. |
