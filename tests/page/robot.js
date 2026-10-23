@@ -133,7 +133,9 @@
 
   function combattre(m) {
     const st = STYLES[R.style], d = dist(m, p);
-    if (!vue(m) && d > 1.2) { if (p.hp < p.maxHp * .45 && p.pot > 0) drink(); if (!allerVers(m.x, m.y) || !p.path) m.robotNon = S.t + 10; return; } // sans chemin ni vue, sinon le robot resterait planté là
+    // Sans chemin ni vue, le robot laisse ce monstre (sinon il resterait planté là). Derrière un mur avec un long détour aussi :
+    // en contournant, il s'éloigne, perd sa cible, revient vers la sortie, la revoit, et tourne en rond (robot Givre, qui doit s'approcher)
+    if (!vue(m) && d > 1.2) { if (p.hp < p.maxHp * .45 && p.pot > 0) drink(); if (!allerVers(m.x, m.y) || !p.path || (!m.boss && p.path.length > Math.max(12, d * 2))) { m.robotNon = S.t + 10; p.path = null; } return; }
     if (p.hp < p.maxHp * .45 && p.pot > 0) drink();
     if (p.hp < p.maxHp * .35 && skLvl('aegis') && !(p.cds.aegis > 0)) castSkill('aegis');
     for (const id of p.bar) { if (!id || id === st.sort) continue;
