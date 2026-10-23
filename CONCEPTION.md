@@ -173,6 +173,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 - Plafonds : 6 attaques par seconde (7,8 avec l'Avatar), 60 % de blocage, 20 % de vol de vie, 75 % de critique, 6 % de vie regagnée par seconde.
 - Expérience : 50 × niveau^1,6 pour monter.
 - Objectif mesuré par le robot : environ la faille 60 à 70 après 2 heures, avec un mur qui commence vers 45 à 55. Les 4 styles (Tourbillon, Feu, Givre, Éclairs) doivent rester à moins de 20 % d'écart.
+  - À revoir (Coach, 22 oct.) : cette cible date d'avant les mondes de 8 heures. Elle restera un banc de comparaison (entre versions et entre styles, règle des 20 %), pas une cible de difficulté. La vraie durée se réglera avec le robot « complet » et un facteur de vitesse robot / humain, mesuré par Martin (30 minutes de jeu au téléphone, nouvelle partie, noter le niveau et la zone atteints).
 - Durées cibles du monde 1 : Varsha vers 4 heures, Valgris vers 8 heures, en ayant battu les mini-boss. Le robot doit aussi vérifier qu'un joueur qui rush est trop faible pour le monde suivant.
 - Mesure de durée (v5.11, robot en mode complet : il nettoie chaque zone avant d'avancer, graine 1) : antre de Varsha atteinte en 11 à 18 min, Valgris amené à zéro en 28 à 36 min selon le style. Le robot joue sans hésiter ni lire : un humain met sans doute 2 à 4 fois plus de temps, soit environ 1 à 2 heures pour le monde 1. On reste loin des 8 heures visées : passer de 5 à 8 zones n'a ajouté qu'environ 20 % de temps au robot.
 - Acte I (v5.5) : zones de niveau 1 à 7, antre niveau 10, Varsha niveau 12 avec 1200 points de vie de base. Acolytes : un niveau au-dessus de leur zone, 200 à 320 points de vie de base, butin de boss. Arène : 4 vagues de 5, 7, 9 et 11 monstres. Mesure du robot (style Feu, sans esquive) : antre atteinte en 9 min au niveau 11, Varsha battue en 60 s. Le robot joue plus vite qu'un humain : ces chiffres servent à comparer les versions, pas à prédire les 4 heures visées.
@@ -240,6 +241,15 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 6. Saisons : contenu inventé par Claude, une fois la base solide
 
 En attente : tutoriel court au premier lancement.
+
+### Prochaines étapes (Coach, 22 octobre 2026)
+
+1. Terminer la v5.11 (Moteur et équilibre) : actes à 8 zones, conversion des parties à 5 zones, mode « complet » du robot. Commencée, pas encore enregistrée.
+2. Déménager le dépôt hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : copie neuve depuis GitHub, `npm install`, `npm test`, recopier le dossier `.claude`, garder l'ancien dossier une semaine avant de le supprimer.
+3. Après le déménagement, changer la règle « un seul chantier à la fois » pour « un chantier par branche et par worktree, une fusion à la fois, CONCEPTION.md mis à jour à la fusion », avec au plus 2 chantiers en parallèle, sur des parties différentes du jeu.
+4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre).
+5. Corriger les portails qui coincent le joueur et plafonner les bonus d'objets (notes de Martin).
+6. Butin rare propre à chaque boss, puis le Marais putride en monde 3 (un thème à la fois).
 
 ### Notes de Martin à traiter
 
