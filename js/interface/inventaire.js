@@ -21,7 +21,7 @@ function selHTML(){if(!SEL)return`<div class="selbox"><p class="st">Touche un ob
   if(src==='bag'){if(invMode==='sell')b+=`<button data-a="isell">Vendre ${fmt(it.val)} or</button>`;else b+=`<button data-a="iequip">Équiper</button>`;if(invMode==='stash')b+=`<button data-a="ito">Au coffre</button>`;b+=`<button class="min" data-a="idrop">Jeter</button>`;}
   else if(src==='eq'){b+=`<button data-a="iuneq">Retirer</button>`;if(invMode==='stash')b+=`<button data-a="ito">Au coffre</button>`;}
   else if(src==='stash'){b+=`<button data-a="ifrom">Prendre</button><button data-a="iequip">Équiper</button>`;}
-  return`<div class="selbox"><div class="selhead"><img alt="" src="${iconURL(it)}" class="r${it.rar}"><div><div class="it" style="color:${RCOL[it.rar]}">${it.name}</div><div class="st">${RNAME[it.rar]} · ${SLOTN[it.slot]} · niveau ${it.ilvl} · ${TIERN[tierOf(it)]}</div>${cmp}</div></div>
+  return`<div class="selbox"><div class="selhead"><img alt="" src="${iconURL(it)}" class="r${it.rar}"><div><div class="it" style="color:${RCOL[it.rar]}">${it.name}</div><div class="st">${it.boss?'Légendaire de boss':RNAME[it.rar]} · ${SLOTN[it.slot]} · niveau ${it.ilvl} · ${TIERN[tierOf(it)]}</div>${cmp}</div></div>
   <div class="st lines">${itemLines(it).join('<br>')}</div><div>${b}</div></div>`;}
 function invPanel(mode){if(mode)invMode=mode;if(SEL&&!stillThere(SEL))SEL=null;const c=cellPx();let h='';
   if(invMode==='inv')h+=tabs();

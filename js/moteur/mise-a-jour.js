@@ -27,12 +27,13 @@ function update(dt){
     p.moving=false;const spd=4.3*(1+p.st.move/100)*(p.webbed?.45:1);
     if(p.path&&p.path.length){const n=p.path[0],tx=n[0]+.5,ty=n[1]+.5,dx=tx-p.x,dy=ty-p.y,l=Math.hypot(dx,dy);
       if(l<.12){p.path.shift();}else{const s=Math.min(l,spd*dt),ox=p.x,oy=p.y;step(p,dx/l,dy/l,s,z);if(Math.hypot(p.x-ox,p.y-oy)<s*.3){const cx=Math.floor(p.x)+.5,cy=Math.floor(p.y)+.5;if(Math.hypot(cx-p.x,cy-p.y)>.05)step(p,cx-p.x,cy-p.y,Math.min(1,s/Math.hypot(cx-p.x,cy-p.y)),z);}p.face=Math.atan2(dy,dx);p.moving=true;}}
+    bossPowers(dt,z);
     const px=Math.floor(p.x),py=Math.floor(p.y);for(let y=py-9;y<=py+9;y++)for(let x=px-9;x<=px+9;x++)if(x>=0&&y>=0&&x<z.w&&y<z.h&&(x-px)**2+(y-py)**2<81)z.seen[y*z.w+x]=1;
     for(let i=z.items.length-1;i>=0;i--){const o=z.items[i];const dd=Math.hypot(o.x-p.x,o.y-p.y);if(o.dropped){if(dd>1.2)o.dropped=false;continue;}if(dd>(o.kind==='item'?.6:1.4))continue;
       if(o.kind==='gold'){p.gold+=o.v;sfx('gold');S.fx.push({x:o.x,y:o.y,t:`+${fmt(o.v)} or`,col:'#e8c46a',life:1});}
       else if(o.kind==='pot'){if(p.pot>=POTIONS.fiole.max)continue;p.pot++;floatText(o.x,o.y,'+1 fiole','#ff8a7a');}
       else if(o.kind==='scroll'){p.scroll++;floatText(o.x,o.y,'+1 parchemin','#9fb8ff');}
-      else{if(p.skipWhite&&o.it.rar===0&&!o.forced)continue;if(!bagAdd(o.it)){if(!p.fullT||S.t-p.fullT>3){say('Ton inventaire est plein.');p.fullT=S.t;}continue;}floatText(o.x,o.y,o.it.name,RCOL[o.it.rar]);if(o.it.rar===3){toast('Légendaire : '+o.it.name);sfx('leg');}}
+      else{if(p.skipWhite&&o.it.rar===0&&!o.forced)continue;if(!bagAdd(o.it)){if(!p.fullT||S.t-p.fullT>3){say('Ton inventaire est plein.');p.fullT=S.t;}continue;}floatText(o.x,o.y,o.it.name,RCOL[o.it.rar]);if(o.it.rar===3){toast((o.it.boss?bossLine(o.it):'Légendaire')+' : '+o.it.name);sfx('leg');}}
       z.items.splice(i,1);}
     if(p.tpCd<=0){
       for(const o of z.objs){if(o.type==='exit'&&dist(p,o)<.6){if(tryExit(o))return;break;}
@@ -89,9 +90,9 @@ function explode(pr){
 function updMon(m,dt,z){
   if(m.dead){m.dt+=dt;return;}
   if(m.stun>0){m.stun-=dt;m.flash=Math.max(0,m.flash-dt);return;}
-  m.cd-=dt;m.flash=Math.max(0,m.flash-dt);m.slow=Math.max(0,m.slow-dt);m.atk=Math.max(0,m.atk-dt);m.ph+=dt;
+  m.cd-=dt;m.flash=Math.max(0,m.flash-dt);m.slow=Math.max(0,m.slow-dt);m.web=Math.max(0,(m.web||0)-dt);m.atk=Math.max(0,m.atk-dt);m.ph+=dt;
   if(p.dead)return;
-  const spd=m.spd*(m.slow>0?.5:1),d=dist(m,p);
+  const spd=m.spd*(m.slow>0?.5:1)*(m.web>0?.7:1),d=dist(m,p);
   const fd=z.flow?z.flow[Math.floor(m.y)*z.w+Math.floor(m.x)]:-1;
   if(!m.aggro&&m.amb){if(fd>=0&&fd<=5){const g=m.amb;for(const o of z.mons)if(o.amb===g){o.aggro=true;o.amb=0;}toast('Embuscade !');S.shake=Math.max(S.shake,.2);}return;}
   if(!m.aggro){
@@ -102,3 +103,23 @@ function updMon(m,dt,z){
   if(m.boss&&!m.mini&&!(m.bossId&&BOSSES[m.bossId].own))bossAI(m,dt,z);
   (BEHAV[m.ai]||BEHAV.melee)(m,dt,z,d,fd,spd);
 }
+/* ---------- Pouvoirs du butin de boss (catalogue BOSSLOOT) ---------- */
+// Étendard du Pavois du Héraut : actif si le héros porte le pavois et se tient près de l’étendard
+function bannerOn(){const b=S.cur&&S.cur.pban;return!!(p.st&&p.st.legs.pavois&&b&&b.t>0&&Math.hypot(p.x-b.x,p.y-b.y)<3.5);}
+// Voile de Cendre vive : un sort qui touche laisse une flaque (une par ennemi toutes les 1,2 s)
+function ashPool(m){const z=S.cur;if(S.t-(m.ashT??-9)<1.2)return;m.ashT=S.t;(z.phz=z.phz||[]).push({kind:'ash',x:m.x,y:m.y,r:1,t:3,mult:.4});if(z.phz.length>40)z.phz.shift();}
+// Larme de Méliane : le héros saute vers une case accessible, loin de l’ennemi le plus proche
+function larmeBlink(){const z=S.cur,m=nearestMon(p.x,p.y,8),fl=z.flow;let best=null,bs=-1;p.larmeCd=20;p.inv=Math.max(p.inv||0,1);burst(p.x,p.y,'#c8d8ff',24);
+  if(fl)for(let y=Math.floor(p.y)-6;y<=Math.floor(p.y)+6;y++)for(let x=Math.floor(p.x)-6;x<=Math.floor(p.x)+6;x++){if(x<0||y<0||x>=z.w||y>=z.h)continue;const d=fl[y*z.w+x];if(!(d>=3&&d<=7))continue;
+    const sc=m?Math.hypot(x+.5-m.x,y+.5-m.y):d;if(sc>bs){bs=sc;best=[x,y];}}
+  if(best){p.x=best[0]+.5;p.y=best[1]+.5;p.path=null;p.target=null;}burst(p.x,p.y,'#c8d8ff',24);sfx('portal');floatText(p.x,p.y,'Téléportation','#c8d8ff');}
+function bossPowers(dt,z){const lg=p.st.legs;p.larmeCd=Math.max(0,(p.larmeCd||0)-dt);p.sceauCd=Math.max(0,(p.sceauCd||0)-dt);
+  if(z.pban){z.pban.t-=dt;if(z.pban.t<=0)z.pban=null;}
+  if(z.id==='town')return;const foe=()=>nearestMon(p.x,p.y,7);
+  if(lg.braise&&p.moving){p.trailT=(p.trailT||0)-dt;if(p.trailT<=0){p.trailT=.3;(z.phz=z.phz||[]).push({kind:'fire',x:p.x,y:p.y,r:.8,t:2.5,mult:.3});if(z.phz.length>40)z.phz.shift();}}
+  if(lg.mue){p.mueT=(p.mueT||0)-dt;if(p.mueT<=0&&foe()){p.mueT=8;sfx('cast');
+    for(let k=0;k<8;k++){const a=k/8*6.28;S.proj.push({x:p.x+Math.cos(a)*.4,y:p.y+Math.sin(a)*.4,vx:Math.cos(a)*8,vy:Math.sin(a)*8,from:'p',kind:'fire',mult:.6,life:.9});}}}
+  if(lg.pavois){p.banCd=(p.banCd||0)-dt;if(p.banCd<=0&&foe()){p.banCd=20;z.pban={x:p.x,y:p.y,t:8};floatText(p.x,p.y,'Étendard planté','#e0dccc');}}
+  if(z.phz&&z.phz.length){for(const h of z.phz)h.t-=dt;z.phz=z.phz.filter(h=>h.t>0);
+    for(const m of z.mons){if(m.dead)continue;m.phzT=(m.phzT||0)-dt;if(m.phzT>0)continue;let mu=0;for(const h of z.phz)if(Math.hypot(m.x-h.x,m.y-h.y)<h.r+m.size*.3)mu=Math.max(mu,h.mult);
+      if(mu){m.phzT=.5;hitMon(m,mu,true,'#ff9a50',true);}}}}

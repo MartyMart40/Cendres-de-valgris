@@ -17,6 +17,8 @@ const SCENES = {
   valgris: () => { nouvellePartie(1); quete('q4', 3); aller(antre(2)); invincible(); avancer(.3); tuer(S.cur.mons.find(m => m.bossId === 'valgris')); avancer(5.5); },
   givre: () => { nouvellePartie(1); setWorld(2); aller(zid(1, 0)); invincible(); avancer(2); },
   portail: () => { nouvellePartie(1); aller(zid(1, 0)); invincible(); S.cur.mons = []; const f = nearFloor(S.cur, p.x + 6, p.y + 2); p.x = f[0] + .5; p.y = f[1] + .5; useScroll(); avancer(1.5); $('#toast').style.opacity = 0; },
+  butin: () => { nouvellePartie(1); heros(30); p.bag = []; const it = genBossItem('korr', 30); bagAdd(it); bagAdd(genBossItem('heraut', 30)); bagAdd(objet('helm', 2, 30)); SEL = { it, src: 'bag' }; invPanel('inv'); panel.scrollTop = 1e4; },
+  pouvoirs: () => { nouvellePartie(1); heros(30); aller(zid(1, 0)); invincible(); S.cur.mons = []; for (const b of ['korr', 'heraut']) { const it = genBossItem(b, 30); p.eq[it.slot] = it; } recalc(); const f = nearFloor(S.cur, p.x + 5, p.y + 1); p.path = pathTo(S.cur, Math.floor(p.x), Math.floor(p.y), f[0], f[1]); const m = monstre('rodeur', 3); m.stun = 1e9; avancer(1); $('#toast').style.opacity = 0; },
 };
 
 async function roulerRendu({ reference = false } = {}) {

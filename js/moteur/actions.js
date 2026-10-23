@@ -23,7 +23,11 @@ function autoAim(){
 }
 function rollHit(mult,spell){const s=p.st;let d=rnd(s.dmg[0],s.dmg[1])*(1+s.dmgPct/100)*mult*(p.buff>0?1+p.buffPct/100:1)*(p.av>0?1+p.avPct/100:1);if(spell)d*=1+s.spell/100;
   const c=Math.random()*100<s.crit;if(c)d*=1+s.critDmg/100;return{d:Math.max(1,Math.round(d)),c};}
-function hitMon(m,mult,spell,col){if(m.dead)return;if(p.st.exec&&m.hp<m.maxHp*.35)mult*=1+p.st.exec/100;const h=rollHit(mult,spell);hurtMon(m,h.d,h.c?'#ffe060':col,h.c);
+// hz : coup d’une flamme ou d’une cendre au sol (butin de boss), qui ne relance pas les pouvoirs
+function hitMon(m,mult,spell,col,hz){if(m.dead)return;if(p.st.exec&&m.hp<m.maxHp*.35)mult*=1+p.st.exec/100;const lg=p.st.legs;
+  if(lg.marteau&&!hz){mult*=1+.04*(m.brk||0);m.brk=Math.min(10,(m.brk||0)+1);}if(bannerOn())mult*=1.25;
+  const h=rollHit(mult,spell);hurtMon(m,h.d,h.c?'#ffe060':col,h.c);
+  if(lg.toile)m.web=2;if(lg.voile&&spell&&!hz)ashPool(m);
   if(p.st.leech){const lv=h.d*p.st.leech/100*(p.st.legs.vamp&&!spell?2:1)*(spell?.5:1);p.hp=Math.min(p.maxHp,p.hp+Math.min(lv,p.maxHp*.08));}}
 function castSkill(id,tx,ty,free){
   if(!id||p.dead||S.cur.id==='town'||S.cine)return false;const sk=SK[id],l=skLvl(id);if(!l)return false;

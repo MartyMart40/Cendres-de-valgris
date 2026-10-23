@@ -85,6 +85,11 @@ function render(){
       for(const f of[.35,.65,.95]){ctx.beginPath();ctx.ellipse(sx,sy,rx*f,ry*f,0,0,7);ctx.stroke();}}
     else if(h.kind==='ash'){const g=ctx.createRadialGradient(sx,sy,0,sx,sy,rx);g.addColorStop(0,`rgba(190,180,170,${.6*a})`);g.addColorStop(.7,`rgba(120,60,40,${.35*a})`);g.addColorStop(1,'rgba(60,50,45,0)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(sx,sy,rx,ry,0,0,7);ctx.fill();}
     else{const g=ctx.createRadialGradient(sx,sy,0,sx,sy,rx);g.addColorStop(0,`rgba(255,170,60,${.55*a})`);g.addColorStop(1,'rgba(200,40,10,0)');ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(sx,sy,rx,ry,0,0,7);ctx.fill();}}
+  // Butin de boss : flammes et cendres laissées par le héros, étendard du Pavois
+  for(const h of z.phz||[]){const[sx,sy]=scr(h.x,h.y),rx=h.r*hw*1.42,ry=h.r*hh*1.42,a=Math.min(1,h.t),g=ctx.createRadialGradient(sx,sy,0,sx,sy,rx);
+    if(h.kind==='ash'){g.addColorStop(0,`rgba(200,190,175,${.5*a})`);g.addColorStop(.7,`rgba(150,70,40,${.3*a})`);g.addColorStop(1,'rgba(60,50,45,0)');}else{g.addColorStop(0,`rgba(255,190,80,${.5*a})`);g.addColorStop(1,'rgba(220,60,10,0)');}
+    ctx.fillStyle=g;ctx.beginPath();ctx.ellipse(sx,sy,rx,ry,0,0,7);ctx.fill();}
+  if(z.pban){const[sx,sy]=scr(z.pban.x,z.pban.y);ctx.strokeStyle='rgba(232,200,120,.55)';ctx.lineWidth=1.5;ctx.beginPath();ctx.ellipse(sx,sy,3.5*hw*1.42,3.5*hh*1.42,0,0,7);ctx.stroke();}
   if(z.shrink){const[sx,sy]=scr(z.shrink.cx,z.shrink.cy),rx=z.shrink.r*hw*1.42,ry=z.shrink.r*hh*1.42;ctx.save();ctx.beginPath();ctx.rect(0,0,W,H);ctx.ellipse(sx,sy,rx,ry,0,0,7);ctx.fillStyle='rgba(70,64,58,.45)';ctx.fill('evenodd');
     ctx.strokeStyle=`rgba(210,200,185,${.6+Math.sin(S.t*6)*.2})`;ctx.lineWidth=4;ctx.beginPath();ctx.ellipse(sx,sy,rx,ry,0,0,7);ctx.stroke();ctx.restore();}
   for(const d of z.decals){const[sx,sy]=scr(d.x,d.y);const a=Math.max(0,1-(S.t-d.t)/40);if(a<=0)continue;ctx.fillStyle=d.c.replace('A',(.6*a).toFixed(2));ctx.beginPath();ctx.ellipse(sx,sy,d.r*hw,d.r*hh,0,0,7);ctx.fill();}
@@ -100,6 +105,7 @@ function render(){
   for(const o of z.objs)if(o.type!=='wp')dr.push({d:o.x+o.y,k:'o',o});
   for(const o of z.props)if(o.k==='tent'||on(o.x,o.y))dr.push({d:o.k==='tent'?o.x+o.y+3.2:o.x+o.y,k:'pp',o});
   for(const po of portalsIn(z))dr.push({d:po.x+po.y,k:'pt',o:po});
+  if(z.pban)dr.push({d:z.pban.x+z.pban.y,k:'pp',o:{k:'banner',x:z.pban.x,y:z.pban.y}});
   if(!p.dead)dr.push({d:p.x+p.y,k:'p'});
   for(const pr of S.proj)dr.push({d:pr.x+pr.y,k:'pr',o:pr});
   dr.sort((a,b)=>a.d-b.d);

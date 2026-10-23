@@ -30,8 +30,9 @@ test('mêmes comportements, nouvelles allures : loups de givre, archers gelés, 
   egal([monstre('charognard').name, monstre('archer').name, monstre('ombre').name.startsWith('Spectre')], ['Loup de givre', 'Archer gelé', true]);
   egal(monstre('charognard').ai, MT.charognard.ai); egal(monN('korr'), 'Korr le Brise-Glace');
 });
-test('gros butin à l’arrivée : un légendaire, trois rares et de l’or', () => {
-  accepterDefi(); const it = S.cur.items.filter(o => o.kind === 'item').map(o => o.it.rar).sort();
+test('gros butin à l’arrivée : un légendaire, trois rares, l’objet de Valgris et de l’or', () => {
+  accepterDefi(); const it = S.cur.items.filter(o => o.kind === 'item' && !o.it.boss).map(o => o.it.rar).sort();
+  egal(S.cur.items.filter(o => o.kind === 'item' && o.it.boss === 'valgris').length, 1, 'objet de Valgris (butin des boss, v5.13)');
   // L'or tombe aux pieds du héros, qui le ramasse tout de suite
   const or = p.gold - 500 + S.cur.items.filter(o => o.kind === 'gold').reduce((a, o) => a + o.v, 0);
   egal(it, [2, 2, 2, 3]); egal(or, Math.round(600 * (1 + .3 * (zoneDef(zid(1, 0)).lvl + 1))), 'or à l’arrivée');

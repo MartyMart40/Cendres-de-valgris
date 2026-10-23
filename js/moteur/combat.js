@@ -34,9 +34,11 @@ function hurtPlayer(d,L,src){
   if(src&&s.thorns&&!src.dead){const th=Math.max(1,Math.round(d*s.thorns/100));hurtMon(src,th,'#9fe07f');}
   if(Math.random()*100<s.block){S.fx.push({x:p.x,y:p.y,t:'Bloqué',col:'#cfd8e0',life:.8});if(s.legs.aegis)p.hp=Math.min(p.maxHp,p.hp+p.maxHp*.03);return;}
   const A=s.armorT*(p.buff>0?1+p.buffPct/100:1),red=Math.min(.85,A/(A+30*G(L||1)));
-  const r=Math.max(1,Math.round(d*(1-red)));p.hp-=r;sfx('hurt');p.hurt=.3;S.shake=Math.max(S.shake,.18);if(Math.random()<.4)addDecal(S.cur,p.x+rnd(-.3,.3),p.y+rnd(-.3,.3),rnd(.1,.18),'');S.fx.push({x:p.x,y:p.y,t:fmt(r),col:'#ff5a4a',life:1});
+  const r=Math.max(1,Math.round(d*(1-red)*(bannerOn()?.85:1)));p.hp-=r;sfx('hurt');p.hurt=.3;S.shake=Math.max(S.shake,.18);if(Math.random()<.4)addDecal(S.cur,p.x+rnd(-.3,.3),p.y+rnd(-.3,.3),rnd(.1,.18),'');S.fx.push({x:p.x,y:p.y,t:fmt(r),col:'#ff5a4a',life:1});
   if(s.legs.crater&&Math.random()<.12&&skLvl('meteor')>0){const m=nearestMon(p.x,p.y,6);if(m)S.mets.push({x:m.x,y:m.y,t:.6,mult:3.2+.28*(skLvl('meteor')-1)});}
   if(p.hp<=0&&s.second&&!(p.secCd>0)){p.hp=p.maxHp*.35;p.secCd=s.second;p.inv=1;toast('Seconde vie');burst(p.x,p.y,'#fff0c0',30);sfx('lvl');}
+  if(p.hp<=0&&s.legs.sceau&&!(p.sceauCd>0)){p.hp=p.maxHp*.5;p.sceauCd=120;p.inv=1.2;toast('Imbattable : tu te relèves');burst(p.x,p.y,'#f4ecd8',40);sfx('lvl');}
+  if(p.hp>0&&p.hp<p.maxHp*.35&&s.legs.larme&&!(p.larmeCd>0))larmeBlink();
   if(p.hp<=0){p.hp=0;p.dead=true;sfx('die');p.path=null;p.target=null;S.deaths=(S.deaths||0)+1;
     const lost=Math.floor(p.gold*.1);p.gold-=lost;
     S.pend.push({t:.9,fn:()=>openPanel(`<h2>Tu as succombé</h2><p>Les cendres t’engloutissent. ${lost?`Tu perds ${fmt(lost)} pièces d’or.`:''}</p><button data-a="revive">Revenir au camp</button>`)});}
@@ -51,6 +53,7 @@ function dropLoot(m,z){if(m.noLoot)return;
     else if(r<.6)dropAt(z,m.x,m.y,{kind:'pot'});
     else if(r<.63)dropAt(z,m.x,m.y,{kind:'scroll'});}
   if(m.boss)dropAt(z,m.x,m.y,{kind:'gold',v:Math.round(150*(1+.3*(L-1)))});
+  if(m.bossId&&rollBossLoot(m.bossId))dropAt(z,m.x,m.y,{kind:'item',it:genBossItem(m.bossId,L+1)});
 }
 function openChest(o){
   if(o.open)return;o.open=true;const z=S.cur;burst(o.x,o.y,'#e8c46a',16);

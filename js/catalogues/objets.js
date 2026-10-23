@@ -60,6 +60,19 @@ const LEGS=[
   {id:'warlord',type:'amulet',n:'Collier du Seigneur de guerre',slot:'amulet',p:'Le cri de guerre dure deux fois plus longtemps.'},
   {id:'whirl',type:'sword',n:'Lame du Derviche',slot:'weapon',base:1,p:'Le tourbillon ne coûte rien.'}
 ];
+/* Butin propre à chaque boss : un légendaire qui ne tombe que sur lui. ch : chance par victoire ; garanti au BOSS_PITY-ième combat sans lui.
+   n : nom selon le thème du monde (repli sur cendres) ; fix : bonus toujours présents ; p : pouvoir (voir mise-a-jour.js, bossPowers). */
+const BOSS_PITY=25;
+const BOSSLOOT=[
+  {id:'toile',boss:'ossira',type:'gloves',ch:1/12,fix:['aspd','life'],n:{cendres:'Fileuses d’Ossira',givre:'Fileuses de givre'},p:'Tes coups ralentissent l’ennemi de 30 % pendant 2 s.'},
+  {id:'braise',boss:'korr',type:'boots',ch:1/12,fix:['move','life'],n:{cendres:'Semelles du Brûle-Tombes',givre:'Semelles du Brise-Glace'},p:'En marchant, tu laisses une traînée de feu qui brûle les ennemis.'},
+  {id:'larme',boss:'meliane',type:'amulet',ch:1/12,fix:['life','lifePct'],n:{cendres:'Larme de Méliane',givre:'Larme gelée de Méliane'},p:'Quand ta vie passe sous 35 %, tu te téléportes plus loin et tu es intouchable 1 s (au plus toutes les 20 s).'},
+  {id:'mue',boss:'varsha',type:'armor',ch:1/10,fix:['lifePct','armorPct'],n:{cendres:'Mue de la Mère des Cendres',givre:'Mue de la Mère des Glaces'},p:'Toutes les 8 s en combat, une salve de braises part tout autour de toi.'},
+  {id:'pavois',boss:'heraut',type:'shield',ch:1/12,fix:['block','armor'],n:{cendres:'Pavois du Héraut',givre:'Pavois du Héraut blanc'},p:'Toutes les 20 s en combat, tu plantes un étendard : près de lui, +25 % de dégâts et 15 % de dégâts subis en moins (8 s).'},
+  {id:'voile',boss:'cineraire',type:'helm',ch:1/12,fix:['spell','mana'],n:{cendres:'Voile de Cendre vive',givre:'Voile de Givre vif'},p:'Tes sorts laissent au sol une flaque de cendre brûlante pendant 3 s.'},
+  {id:'marteau',boss:'forgeron',type:'mace',ch:1/12,fix:['dmgPct','critDmg'],n:{cendres:'Marteau sans visage',givre:'Marteau du Gel'},p:'Chaque coup sur le même ennemi lui fait subir 4 % de dégâts en plus, jusqu’à 40 %.'},
+  {id:'sceau',boss:'valgris',type:'ring',ch:1/10,fix:['life','leech'],n:{cendres:'Sceau de l’Imbattable'},p:'Quand tu devrais mourir, tu te relèves avec 50 % de ta vie (au plus toutes les 2 minutes).'}
+];
 const RARE_A=['Croc','Glas','Serment','Rune','Fléau','Murmure','Braise','Écharde','Lien','Sceau','Cri','Voile'];
 const RARE_B=['du Crépuscule','des Tombes','de Cendre','des Abîmes','de l’Aube noire','du Veilleur','des Ronces','du Brasier','de la Faille'];
 const RCOL=['#e2d6c0','#8796ff','#f0d050','#ff9a3a'];

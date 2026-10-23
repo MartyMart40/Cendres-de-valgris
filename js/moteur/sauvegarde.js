@@ -1,6 +1,6 @@
 'use strict';
 /* ---------- Sauvegarde ---------- */
-function save(){try{if(typeof syncWorld==='function'&&S.qw)syncWorld();localStorage.setItem(SAVE,JSON.stringify({v:3,ver:GAME_VER,world:S.world,act:S.act,seed:S.seed,lay:S.layout,p:{lvl:p.lvl,xp:p.xp,gold:p.gold,pot:p.pot,scroll:p.scroll,bag:p.bag,eq:p.eq,sk:p.sk,pts:p.pts,bar:p.bar,skipWhite:p.skipWhite,mute:p.mute,stash:p.stash,tv:p.tv},q:S.q,qw:S.qw,wps:S.wps,done:S.done,riftMax:S.riftMax,rec:S.rec,aco:S.aco,acow:S.acow,worldMax:S.worldMax}));}catch(e){}}
+function save(){try{if(typeof syncWorld==='function'&&S.qw)syncWorld();localStorage.setItem(SAVE,JSON.stringify({v:3,ver:GAME_VER,world:S.world,act:S.act,seed:S.seed,lay:S.layout,p:{lvl:p.lvl,xp:p.xp,gold:p.gold,pot:p.pot,scroll:p.scroll,bag:p.bag,eq:p.eq,sk:p.sk,pts:p.pts,bar:p.bar,skipWhite:p.skipWhite,mute:p.mute,stash:p.stash,tv:p.tv},q:S.q,qw:S.qw,wps:S.wps,done:S.done,riftMax:S.riftMax,rec:S.rec,aco:S.aco,acow:S.acow,worldMax:S.worldMax,btry:S.btry}));}catch(e){}}
 /* Conversions : v1 -> v2 (ancien équipement) puis v2 -> v3 (mondes et actes). La sauvegarde v2 reste intacte comme copie de secours. */
 const WP_V2={town:'town',plain:'m1a1z0',crypt:'m1a1z1',lair:'m1a1z2'};
 function migrate12(v){return{v:2,migr:true,p:{lvl:v.p.lvl||1,xp:0,gold:(v.p.gold||0)+200,pot:v.p.pot||4,scroll:v.p.scroll||2,bag:[],eq:starterGear(v.p.lvl||1),sk:{fire:1,nova:1},pts:Math.max(0,(v.p.lvl||1)-1),bar:['fire','nova',null]},q:v.q,wps:v.wps,done:v.done,riftMax:1};}
@@ -24,6 +24,7 @@ function startGame(sv){
   S.qw=(sv&&sv.qw&&typeof sv.qw==='object')?sv.qw:{};S.qw[S.world]=S.qw[S.world]||S.q;S.q=S.qw[S.world];
   S.acow=(sv&&sv.acow&&typeof sv.acow==='object')?sv.acow:{};S.acow[S.world]=S.acow[S.world]||S.aco||{};S.aco=S.acow[S.world];
   S.worldMax=Math.max(S.world,(sv&&sv.worldMax)||1);
+  S.btry=(sv&&sv.btry&&typeof sv.btry==='object')?sv.btry:{};
   for(const k in QUESTS){if(!S.q[k])S.q[k]={s:0};if(S.q[k].n==null)S.q[k].n=0;}
   curWorld().acts.forEach((a,i)=>{const q=a.quest&&S.q[a.quest];if(q&&q.s===1&&acoCount(i+1)>=acoNeed(i+1))q.s=2;});
   if(!p.stash)p.stash=[[],[],[],[]];S.stab=0;
