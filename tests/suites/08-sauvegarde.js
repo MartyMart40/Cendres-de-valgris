@@ -54,9 +54,32 @@ test('objets qui se chevauchent dans le sac : rangés ailleurs, aucun perdu', ()
 });
 test('partie v5.4 : 2 acolytes déjà vaincus brisent le sceau au chargement', () => {
   nouvellePartie(); quete('q2', 1); S.aco = { ossira: 1, korr: 1 }; S.acow[1] = S.aco; save(); const sv = loadSave(); delete sv.acow; delete sv.qw; sv.q.q2.s = 1;
-  startGame(sv); egal(S.q.q2.s, 2); ok(!sealOf(zid(1, 5)), 'antre encore scellé');
+  startGame(sv); egal(S.q.q2.s, 2); ok(!sealOf(antre(1)), 'antre encore scellé');
 });
 test('la sauvegarde se fait seule en rentrant au camp', () => {
   nouvellePartie(); localStorage.clear(); aller(zid(1, 0)); p.gold = 999; aller('town');
   egal(JSON.parse(localStorage.getItem(SAVE)).p.gold, 999);
+});
+
+// v5.11 : les actes passent à 8 zones ; une partie déjà tirée garde ses 5 zones
+function partieA5Zones() {
+  nouvellePartie(); const l = rollAct(1, 1, S.seed).slice(0, 5); S.layout = { '1-1': l }; placeAcolytes(l, curWorld().acts[0], S.seed, 1);
+  S.wps = { town: 1, m1a1z0: 1, m1a1z2: 1, m1a1z4: 1 }; quete('q1', 3); quete('q2', 1); save(); return loadSave();
+}
+test('ancienne partie à 5 zones : elle garde ses 5 zones et son antre en zone 6', () => {
+  startGame(partieA5Zones()); egal(actZones(1).length, 6); egal(antre(1), zid(1, 5)); ok(zoneDef(zid(1, 5)).last); egal(zoneDef(zid(1, 5)).boss, 'varsha');
+});
+test('ancienne partie à 5 zones : niveaux 1 à 7 comme avant', () => {
+  startGame(partieA5Zones()); egal(actZones(1).slice(0, 5).map(id => zoneDef(id).lvl), [1, 3, 4, 6, 7]);
+});
+test('ancienne partie à 5 zones : points de passage et acolytes gardés', () => {
+  startGame(partieA5Zones()); egal(actZones(1).slice(0, 5).map(id => zoneDef(id).wp), [true, false, true, false, true]);
+  egal(actLayout(1).filter(x => x.aco).length, 3); ok(acoZone('ossira') && parseZ(acoZone('ossira')).i < 5, 'acolyte hors des 5 zones');
+  closePanel(); enterZone('m1a1z4', 'wp'); ok(S.cur.objs.some(o => o.type === 'exit' && o.to === zid(1, 5)), 'pas de sortie vers l’antre');
+});
+test('ancienne partie à 5 zones : l’acte II, pas encore tiré, en a 8', () => {
+  const sv = partieA5Zones(); delete sv.lay['1-2']; startGame(sv); egal(actZones(2).length, 9);
+});
+test('ancienne partie à 5 zones : le tirage survit à un aller-retour de sauvegarde', () => {
+  startGame(partieA5Zones()); recharger(); egal(actLayout(1).length, 5); egal(antre(1), zid(1, 5));
 });

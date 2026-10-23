@@ -1,5 +1,5 @@
 // Acte II : lieutenants de Valgris, Sanctuaire scellé, Valgris en 3 phases et sa fin.
-function sanctuaire() { nouvellePartie(); quete('q3', 3); quete('q4', 3); quete('q5', 1); aller(zid(2, 5)); invincible(); avancer(.3); return S.cur.mons.find(m => m.bossId === 'valgris'); }
+function sanctuaire() { nouvellePartie(); quete('q3', 3); quete('q4', 3); quete('q5', 1); aller(antre(2)); invincible(); avancer(.3); return S.cur.mons.find(m => m.bossId === 'valgris'); }
 
 test('lieutenants : un niveau au-dessus de leur zone, 260 à 380 points de vie de base', () => {
   nouvellePartie(4); quete('q3', 3);
@@ -28,8 +28,8 @@ test('le Forgeron sans visage : l’armure prend les coups, brisée il chancelle
   f.vuln = .01; BEHAV.forge(f, .05, S.cur, dist(f, p), 3, f.spd); egal(f.shell, f.shellMax, 'armure non reforgée');
 });
 test('le Sanctuaire reste scellé tant que 2 des 3 lieutenants ne sont pas vaincus', () => {
-  nouvellePartie(); quete('q3', 3); quete('q4', 1); ok(sealOf(zid(2, 5))); battreAcolytes(2, 1); ok(sealOf(zid(2, 5)));
-  battreAcolytes(2, 2); egal(S.q.q4.s, 2); ok(!sealOf(zid(2, 5)), 'Sanctuaire encore scellé');
+  nouvellePartie(); quete('q3', 3); quete('q4', 1); ok(sealOf(antre(2))); battreAcolytes(2, 1); ok(sealOf(antre(2)));
+  battreAcolytes(2, 2); egal(S.q.q4.s, 2); ok(!sealOf(antre(2)), 'Sanctuaire encore scellé');
 });
 // CONCEPTION.md disait « environ 18 000 » : le jeu v5.8 donne 1000 × G(20), soit 9 729.
 test('Valgris : niveau 20, 1000 points de vie de base (9 729 au niveau 20)', () => {
@@ -55,6 +55,6 @@ test('à zéro de vie, Valgris tombe, se relève sous sa vraie forme et laisse l
 test('« Pas encore » : butin normal, quête à rendre, et Valgris revient pour le farm', () => {
   const v = sanctuaire(); const z = S.cur; tuer(v); attendre(panneauOuvert, 12); cliquer('vpas');
   ok(!z.mons.includes(v), 'Valgris est resté'); egal(S.q.q5.s, 2); ok(z.items.filter(o => o.kind === 'item').length >= 4, 'pas de butin');
-  egal(S.world, 1); aller(zid(2, 4)); z.left = performance.now() - 100000; aller(zid(2, 5));
+  egal(S.world, 1); aller(lastZone(2)); z.left = performance.now() - 100000; aller(antre(2));
   ok(S.cur.mons.some(m => m.bossId === 'valgris' && !m.dead), 'Valgris ne revient pas');
 });

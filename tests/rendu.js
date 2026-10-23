@@ -14,7 +14,7 @@ const SCENES = {
   combat: () => { nouvellePartie(1); heros(8); aller(zid(1, 0)); invincible(); for (const t of ['rodeur', 'archer', 'ombre']) { const m = monstre(t, 2.5); m.aggro = true; } castSkill('fire', p.x + 3, p.y); avancer(.6); },
   inventaire: () => { nouvellePartie(1); heros(30); p.bag = []; for (const [t, r] of [['sword', 3], ['helm', 2], ['ring', 1], ['armor', 2], ['staff', 0], ['boots', 1]]) bagAdd(objet(t, r, 30)); invPanel('inv'); },
   talents: () => { nouvellePartie(1); heros(25); rankUp('mastery', 10); rankUp('whirl', 6); SELT = 'whirl'; talentPanel(); },
-  valgris: () => { nouvellePartie(1); quete('q4', 3); aller(zid(2, 5)); invincible(); avancer(.3); tuer(S.cur.mons.find(m => m.bossId === 'valgris')); avancer(5.5); },
+  valgris: () => { nouvellePartie(1); quete('q4', 3); aller(antre(2)); invincible(); avancer(.3); tuer(S.cur.mons.find(m => m.bossId === 'valgris')); avancer(5.5); },
   givre: () => { nouvellePartie(1); setWorld(2); aller(zid(1, 0)); invincible(); avancer(2); },
 };
 

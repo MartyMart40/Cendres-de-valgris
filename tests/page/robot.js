@@ -11,9 +11,10 @@
     eclairs: { sort: 'chain', poids: { chain: 4, fire: 1, combust: 3, mind: 2, vigor: 2, skin: 1, meteor: 1, embers: 1, cataclysm: 1, lore: 4, regen: 1, bulwark: 1, bastion: 1 } },
     tourbillon: { sort: 'whirl', poids: { whirl: 4, mastery: 3, thirst: 1, frenzy: 2, cry: 1, vigor: 2, skin: 2, execute: 1, avatar: 1, fury: 4, regen: 1, bulwark: 1, bastion: 1 } },
   };
-  // Ordre des zones : acte I zones 0 à 5, puis acte II zones 0 à 5
-  const rang = id => { const k = parseZ(id); return k ? (k.a - 1) * 6 + k.i : id === 'town' ? -1 : 99; };
-  const deRang = g => zid(Math.floor(g / 6) + 1, g % 6);
+  // Ordre des zones : acte I de la zone 0 à l'antre, puis acte II (100 rangs par acte, quel que soit le nombre de zones)
+  const rang = id => { const k = parseZ(id); return k ? (k.a - 1) * 100 + k.i : id === 'town' ? -1 : 999; };
+  const deRang = g => zid(Math.floor(g / 100) + 1, g % 100);
+  const antre = a => zid(a, actLayout(a).length);
 
   let R = null; // état du robot
 
@@ -21,7 +22,7 @@
     performance.now = () => (S ? S.t * 1000 : 0);
     localStorage.clear(); startGame(null); S.pend = []; closePanel();
     p.skipWhite = true;
-    R = { style: STYLES[opts.style] ? opts.style : 'feu', choix: opts.choix || 'pas', faillesMin: opts.faillesMin || 0, limite: (opts.limiteMin || 240) * 60,
+    R = { style: STYLES[opts.style] ? opts.style : 'feu', choix: opts.choix || 'pas', complet: !!opts.complet, vues: new Set(), faillesMin: opts.faillesMin || 0, limite: (opts.limiteMin || 240) * 60,
       t: 0, pense: 0, bloque: 0, dernier: { x: 0, y: 0 }, etapes: {}, morts: {}, faille: null, fini: false, phase: 'actes', retour: null };
     S.deaths = 0; resetTree(); depenser();
   }
@@ -63,8 +64,8 @@
     if (q && (s === 0 || s === 2)) return { zone: 'town' };
     if (q === 'q1') return { zone: zid(1, 0), chasse: true };
     if (q === 'q2' || q === 'q4') { const a = q === 'q2' ? 1 : 2; const b = curWorld().acts[a - 1].acolytes.filter(x => !S.aco[x]).map(x => acoZone(x)).sort((x, y) => Math.abs(rang(x) - rang(S.cur.id)) - Math.abs(rang(y) - rang(S.cur.id)))[0]; return { zone: b, mini: true }; }
-    if (q === 'q3') return { zone: zid(1, 5), boss: true };
-    if (q === 'q5') return { zone: zid(2, 5), boss: true };
+    if (q === 'q3') return { zone: antre(1), boss: true };
+    if (q === 'q5') return { zone: antre(2), boss: true };
     return { zone: 'rift' };
   }
 
@@ -75,7 +76,8 @@
   function sortir(vers) { const o = S.cur.objs.find(o => o.type === 'exit' && o.to === vers); if (o) { allerObjet(o); R.voulue = { x: o.x, y: o.y, zone: S.cur.id }; return true; } return false; }
   // Comme un joueur, le robot ne marche que sur la sortie (ou le portail) qu'il a choisie
   function eviterSorties() {
-    const v = R.voulue, z = S.cur;
+    const z = S.cur; if (R.voulue && R.voulue.zone !== z.id) R.voulue = null; // choix oublié en changeant de zone
+    const v = R.voulue;
     const sous = z.objs.filter(o => o.type === 'exit').concat(portalsIn(z)).filter(o => Math.hypot(o.x - p.x, o.y - p.y) < 1);
     const voulue = o => v && v.zone === z.id && Math.hypot(v.x - o.x, v.y - o.y) < .1;
     if (sous.some(o => !voulue(o))) p.tpCd = Math.max(p.tpCd, .1);
@@ -98,7 +100,7 @@
     // Une arène se traverse en battant ses vagues : la sortie est fermée avant
     if (gC > g && z.arena && !z.arena.done) { allerVers(z.center[0], z.center[1]); return; }
     const wp = z.objs.find(o => o.type === 'wp'); if (wp && !S.wps[ici] && dist(p, wp) < 12) { allerVers(wp.x, wp.y); return; }
-    sortir(gC > g ? (parseZ(ici).i === 5 ? zid(2, 0) : deRang(g + 1)) : (g === 0 ? 'town' : parseZ(ici).i === 0 ? zid(1, 5) : deRang(g - 1)));
+    sortir(gC > g ? (z.def.last ? zid(2, 0) : deRang(g + 1)) : (g === 0 ? 'town' : parseZ(ici).i === 0 ? antre(1) : deRang(g - 1)));
   }
 
   function rentrer() {
@@ -106,7 +108,7 @@
     if (S.portal && S.portal.zone === S.cur.id) { allerObjet(portalsIn(S.cur)[0]); R.voulue = { x: S.portal.x, y: S.portal.y, zone: S.cur.id }; return; }
     if (p.scroll > 0) { useScroll(); return; }
     const k = parseZ(S.cur.id); if (S.cur.id === 'rift') { sortir('town'); return; }
-    sortir(k.i === 0 ? (k.a === 1 ? 'town' : zid(1, 5)) : zid(k.a, k.i - 1));
+    sortir(k.i === 0 ? (k.a === 1 ? 'town' : antre(1)) : zid(k.a, k.i - 1));
   }
 
   function choisirFaille() {
@@ -191,6 +193,11 @@
       if (z.acoSpot && b.mini) { allerVers(z.acoSpot[0], z.acoSpot[1]); return; }
       return;
     }
+    // Mode complet : comme un joueur qui explore, le robot nettoie chaque zone d'acte avant d'avancer
+    if (R.complet && parseZ(z.id) && !z.def.last && b.zone !== 'rift' && rang(b.zone) > rang(z.id)) {
+      const reste = z.mons.filter(o => !o.dead && !o.beaten && !(o.robotNon > S.t)).sort((a, c) => dist(a, p) - dist(c, p))[0];
+      if (reste) { if (!allerVers(reste.x, reste.y)) reste.robotNon = S.t + 10; return; }
+    }
     voyager(b.zone);
   }
 
@@ -203,8 +210,11 @@
         // Coincé = immobile sans que les monstres de la zone perdent de la vie
         const vie = S.cur.mons.reduce((a, m) => a + (m.dead ? 0 : m.hp + (m.shell || 0)), 0) + S.cur.mons.filter(m => m.dead).length * 1e9;
         if (Math.hypot(p.x - R.dernier.x, p.y - R.dernier.y) < .05 && !S.paused && vie === R.vie) R.bloque += .2; else { R.bloque = 0; R.dernier = { x: p.x, y: p.y }; }
-        // Tourne en rond = bouge, mais aucun monstre vivant de la zone ne perd de vie pendant 40 s
-        if (vie === R.vie && !S.paused && S.cur.id !== 'town' && S.cur.mons.some(m => !m.dead)) R.rond = (R.rond || 0) + .2; else R.rond = 0;
+        // Tourne en rond = aucun monstre vivant de la zone ne perd de vie, et le robot repasse sur des cases déjà vues
+        // pendant 40 s (une longue marche vers des cases nouvelles ne compte pas)
+        const cle = S.cur.id + ':' + Math.floor(p.x) + ',' + Math.floor(p.y);
+        if (vie === R.vie && !S.paused && S.cur.id !== 'town' && S.cur.mons.some(m => !m.dead)) { if (R.vues.has(cle)) R.rond = (R.rond || 0) + .2; else R.vues.add(cle); }
+        else { R.rond = 0; R.vues = new Set(); }
         if (R.rond > 40) { R.rond = 0; R.tourne = (R.tourne || 0) + 1; if (!R.premierTourne) R.premierTourne = R.journal.slice(-12); closePanel(); enterZone('town', 'spawn'); }
         R.vie = vie;
         if (R.bloque > 15) { R.bloque = 0; R.coince = (R.coince || 0) + 1; if (!R.premierCoince) R.premierCoince = R.journal.slice(-12); if (S.cur.id !== 'town') { if (p.scroll > 0) useScroll(); else { closePanel(); enterZone('town', 'spawn'); } } }

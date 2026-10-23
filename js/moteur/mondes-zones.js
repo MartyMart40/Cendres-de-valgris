@@ -42,7 +42,7 @@ function zoneDef(id){
   const th=THEMES[wd.theme],lay=actLayout(k.a),base={world:k.w,act:k.a,idx:k.i};
   if(k.i===lay.length){const an=th.antre&&th.antre[k.a];return{...act.antre,...base,style:themeDecor(th,'antre'),last:true,lvl:act.antre.lvl+(wd.lvlAdd||0),...(an?{name:an[0],art:an[1]}:{})};}
   const L_=lay[k.i];if(!L_)return null;const F=FORMES[L_.f],nm=((th[act.bank||'names']||th.names)[L_.f]||[['Terres sans nom','les ']])[L_.n]||['Terres sans nom','les '];
-  const lvl=Math.round(act.lvl[0]+(act.lvl[1]-act.lvl[0])*k.i/Math.max(1,act.count-1))+(wd.lvlAdd||0);
+  const lvl=Math.round(act.lvl[0]+(act.lvl[1]-act.lvl[0])*k.i/Math.max(1,lay.length-1))+(wd.lvlAdd||0);
   return{...base,name:nm[0],art:nm[1],forme:L_.f,style:L_.d,lvl,mons:poolFor(th,lvl),packs:F.packs,size:F.size,w:F.w,h:F.h,waves:F.waves,
     wp:act.wp.includes(k.i),relic:act.relic&&act.relic.zone===k.i?act.relic.q:false,aco:L_.aco||null,last:false};}
 /* « la Crypte oubliée », « les Champs calcinés »… */

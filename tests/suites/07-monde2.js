@@ -2,7 +2,7 @@
 function accepterDefi() {
   nouvellePartie(); quete('q3', 3); quete('q4', 3); quete('q5', 1); battreAcolytes(1, 2);
   p.gold = 500; S.riftMax = 7; p.bag = []; bagAdd(objet('ring', 1)); p.stash[2].push(Object.assign(objet('belt', 2), { gx: 0, gy: 0 }));
-  aller(zid(2, 5)); invincible(); avancer(.3); const v = S.cur.mons.find(m => m.bossId === 'valgris');
+  aller(antre(2)); invincible(); avancer(.3); const v = S.cur.mons.find(m => m.bossId === 'valgris');
   tuer(v); attendre(panneauOuvert, 12); cliquer('vdefi'); avancer(1.5);
 }
 
@@ -11,8 +11,8 @@ test('« Accepter le défi » mène au Refuge de Brumegel, avec héros, sac, cof
   egal(S.riftMax, 7); egal(p.bag.length, 1); egal(p.stash[2].length, 1); ok(p.gold >= 500, 'or perdu'); egal(S.qw[1].q5.s, 3);
 });
 test('saut de difficulté : niveaux + 17, Varsha des Glaces au niveau 29', () => {
-  nouvellePartie(); setWorld(2); egal(actZones(1).slice(0, 5).map(id => zoneDef(id).lvl), [18, 20, 21, 23, 24]);
-  egal(zoneDef(zid(1, 5)).lvl, 27); quete('q2', 3); aller(zid(1, 5)); const v = S.cur.mons.find(m => m.bossId === 'varsha'); egal([v.lvl, v.name], [29, 'Varsha des Glaces']);
+  nouvellePartie(); setWorld(2); egal(actZones(1).slice(0, 8).map(id => zoneDef(id).lvl), [18, 19, 20, 21, 21, 22, 23, 24]);
+  egal(zoneDef(antre(1)).lvl, 27); quete('q2', 3); aller(antre(1)); const v = S.cur.mons.find(m => m.bossId === 'varsha'); egal([v.lvl, v.name], [29, 'Varsha des Glaces']);
 });
 test('monstres : vie × 1,25 et dégâts × 1,12 ; boss d’acte : vie × 0,55 en plus', () => {
   nouvellePartie(); setWorld(2); aller(zid(1, 0)); const r = monstre('rodeur', 1.5, 20);
@@ -42,7 +42,7 @@ test('quêtes et acolytes propres à chaque monde ; retour par la pierre de fail
   egal(acoCount(1), 2); egal(S.q.q5.s, 3); egal(S.qw[2].q3.s, 3);
 });
 test('au dernier monde, « Accepter le défi » est grisé', () => {
-  nouvellePartie(); setWorld(2); quete('q4', 3); aller(zid(2, 5)); invincible(); avancer(.3);
+  nouvellePartie(); setWorld(2); quete('q4', 3); aller(antre(2)); invincible(); avancer(.3);
   tuer(S.cur.mons.find(m => m.bossId === 'valgris')); attendre(panneauOuvert, 12);
   const b = panel.querySelector('[data-a="vdefi"]'); ok(b && b.disabled, 'le défi n’est pas grisé');
 });

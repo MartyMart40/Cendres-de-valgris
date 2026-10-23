@@ -30,17 +30,17 @@ test('un acolyte vaincu compte, avec un butin de boss', () => {
   egal(S.cur.items.filter(o => o.kind === 'item').length - n, 4, 'objets lâchés'); ok(S.cur.items.some(o => o.kind === 'item' && o.it.rar >= 2), 'aucun objet rare');
 });
 test('l’antre reste scellé tant que 2 des 3 acolytes ne sont pas vaincus', () => {
-  nouvellePartie(); quete('q2', 1); const antre = zid(1, 5);
-  ok(sealOf(antre), 'antre ouvert sans acolyte'); battreAcolytes(1, 1); ok(sealOf(antre), 'antre ouvert avec 1 acolyte');
-  const avant = zid(1, 4); aller(avant); const ex = S.cur.objs.find(o => o.type === 'exit' && o.to === antre); egal(tryExit(ex), false); egal(S.cur.id, avant);
+  nouvellePartie(); quete('q2', 1); const an = antre(1);
+  ok(sealOf(an), 'antre ouvert sans acolyte'); battreAcolytes(1, 1); ok(sealOf(an), 'antre ouvert avec 1 acolyte');
+  const avant = lastZone(1); aller(avant); const ex = S.cur.objs.find(o => o.type === 'exit' && o.to === an); egal(tryExit(ex), false); egal(S.cur.id, avant);
 });
 test('2 acolytes brisent le sceau, qui reste ouvert', () => {
-  nouvellePartie(); quete('q2', 1); battreAcolytes(1, 2); egal(S.q.q2.s, 2); ok(!sealOf(zid(1, 5)), 'antre encore scellé');
-  aller(zid(1, 4)); const ex = S.cur.objs.find(o => o.type === 'exit' && o.to === zid(1, 5)); ok(tryExit(ex)); egal(S.cur.id, zid(1, 5));
-  S.aco = {}; quete('q2', 3); ok(!sealOf(zid(1, 5)), 'le sceau s’est refermé');
+  nouvellePartie(); quete('q2', 1); battreAcolytes(1, 2); egal(S.q.q2.s, 2); ok(!sealOf(antre(1)), 'antre encore scellé');
+  aller(lastZone(1)); const ex = S.cur.objs.find(o => o.type === 'exit' && o.to === antre(1)); ok(tryExit(ex)); egal(S.cur.id, antre(1));
+  S.aco = {}; quete('q2', 3); ok(!sealOf(antre(1)), 'le sceau s’est refermé');
 });
 test('Varsha : niveau 12, 1200 points de vie de base ; vaincue, elle ouvre la descente vers l’acte II', () => {
-  nouvellePartie(); quete('q2', 3); quete('q3', 1); aller(zid(1, 5)); const v = S.cur.mons.find(m => m.bossId === 'varsha');
+  nouvellePartie(); quete('q2', 3); quete('q3', 1); aller(antre(1)); const v = S.cur.mons.find(m => m.bossId === 'varsha');
   ok(v, 'Varsha absente'); egal([v.lvl, MT.varsha.hp], [12, 1200]); egal(v.hp, Math.round(1200 * G(12)));
   tuer(v); egal(S.q.q3.s, 2); ok(S.cur.objs.some(o => o.type === 'exit' && o.to === zid(2, 0)), 'pas de sortie vers l’acte II');
   ok(!vivants().length, 'des monstres survivent à Varsha');

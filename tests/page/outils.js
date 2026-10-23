@@ -30,6 +30,8 @@ function textePanneau() { return panneauOuvert() ? panel.textContent : ''; }
 function cliquer(a, extra = {}) { const b = [...panel.querySelectorAll('button')].find(b => b.dataset.a === a && Object.entries(extra).every(([k, v]) => b.dataset[k] === String(v))); if (!b) throw new Error(`bouton « ${a} » absent`); b.click(); }
 // Quête : état direct (0 inconnue, 1 en cours, 2 à rendre, 3 terminée)
 function quete(k, s) { S.q[k].s = s; }
+// Zone du boss d'un acte (l'antre), après les zones tirées
+function antre(a = 1) { return zid(a, actLayout(a).length); }
 // Bat les acolytes (ou lieutenants) d'un acte sans aller les chercher
 function battreAcolytes(a, n) { const act = curWorld().acts[a - 1]; for (const b of act.acolytes.slice(0, n)) { S.aco[b] = 1; onAcolyte(b); } S.pend = []; }
 // Vrai toucher d'écran sur un objet du monde (PNJ, coffre, pierre…)
