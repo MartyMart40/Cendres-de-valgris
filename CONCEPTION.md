@@ -9,7 +9,7 @@ Document de référence du jeu. Chaque chantier le lit au début et le met à jo
 - Jouer (téléphone ou ordinateur) : https://martymart40.github.io/Cendres-de-valgris/ (GitHub Pages, mis à jour tout seul à chaque envoi sur GitHub).
 - Dépôt : https://github.com/MartyMart40/Cendres-de-valgris (public, seule source de vérité depuis la v5.8).
 - Archives, à ne plus modifier : l'ancien artefact du jeu (https://claude.ai/artifact/R197THvp93MsnVjV9UxNoM) et l'ancien Claude Doc de conception (https://claude.ai/artifact/V9aKNqAvSoWKEfmtQd3ZKA).
-- Un seul chantier modifie le jeu à la fois.
+- Au plus 2 chantiers en parallèle, chacun sur sa branche, une fusion à la fois (voir Méthode de travail).
 
 ## Vision
 
@@ -201,13 +201,22 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
   - `js/demarrage.js` : lance le jeu, toujours chargé en dernier.
   - Un nouveau fichier `js/` doit être ajouté dans `index.html`, à la bonne place dans l'ordre.
 - Une seule commande roule tout : `npm test`, ou un double-clic sur `tester.cmd`. Environ une minute et demie.
-  - Banc d'essai : 133 tests en 15 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
+  - Banc d'essai : 145 tests en 15 suites dans `tests/suites` (catalogues, équilibre, tirage des actes, formes de zone, acolytes et porte scellée, acte II et Valgris, monde 2, sauvegardes et conversions, inventaire, coffre, talents, forge et sorts, vrais touchers d'écran sur chaque PNJ, failles, styles). On ajoute les tests d'une nouveauté dans la bonne suite, ou dans une nouvelle suite.
   - Robot (`tests/robot.js`) : joue les deux actes puis les failles (avec `--complet`, il nettoie chaque zone d'acte avant d'avancer, comme un joueur qui explore), 2 heures de jeu simulé, 4 styles (Feu, Givre, Éclairs, Tourbillon), hasard fixé : deux parcours de la même version donnent les mêmes chiffres (à une faille près quand l'ordinateur est très chargé). Le bilan signale un robot « coincé » (immobile) ou qui « tourne en rond » (aucun dégât pendant 40 s), et un style dont le sort n'a jamais été débloqué.
   - Rendu en image (`tests/rendu.js`) : 7 scènes sur un écran de téléphone, dans `tests/sortie/rendu`.
   - Commandes séparées : `npm run tests`, `npm run robot`, `npm run rendu`, et `npm run jouer` pour jouer sur l'ordinateur.
 - Outils : Node.js portable dans `C:\Users\martin.laliberte\outils\node`, installé sans droits d'administrateur. Les tests pilotent Edge, déjà sur l'ordinateur.
 - `tests/reference/v5.8.html` garde la v5.8 d'un seul fichier, et `outils/transfert/` les scripts du transfert : utiles seulement pour refaire la comparaison du transfert.
-- Fin de chantier : `npm test` passe, commit, envoi sur GitHub (le jeu en ligne se met à jour), puis mise à jour de ce document (journal des versions, état du jeu, feuille de route).
+- Fin de chantier : `npm test` passe, fusion dans `main`, envoi sur GitHub (le jeu en ligne se met à jour), puis mise à jour de ce document (journal des versions, état du jeu, feuille de route).
+- Le dépôt vit dans `C:\Users\martin.laliberte\Projets\Cendres-de-valgris`, hors de OneDrive (déménagé le 22 octobre 2026). L'ancien dossier OneDrive est gardé jusqu'au 29 octobre, puis supprimé.
+
+### Chantiers en parallèle (règle du 22 octobre 2026)
+
+- Au plus 2 chantiers à la fois, sur des parties différentes du jeu. Le message de départ du Coach dit quels fichiers chaque chantier touche ; deux chantiers qui touchent le même fichier passent l'un après l'autre.
+- Chaque chantier a sa branche et son worktree (une copie de travail à part, créée par l'application). Il ne travaille jamais directement sur `main` et ne touche pas à ce document.
+- Une fusion à la fois : le chantier ramène le dernier `main` dans sa branche, relance `npm test` au complet, fusionne et publie. Le numéro de version se choisit à la fusion (le prochain libre).
+- Ce document est mis à jour juste après la fusion, dans `main`. Le chantier suivant à fusionner part de ce `main` à jour.
+- Le Coach reste sur `main` et ne fait pas de commit pendant une fusion.
 
 ### Chantiers
 
@@ -245,10 +254,10 @@ En attente : tutoriel court au premier lancement.
 ### Prochaines étapes (Coach, 22 octobre 2026)
 
 1. (fait) v5.11 : actes à 8 zones, conversion des parties à 5 zones, mode « complet » du robot. Elle montre que le monde 1 dure environ 1 à 2 heures pour un humain, loin des 8 heures visées : la cible est à rediscuter (étape 4).
-2. Déménager le dépôt hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : copie neuve depuis GitHub, `npm install`, `npm test`, recopier le dossier `.claude`, garder l'ancien dossier une semaine avant de le supprimer.
-3. Après le déménagement, changer la règle « un seul chantier à la fois » pour « un chantier par branche et par worktree, une fusion à la fois, CONCEPTION.md mis à jour à la fusion », avec au plus 2 chantiers en parallèle, sur des parties différentes du jeu.
-4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre).
-5. Corriger les portails qui coincent le joueur et plafonner les bonus d'objets (notes de Martin).
+2. (fait) Dépôt déménagé hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : 145 tests réussis. Supprimer l'ancien dossier OneDrive le 29 octobre.
+3. (fait) Nouvelle règle : au plus 2 chantiers en parallèle, chacun sur sa branche et son worktree, une fusion à la fois, ce document mis à jour à la fusion (voir Méthode de travail).
+4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre). Martin peut le faire pendant le chantier de l'étape 5 : il joue sur le jeu en ligne, rien ne change dans le code.
+5. Chantier Moteur et équilibre (prochain, message de départ prêt) : corriger les portails qui coincent le joueur et plafonner les bonus d'objets (notes de Martin).
 6. Butin rare propre à chaque boss, puis le Marais putride en monde 3 (un thème à la fois).
 
 ### Notes de Martin à traiter

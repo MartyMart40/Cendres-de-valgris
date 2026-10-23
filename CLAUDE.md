@@ -34,13 +34,22 @@ Tu es le développeur et le coach de Martin pour « Les Cendres de Valgris », u
 - Un rendu en image quand l'étape touche les graphismes.
 - Les tests et le robot sont des fichiers du dépôt : on les garde et on les enrichit, on ne les réécrit pas à chaque fois.
 - Si un test échoue, corrige avant de publier. Donne le résultat des tests dans ton résumé.
+- Avec deux chantiers en parallèle, les tests comptent seulement s'ils passent après avoir ramené le dernier `main` dans la branche.
 
 ## Organisation
 
 - Chaque séance est un chantier (Moteur et équilibre, Ennemis et boss, Équipement, Mondes et histoire, Graphismes et son, Saisons). Le Coach discute de la vision ailleurs, dans Cowork.
-- Un seul chantier modifie le jeu à la fois.
 - Fais des commits clairs, en français, une étape par commit.
-- À la fin d'un chantier : tests réussis, commit, publication, puis mise à jour de `CONCEPTION.md` (journal des versions, état du jeu, feuille de route).
+
+## Chantiers en parallèle
+
+- Au plus 2 chantiers à la fois, sur des parties différentes du jeu (le message de départ du Coach dit quels fichiers chacun touche). Si deux chantiers doivent toucher le même fichier, ils passent l'un après l'autre.
+- Un chantier = une branche et un worktree (une copie de travail à part, créée par l'application quand on coche « worktree » au départ de la séance). Il ne travaille jamais directement sur `main`.
+- Au début, dans le worktree : `npm install`, puis `npm test` pour partir d'un état sain. Le dossier `.claude` n'est pas copié dans le worktree : si `npm run jouer` sert déjà le jeu ailleurs sur le port 8080, ne pas en lancer un deuxième (les tests, eux, prennent un port libre tout seuls).
+- Pendant le chantier : commits sur sa branche seulement. On ne touche pas à `CONCEPTION.md` (il ne change qu'à la fusion, pour éviter les conflits).
+- Une fusion à la fois. Pour fusionner : ramener le dernier `main` dans la branche (outil « synchroniser avec la branche de base »), régler les conflits, relancer `npm test` au complet, puis fusionner dans `main` et publier. Le numéro de version (v5.12, v5.13…) se choisit à ce moment : le prochain numéro libre dans `main`.
+- Juste après la fusion, dans `main` : mise à jour de `CONCEPTION.md` (journal des versions, état du jeu, feuille de route), commit et publication. Si l'autre chantier fusionne ensuite, il ramène d'abord ce `main` à jour.
+- Le Coach travaille sur `main` et ne modifie que `CONCEPTION.md` et `CLAUDE.md` : il ne fait pas de commit pendant qu'un chantier fusionne.
 
 ## Séance Coach
 
