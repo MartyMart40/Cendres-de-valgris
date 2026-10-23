@@ -244,7 +244,7 @@ En attente : tutoriel court au premier lancement.
 
 ### Prochaines étapes (Coach, 22 octobre 2026)
 
-1. Terminer la v5.11 (Moteur et équilibre) : actes à 8 zones, conversion des parties à 5 zones, mode « complet » du robot. Commencée, pas encore enregistrée.
+1. (fait) v5.11 : actes à 8 zones, conversion des parties à 5 zones, mode « complet » du robot. Elle montre que le monde 1 dure environ 1 à 2 heures pour un humain, loin des 8 heures visées : la cible est à rediscuter (étape 4).
 2. Déménager le dépôt hors de OneDrive, vers `C:\Users\martin.laliberte\Projets\Cendres-de-valgris` : copie neuve depuis GitHub, `npm install`, `npm test`, recopier le dossier `.claude`, garder l'ancien dossier une semaine avant de le supprimer.
 3. Après le déménagement, changer la règle « un seul chantier à la fois » pour « un chantier par branche et par worktree, une fusion à la fois, CONCEPTION.md mis à jour à la fusion », avec au plus 2 chantiers en parallèle, sur des parties différentes du jeu.
 4. Mesurer le facteur de vitesse robot / humain et fixer les nouvelles cibles du robot (voir Règles d'équilibre).
