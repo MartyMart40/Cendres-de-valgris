@@ -139,7 +139,13 @@ function render(){
     if(o.type==='stash'&&dist(o,p)<6){const[sx,sy]=scr(o.x,o.y);lab('Coffre',sx,sy-38*Z,'#e8c060',`700 ${12*Z+1}px "Alegreya Sans",sans-serif`);}
     if(o.type==='rift'&&riftOpen()&&dist(o,p)<6){const[sx,sy]=scr(o.x,o.y);lab('Pierre de faille',sx,sy-64*Z,'#d8a8ff',`700 ${12*Z+1}px "Alegreya Sans",sans-serif`);}
     if(o.type==='wp'&&dist(o,p)<3){const[sx,sy]=scr(o.x,o.y);lab('Point de passage',sx,sy-22*Z,'#a8c0ff',`${12*Z+1}px "Alegreya Sans",sans-serif`);}}
-  for(const po of portalsIn(z))if(Math.hypot(po.x-p.x,po.y-p.y)<5){const[sx,sy]=scr(po.x,po.y);lab(po.label,sx,sy-62*Z,'#a8c0ff',`${12*Z+1}px "Alegreya Sans",sans-serif`);}
+  // Tout près du portail, son étiquette devient le bouton « Entrer » (le seul endroit de l'étiquette qui réagit au toucher)
+  S.portalBtn=null;const pn=portalNear(z);
+  for(const po of portalsIn(z))if(Math.hypot(po.x-p.x,po.y-p.y)<5){const[sx,sy]=scr(po.x,po.y);
+    if(!(pn&&pn.x===po.x&&pn.y===po.y)){lab(po.label,sx,sy-62*Z,'#a8c0ff',`${12*Z+1}px "Alegreya Sans",sans-serif`);continue;}
+    const t='Entrer · '+po.label;ctx.font=`700 ${13*Z+1}px "Alegreya Sans",sans-serif`;const w=ctx.measureText(t).width+22*Z,h=26*Z,ly=sy-66*Z;
+    ctx.fillStyle='rgba(16,24,52,.88)';ctx.strokeStyle='#8fb0ff';ctx.lineWidth=1.5;ctx.beginPath();ctx.rect(sx-w/2,ly-h/2,w,h);ctx.fill();ctx.stroke();ctx.fillStyle='#dfe8ff';ctx.fillText(t,sx,ly+1);
+    S.portalBtn={x0:sx-w/2,y0:ly-h/2,x1:sx+w/2,y1:ly+h/2,po};}
   S.labels=[];ctx.font=`${11*Z+2}px "Alegreya Sans",sans-serif`;
   for(const it of z.items){if(Math.hypot(it.x-p.x,it.y-p.y)>8)continue;if(p.skipWhite&&it.kind==='item'&&it.it.rar===0)continue;const[sx,sy]=scr(it.x,it.y);
     const t=it.kind==='gold'?`${it.v} or`:it.kind==='pot'?'Fiole':it.kind==='scroll'?'Parchemin de portail':it.it.name;

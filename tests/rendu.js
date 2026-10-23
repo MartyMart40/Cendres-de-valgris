@@ -16,6 +16,7 @@ const SCENES = {
   talents: () => { nouvellePartie(1); heros(25); rankUp('mastery', 10); rankUp('whirl', 6); SELT = 'whirl'; talentPanel(); },
   valgris: () => { nouvellePartie(1); quete('q4', 3); aller(antre(2)); invincible(); avancer(.3); tuer(S.cur.mons.find(m => m.bossId === 'valgris')); avancer(5.5); },
   givre: () => { nouvellePartie(1); setWorld(2); aller(zid(1, 0)); invincible(); avancer(2); },
+  portail: () => { nouvellePartie(1); aller(zid(1, 0)); invincible(); S.cur.mons = []; const f = nearFloor(S.cur, p.x + 6, p.y + 2); p.x = f[0] + .5; p.y = f[1] + .5; useScroll(); avancer(1.5); $('#toast').style.opacity = 0; },
 };
 
 async function roulerRendu({ reference = false } = {}) {

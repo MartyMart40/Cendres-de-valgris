@@ -37,7 +37,6 @@ function update(dt){
     if(p.tpCd<=0){
       for(const o of z.objs){if(o.type==='exit'&&dist(p,o)<.6){if(tryExit(o))return;break;}
         if(o.type==='wp'&&dist(p,o)<2.6&&!S.wps[z.id]){S.wps[z.id]=1;toast('Point de passage activé');save();}}
-      for(const po of portalsIn(z))if(Math.hypot(po.x-p.x,po.y-p.y)<.6){enterZone(po.dest,'portal');return;}
     }
   }
   z.flowT-=dt;if(z.flowT<=0&&z.id!=='town'){z.flowT=.25;z.flow=bfs(z,Math.floor(p.x),Math.floor(p.y),26);}

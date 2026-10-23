@@ -11,12 +11,14 @@ function loadSave(){try{const s=localStorage.getItem(SAVE);if(s){const v=JSON.pa
   const o=localStorage.getItem(SAVE_OLD);if(o)return migrate23(migrate12(JSON.parse(o)));return null;}catch(e){return null;}}
 function startGame(sv){
   S={pend:[],amb:[],shake:0,mark:null,zones:{},cur:null,q:{},wps:{town:1},portal:null,fx:[],proj:[],parts:[],novas:[],bolts:[],mets:[],t:0,paused:false,done:false,labels:[],cam:{x:0,y:0},riftMax:1,riftSel:1,rec:{},world:1,act:1,seed:(Math.random()*1e9)|0,layout:{},aco:{},hz:[],worldMax:1};
-  p=newPlayer();p.eq=starterGear(1);
+  p=newPlayer();p.eq=starterGear(1);let capped=0;
   if(sv){Object.assign(p,sv.p);S.q=sv.q||S.q;S.wps=sv.wps||S.wps;S.done=sv.done;S.riftMax=sv.riftMax||1;S.rec=sv.rec||{};
     if(WORLDS[sv.world])S.world=sv.world;if(sv.act&&curWorld().acts[sv.act-1])S.act=sv.act;if(sv.seed)S.seed=sv.seed;if(sv.lay&&typeof sv.lay==='object')S.layout=sv.lay;if(sv.aco&&typeof sv.aco==='object')S.aco=sv.aco;
     if(!p.stash)p.stash=[[],[],[],[]];while(p.stash.length<ST_TABS)p.stash.push([]);
     for(const it of p.bag.concat(Object.values(p.eq),...p.stash))if(it&&it.id>=itemId)itemId=it.id+1;
     for(const k in p.eq)normItem(p.eq[k]);
+    // Conversion v5.12 : les objets plus forts que la borne de leurs bonus y sont ramenés
+    for(const it of p.bag.concat(Object.values(p.eq),...p.stash))if(capItem(it))capped++;
     const lost=fixGrid(p.bag,INV_W,INV_H);for(let t=0;t<ST_TABS;t++)lost.push(...fixGrid(p.stash[t],ST_W,ST_H));
     for(const it of lost){let ok=false;for(let t=0;t<ST_TABS&&!ok;t++)ok=addTo(p.stash[t],ST_W,ST_H,it);}}
   S.qw=(sv&&sv.qw&&typeof sv.qw==='object')?sv.qw:{};S.qw[S.world]=S.qw[S.world]||S.q;S.q=S.qw[S.world];
@@ -32,6 +34,7 @@ function startGame(sv){
   $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');
   enterZone('town','spawn');
   if(treeMsg)S.pend.push(treeMsg);
+  if(capped){S.capped=capped;S.pend.push({t:1.4,fn:()=>say(capped>1?`${capped} objets trop puissants ont été ramenés à la limite de leurs bonus.`:'Un objet trop puissant a été ramené à la limite de ses bonus.')});}
   if(!sv)S.pend.push({t:.9,fn:()=>say(`Parle à ${npcA('corvel').replace(/<\/?b>/g,'')}, près du feu.`)});
   if(sv&&sv.migr)S.pend.push({t:1,fn:()=>openPanel('<h2>Nouvelle version</h2><p>Le jeu a maintenant dix emplacements d’équipement, des compétences et des failles sans fin. Ton niveau et tes quêtes sont gardés. Ton ancien équipement est remplacé par un équipement neuf et 200 pièces d’or.</p><p class="st">Tu as des points de compétence à placer dans Menu, onglet Compétences.</p><button data-a="close">Compris</button>')});
 }

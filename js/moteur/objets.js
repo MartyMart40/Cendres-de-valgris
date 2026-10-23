@@ -25,8 +25,17 @@ function genItem(L,minR,mf,forceType){
   if(rar===3){it.leg=legd.id;it.name=legd.n;it.power=legd.p;}
   if(rar===1)it.suf=AFX[keys[0]].s;if(rar===2)it.rname=`${pick(RARE_A)} ${pick(RARE_B)}`;
   it.val=Math.round((6+L*3)*(1+rar*1.6));
-  return refreshName(it);
+  capItem(it);return refreshName(it);
 }
+/* Bornes : ramène chaque bonus à la borne de son type (AFX[k].max) et les valeurs de base à celles du type d’objet.
+   Rend le nombre de valeurs corrigées (0 pour un objet normal). Un bonus inconnu ou illisible est retiré. */
+function capItem(it){if(!it||!it.aff)return 0;let n=0;const L=Math.max(1,it.ilvl||1),t=TYPES[it.type],g=G(L);
+  for(const k in it.aff){const A=AFX[k],v=it.aff[k];if(!A||typeof v!=='number'||!isFinite(v)){delete it.aff[k];n++;continue;}
+    const m=A.max(L);if(v>m){it.aff[k]=m;n++;}}
+  if(t&&it.d&&t.d)for(let i=0;i<2;i++){const m=Math.max(i+1,Math.ceil(t.d[i]*g*MARGE));if(!(it.d[i]<=m)){it.d[i]=m;n++;}}
+  if(t&&it.a){const m=Math.max(1,Math.ceil((t.a||0)*g*MARGE));if(!(it.a<=m)){it.a=m;n++;}}
+  if(it.block&&!(it.block<=(t&&t.block||0))){it.block=t&&t.block||0;n++;}
+  return n;}
 const OLDBASE={'Dague':'dagger','Épée':'sword','Masse':'mace','Hache':'axe','Bâton':'staff','Bouclier':'shield','Orbe':'orb'};
 function normItem(it){if(!it)return it;if(!it.type){it.type=OLDBASE[it.base]||({weapon:'sword',offhand:'shield',ring:'ring'}[it.slot])||it.slot;
     if(!TYPES[it.type])it.type='ring';it.slot=TYPES[it.type].slot;

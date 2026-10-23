@@ -21,6 +21,9 @@ function enterZone(id,how,from){
 function portalsIn(z){const r=[];if(!S.portal)return r;
   if(z.id==='town')r.push({x:z.portalSpot.x,y:z.portalSpot.y,dest:S.portal.zone,label:'Vers : '+zoneName(S.portal.zone)});
   if(z.id===S.portal.zone)r.push({x:S.portal.x,y:S.portal.y,dest:'town',label:'Vers le camp'});return r;}
+/* Un portail ne se prend que par un geste voulu : le toucher, ou le bouton « Entrer » quand on est tout près. Marcher dessus ne fait rien. */
+const PORTAL_NEAR=1.6;
+function portalNear(z){if(!z||p.dead||S.cine)return null;for(const po of portalsIn(z))if(Math.hypot(po.x-p.x,po.y-p.y)<PORTAL_NEAR)return po;return null;}
 function openRift(n){
   if(S.portal&&S.portal.zone==='rift')S.portal=null;
   S.zones.rift=makeZone('rift',riftDef(n));S.zones.rift.t0=S.t;enterZone('rift','spawn');sfx('portal');

@@ -24,24 +24,28 @@ function tierOf(it){const L=it.ilvl;return L<12?0:L<28?1:L<50?2:L<80?3:4;}
 const SLOTTYPES={weapon:['dagger','sword','sword','mace','axe','staff'],offhand:['shield','shield','shield','orb'],helm:['helm'],armor:['armor'],gloves:['gloves'],boots:['boots'],belt:['belt'],amulet:['amulet'],ring:['ring']};
 const SLOTW={weapon:3,offhand:2,helm:2,armor:2,gloves:2,boots:2,belt:2,amulet:1,ring:2};
 // k: clé, sl: emplacements permis, f: valeur selon niveau d’objet, t: texte
+// max: borne selon le niveau d’objet. C’est le plus haut tirage possible (légendaire × LEGK, plus la base du type d’objet) :
+// un objet ne la dépasse jamais, même forgé, et les objets trop forts des anciennes sauvegardes y sont ramenés au chargement.
+// MARGE : les valeurs qui suivent la courbe G gardent 25 % de jeu pour les arrondis (surtout aux petits niveaux) et la forge.
+const LEGK=1.3,MARGE=1.25;
 const AFX={
-  dmg:{sl:['weapon','ring','amulet','gloves'],f:L=>Math.max(1,Math.round(rnd(1,3.2)*G(L))),t:v=>`+${fmt(v)} dégâts`,s:'du Boucher'},
-  dmgPct:{sl:['weapon','amulet','ring','gloves','offhand'],f:L=>ri(8,Math.min(200,18+L*.7)),t:v=>`+${v} % dégâts`,s:'de la Furie'},
-  life:{sl:['offhand','helm','armor','gloves','boots','belt','amulet','ring'],f:L=>Math.max(2,Math.round(rnd(5,11)*G(L))),t:v=>`+${fmt(v)} vie`,s:'du Bœuf'},
-  lifePct:{sl:['armor','belt','amulet','helm'],f:()=>ri(4,12),t:v=>`+${v} % vie`,s:'du Colosse'},
-  armor:{sl:['offhand','helm','armor','gloves','boots','belt'],f:L=>Math.max(1,Math.round(rnd(3,8)*G(L))),t:v=>`+${fmt(v)} armure`,s:'du Rempart'},
-  armorPct:{sl:['offhand','helm','armor','gloves','boots','belt'],f:()=>ri(10,30),t:v=>`+${v} % armure`,s:'de la Forteresse'},
-  aspd:{sl:['weapon','gloves','ring','amulet'],f:()=>ri(5,16),t:v=>`+${v} % vitesse d’attaque`,s:'de la Rafale'},
-  crit:{sl:['weapon','gloves','ring','amulet','helm'],f:()=>ri(2,6),t:v=>`+${v} % chance critique`,s:'du Faucon'},
-  critDmg:{sl:['weapon','amulet','helm','gloves'],f:()=>ri(15,40),t:v=>`+${v} % dégâts critiques`,s:'du Bourreau'},
-  leech:{sl:['weapon','ring','amulet'],f:()=>ri(1,3),t:v=>`${v} % de vol de vie`,s:'de la Sangsue'},
-  mana:{sl:['helm','ring','amulet','offhand'],f:L=>ri(5,12)+Math.floor(L/4),t:v=>`+${v} mana`,s:'du Sage'},
-  manaReg:{sl:['helm','ring','amulet','offhand','belt'],f:()=>ri(10,40),t:v=>`+${v} % régénération de mana`,s:'de la Source'},
-  spell:{sl:['offhand','amulet','helm','weapon'],f:L=>ri(10,Math.min(150,24+Math.floor(L*.5))),t:v=>`+${v} % dégâts des sorts`,s:'des Braises'},
-  move:{sl:['boots'],f:()=>ri(5,15),t:v=>`+${v} % vitesse de déplacement`,s:'du Vent'},
-  mf:{sl:['helm','ring','amulet','boots'],f:()=>ri(5,25),t:v=>`+${v} % découverte d’objets`,s:'de la Fortune'},
-  block:{sl:['offhand'],f:()=>ri(4,10),t:v=>`+${v} % blocage`,s:'du Gardien'},
-  allSk:{sl:['amulet','helm','offhand'],f:()=>1,t:v=>`+${v} à toutes les compétences`,s:'du Maître',rare:true}
+  dmg:{sl:['weapon','ring','amulet','gloves'],f:L=>Math.max(1,Math.round(rnd(1,3.2)*G(L))),t:v=>`+${fmt(v)} dégâts`,max:L=>Math.ceil(3.2*LEGK*MARGE*G(L)),s:'du Boucher'},
+  dmgPct:{sl:['weapon','amulet','ring','gloves','offhand'],f:L=>ri(8,Math.min(200,18+L*.7)),t:v=>`+${v} % dégâts`,max:L=>Math.round(Math.ceil(Math.min(200,18+L*.7))*LEGK),s:'de la Furie'},
+  life:{sl:['offhand','helm','armor','gloves','boots','belt','amulet','ring'],f:L=>Math.max(2,Math.round(rnd(5,11)*G(L))),t:v=>`+${fmt(v)} vie`,max:L=>Math.ceil(11*LEGK*MARGE*G(L)),s:'du Bœuf'},
+  lifePct:{sl:['armor','belt','amulet','helm'],f:()=>ri(4,12),t:v=>`+${v} % vie`,max:()=>Math.round(12*LEGK),s:'du Colosse'},
+  armor:{sl:['offhand','helm','armor','gloves','boots','belt'],f:L=>Math.max(1,Math.round(rnd(3,8)*G(L))),t:v=>`+${fmt(v)} armure`,max:L=>Math.ceil(8*LEGK*MARGE*G(L)),s:'du Rempart'},
+  armorPct:{sl:['offhand','helm','armor','gloves','boots','belt'],f:()=>ri(10,30),t:v=>`+${v} % armure`,max:()=>Math.round(30*LEGK),s:'de la Forteresse'},
+  aspd:{sl:['weapon','gloves','ring','amulet'],f:()=>ri(5,16),t:v=>`+${v} % vitesse d’attaque`,max:()=>Math.round(16*LEGK),s:'de la Rafale'},
+  crit:{sl:['weapon','gloves','ring','amulet','helm'],f:()=>ri(2,6),t:v=>`+${v} % chance critique`,max:()=>5+Math.round(6*LEGK),s:'du Faucon'},
+  critDmg:{sl:['weapon','amulet','helm','gloves'],f:()=>ri(15,40),t:v=>`+${v} % dégâts critiques`,max:()=>20+Math.round(40*LEGK),s:'du Bourreau'},
+  leech:{sl:['weapon','ring','amulet'],f:()=>ri(1,3),t:v=>`${v} % de vol de vie`,max:()=>Math.round(3*LEGK),s:'de la Sangsue'},
+  mana:{sl:['helm','ring','amulet','offhand'],f:L=>ri(5,12)+Math.floor(L/4),t:v=>`+${v} mana`,max:L=>8+Math.round((12+Math.floor(L/4))*LEGK),s:'du Sage'},
+  manaReg:{sl:['helm','ring','amulet','offhand','belt'],f:()=>ri(10,40),t:v=>`+${v} % régénération de mana`,max:()=>Math.round(40*LEGK),s:'de la Source'},
+  spell:{sl:['offhand','amulet','helm','weapon'],f:L=>ri(10,Math.min(150,24+Math.floor(L*.5))),t:v=>`+${v} % dégâts des sorts`,max:L=>20+Math.round(Math.min(150,24+Math.floor(L*.5))*LEGK),s:'des Braises'},
+  move:{sl:['boots'],f:()=>ri(5,15),t:v=>`+${v} % vitesse de déplacement`,max:()=>5+Math.round(15*LEGK),s:'du Vent'},
+  mf:{sl:['helm','ring','amulet','boots'],f:()=>ri(5,25),t:v=>`+${v} % découverte d’objets`,max:()=>Math.round(25*LEGK),s:'de la Fortune'},
+  block:{sl:['offhand'],f:()=>ri(4,10),t:v=>`+${v} % blocage`,max:()=>Math.round(10*LEGK),s:'du Gardien'},
+  allSk:{sl:['amulet','helm','offhand'],f:()=>1,t:v=>`+${v} à toutes les compétences`,max:()=>1,s:'du Maître',rare:true}
 };
 const LEGS=[
   {id:'fire3',type:'helm',n:'Couronne du Brasier',slot:'helm',p:'La boule de feu se divise en trois.'},
