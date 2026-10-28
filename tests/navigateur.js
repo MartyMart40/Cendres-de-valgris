@@ -6,7 +6,7 @@ const path = require('node:path');
 const { chromium } = require('playwright-core');
 const { demarrer } = require('./serveur');
 
-const PAGES = { jeu: 'index.html', reference: 'tests/reference/v5.8.html' };
+const PAGES = { jeu: 'index.html', reference: 'tests/reference/v6.58.html' };
 const TELEPHONE = { viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, hasTouch: true, isMobile: true };
 
 async function lancer() {

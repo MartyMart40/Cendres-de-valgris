@@ -15,10 +15,10 @@ const SCENES = {
   inventaire: () => { nouvellePartie(1); heros(30); p.bag = []; for (const [t, r] of [['sword', 3], ['helm', 2], ['ring', 1], ['armor', 2], ['staff', 0], ['boots', 1]]) bagAdd(objet(t, r, 30)); invPanel('inv'); },
   talents: () => { nouvellePartie(1); heros(25); rankUp('mastery', 10); rankUp('whirl', 6); SELT = 'whirl'; talentPanel(); },
   valgris: () => { nouvellePartie(1); quete('q4', 3); aller(antre(2)); invincible(); avancer(.3); tuer(S.cur.mons.find(m => m.bossId === 'valgris')); avancer(5.5); },
-  givre: () => { nouvellePartie(1); setWorld(2); aller(zid(1, 0)); invincible(); avancer(2); },
+  givre: () => { nouvellePartie(1); S.wtheme = Object.assign({}, S.wtheme, { 2: 'givre' }); applyThemes(); setWorld(2); aller(zid(1, 0)); invincible(); avancer(2); },
   portail: () => { nouvellePartie(1); aller(zid(1, 0)); invincible(); S.cur.mons = []; const f = nearFloor(S.cur, p.x + 6, p.y + 2); p.x = f[0] + .5; p.y = f[1] + .5; useScroll(); avancer(1.5); $('#toast').style.opacity = 0; },
-  butin: () => { nouvellePartie(1); heros(30); p.bag = []; const it = genBossItem('korr', 30); bagAdd(it); bagAdd(genBossItem('heraut', 30)); bagAdd(objet('helm', 2, 30)); SEL = { it, src: 'bag' }; invPanel('inv'); panel.scrollTop = 1e4; },
-  pouvoirs: () => { nouvellePartie(1); heros(30); aller(zid(1, 0)); invincible(); S.cur.mons = []; for (const b of ['korr', 'heraut']) { const it = genBossItem(b, 30); p.eq[it.slot] = it; } recalc(); const f = nearFloor(S.cur, p.x + 5, p.y + 1); p.path = pathTo(S.cur, Math.floor(p.x), Math.floor(p.y), f[0], f[1]); const m = monstre('rodeur', 3); m.stun = 1e9; avancer(1); $('#toast').style.opacity = 0; },
+  butin: () => { nouvellePartie(1); heros(30); p.bag = []; const it = genUnique('korr', 30); bagAdd(it); bagAdd(genUnique('heraut', 30)); bagAdd(objet('helm', 2, 30)); SEL = { it, src: 'bag' }; invPanel('inv'); panel.scrollTop = 1e4; },
+  pouvoirs: () => { nouvellePartie(1); heros(30); aller(zid(1, 0)); invincible(); S.cur.mons = []; for (const b of ['korr', 'heraut']) { const it = genUnique(b, 30); p.eq[it.slot] = it; } recalc(); const f = nearFloor(S.cur, p.x + 5, p.y + 1); p.path = pathTo(S.cur, Math.floor(p.x), Math.floor(p.y), f[0], f[1]); const m = monstre('rodeur', 3); m.stun = 1e9; avancer(1); $('#toast').style.opacity = 0; },
 };
 
 async function roulerRendu({ reference = false } = {}) {

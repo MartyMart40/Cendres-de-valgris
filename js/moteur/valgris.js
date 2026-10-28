@@ -160,7 +160,7 @@ function valgrisAccept(){const m=S.vpend,z=S.cur;if(!m||!WORLDS[S.world+1])retur
   for(let k=0;k<6;k++)burst(m.x+rnd(-2,2),m.y+rnd(-2,2),'#f4ecd8',30);S.shake=.8;sfx('portal');
   S.pend.push({t:1.2,fn:()=>{setWorld(from+1);const L=vrep();const lv=zoneDef(zid(1,0)).lvl+2;
     for(const[r,n]of[[3,1],[2,3]])for(let i=0;i<n;i++)dropAt(S.cur,p.x+rnd(-1,1),p.y+rnd(-1,1),{kind:'item',it:genItem(lv,r,p.st.mf+300)});
-    dropAt(S.cur,p.x,p.y,{kind:'gold',v:Math.round(600*(1+.3*(lv-1)))});rollUnique('valgris',p.x,p.y,lv);
+    dropAt(S.cur,p.x,p.y,{kind:'gold',v:Math.round(600*(1+.3*(lv-1)))});rollUnique('valgris',p.x,p.y,lv,true,WORLDS[from].theme);/* portage de la 6.58 : accepter le défi garantit son trophée, au nom du monde où il a plié */
     toast(`Monde ${S.world} : ${worldName(S.world)}`);if(L.arrive)S.pend.push({t:2.4,fn:()=>say(L.arrive)});
     S.pend.push({t:5,fn:()=>say(`Son butin t’attend à tes pieds. Parle à ${npcA('corvel').replace(/<\/?b>/g,'')}.`)});save();}});}
 function valgrisNotYet(){const m=S.vpend,z=S.cur;S.vpend=null;closePanel();if(!m)return;const L=vrep();

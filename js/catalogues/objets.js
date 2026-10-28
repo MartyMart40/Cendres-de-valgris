@@ -75,22 +75,26 @@ const LEGS=[
   {id:'souffle',type:'amulet',n:'Dernier Souffle',slot:'amulet',p:'Sous 30 % de vie : +50 % de dégâts.'},
   {id:'pelerin',type:'boots',n:'Semelles du Pèlerin',slot:'boots',p:'+20 % de vitesse ; hors combat, ta vie remonte trois fois plus vite.'}
 ];
-/* v5.12 : butin propre à chaque boss. Un objet unique par boss, à petite chance, jamais garanti. Ajouter un trophée = ajouter une entrée. */
+/* v5.12 : butin propre à chaque boss. Un objet unique par boss, à petite chance. Ajouter un trophée = ajouter une entrée.
+   portage de la 6.58, butin des boss de la v5.13 : garanti au BOSS_PITY-ième combat sans lui ; nt : nom selon le thème du monde où il tombe (repli sur n). */
+const BOSS_PITY=25;
 const UNIQUES={
-  ossira:{type:'gloves',n:'Fil de la Tisseuse',leg:'u_web',ch:.03,p:'Tes attaques ralentissent les ennemis pendant 2 s.'},
-  korr:{type:'boots',n:'Semelles du Brûle-Tombes',leg:'u_ember',ch:.03,p:'+20 % de vitesse de déplacement. En marchant, tu brûles les ennemis tout près (30 % des dégâts, deux fois par seconde).'},
-  meliane:{type:'amulet',n:'Larme de Méliane',leg:'u_tear',ch:.03,p:'Chaque ennemi abattu te rend 2 % de vie et de mana.'},
-  varsha:{type:'helm',n:'Diadème de la Mère des Cendres',leg:'u_echo',ch:.02,p:'Tes sorts (sauf les ultimes) ont 15 % de chances de se relancer gratuitement.'},
-  heraut:{type:'shield',n:'Pavois du Héraut',leg:'u_banner',ch:.03,p:'+15 % de blocage. Bloquer étourdit les ennemis proches pendant 0,5 s.'},
-  cineraire:{type:'armor',n:'Linceul de Dame Cinéraire',leg:'u_veil',ch:.03,p:'Tous les dégâts reçus sont réduits de 15 %.'},
-  forgeron:{type:'mace',n:'Marteau sans visage',leg:'u_brk',ch:.03,p:'Tes coups fendent l’armure : les ennemis touchés subissent 20 % de dégâts en plus pendant 4 s.'},
+  ossira:{type:'gloves',n:'Fil de la Tisseuse',nt:{givre:'Fil de la Tisseuse de givre'},leg:'u_web',ch:.03,p:'Tes attaques ralentissent les ennemis pendant 2 s.'},
+  korr:{type:'boots',n:'Semelles du Brûle-Tombes',nt:{givre:'Semelles du Brise-Glace'},leg:'u_ember',ch:.03,p:'+20 % de vitesse de déplacement. En marchant, tu brûles les ennemis tout près (30 % des dégâts, deux fois par seconde).'},
+  meliane:{type:'amulet',n:'Larme de Méliane',nt:{givre:'Larme gelée de Méliane'},leg:'u_tear',ch:.03,p:'Chaque ennemi abattu te rend 2 % de vie et de mana.'},
+  varsha:{type:'helm',n:'Diadème de la Mère des Cendres',nt:{givre:'Diadème de la Mère des Glaces'},leg:'u_echo',ch:.02,p:'Tes sorts (sauf les ultimes) ont 15 % de chances de se relancer gratuitement.'},
+  heraut:{type:'shield',n:'Pavois du Héraut',nt:{givre:'Pavois du Héraut blanc'},leg:'u_banner',ch:.03,p:'+15 % de blocage. Bloquer étourdit les ennemis proches pendant 0,5 s.'},
+  cineraire:{type:'armor',n:'Linceul de Dame Cinéraire',nt:{givre:'Linceul de Dame Givrée'},leg:'u_veil',ch:.03,p:'Tous les dégâts reçus sont réduits de 15 %.'},
+  forgeron:{type:'mace',n:'Marteau sans visage',nt:{givre:'Marteau du Gel'},leg:'u_brk',ch:.03,p:'Tes coups fendent l’armure : les ennemis touchés subissent 20 % de dégâts en plus pendant 4 s.'},
   valgris:{type:'ring',n:'Anneau de l’Épreuve',leg:'u_trial',ch:.015,p:'+1 à toutes les compétences et +25 % de dégâts.'}
 };
-function genUnique(id,L){const U=UNIQUES[id];if(!U)return null;const it=genItem(L,3,0,U.type);it.rar=3;delete it.rname;delete it.suf;
-  it.leg=U.leg;it.name=U.n;it.power=U.p;it.uniq=id;capItem(it);return refreshName(it);}
-/* Tirage à la mort d’un boss : chance du catalogue (force : pour les tests) */
-function rollUnique(id,x,y,L,force){const U=UNIQUES[id];if(!U||!S.cur)return null;if(!force&&Math.random()>=U.ch)return null;
-  const it=genUnique(id,L);dropAt(S.cur,x,y,{kind:'item',it});S.pend.push({t:.6,fn:()=>{toast('Butin de boss : '+it.name+' !');sfx('leg');}});burst(x,y,'#ffb040',50);return it;}
+function uniqName(id,th){const U=UNIQUES[id];return U?(U.nt&&U.nt[th])||U.n:'';}
+function genUnique(id,L,th){const U=UNIQUES[id];if(!U)return null;const it=genItem(L,3,0,U.type);it.rar=3;delete it.rname;delete it.suf;th=th||(S?curWorld().theme:'cendres');
+  it.leg=U.leg;it.name=uniqName(id,th);it.power=U.p;it.uniq=id;it.uth=th;capItem(it);return refreshName(it);}
+/* Tirage à la mort d’un boss : chance du catalogue, garanti au BOSS_PITY-ième combat sans lui (force : garanti, par exemple en acceptant le défi de Valgris) */
+function rollUnique(id,x,y,L,force,th){const U=UNIQUES[id];if(!U||!S.cur)return null;S.btry=S.btry||{};const n=(S.btry[id]||0)+1;
+  if(!force&&n<BOSS_PITY&&Math.random()>=U.ch){S.btry[id]=n;return null;}S.btry[id]=0;
+  const it=genUnique(id,L,th);dropAt(S.cur,x,y,{kind:'item',it});S.pend.push({t:.6,fn:()=>{toast('Butin de boss : '+it.name+' !');sfx('leg');}});burst(x,y,'#ffb040',50);return it;}
 const RARE_A=['Croc','Glas','Serment','Rune','Fléau','Murmure','Braise','Écharde','Lien','Sceau','Cri','Voile'];
 const RARE_B=['du Crépuscule','des Tombes','de Cendre','des Abîmes','de l’Aube noire','du Veilleur','des Ronces','du Brasier','de la Faille'];
 const RCOL=['#e2d6c0','#8796ff','#f0d050','#ff9a3a'];
