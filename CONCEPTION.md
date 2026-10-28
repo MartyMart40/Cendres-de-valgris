@@ -1,6 +1,6 @@
 # Conception : Les Cendres de Valgris
 
-Mis à jour le 22 octobre 2026 · Martin
+Mis à jour le 28 octobre 2026 · Martin
 
 Document de référence du jeu. Chaque chantier le lit au début et le met à jour à la fin.
 
@@ -8,7 +8,7 @@ Document de référence du jeu. Chaque chantier le lit au début et le met à jo
 
 - Jouer (téléphone ou ordinateur) : https://martymart40.github.io/Cendres-de-valgris/ (GitHub Pages, mis à jour tout seul à chaque envoi sur GitHub).
 - Dépôt : https://github.com/MartyMart40/Cendres-de-valgris (public, seule source de vérité depuis la v5.8).
-- Archives, à ne plus modifier : l'ancien artefact du jeu (https://claude.ai/artifact/R197THvp93MsnVjV9UxNoM) et l'ancien Claude Doc de conception (https://claude.ai/artifact/V9aKNqAvSoWKEfmtQd3ZKA).
+- Archives, à ne plus modifier : l'ancien artefact du jeu (https://claude.ai/artifact/R197THvp93MsnVjV9UxNoM ; il a continué d'évoluer à part jusqu'à la v6.58, portée dans le dépôt le 28 octobre ; on ne le touche plus, tout se fait dans le dépôt) et l'ancien Claude Doc de conception (https://claude.ai/artifact/V9aKNqAvSoWKEfmtQd3ZKA).
 - Au plus 2 chantiers en parallèle, chacun sur sa branche, une fusion à la fois (voir Méthode de travail).
 
 ## Vision
@@ -121,51 +121,43 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 
 - Portail d'invasion : un portail s'ouvre sans prévenir en pleine zone, et des monstres d'un autre thème (exemple : licornes) envahissent. Un compte à rebours démarre pour fermer le portail. En cas d'échec, la zone se transforme dans le thème envahisseur, avec des monstres plus durs et un meilleur butin, jusqu'à ce qu'on la quitte. L'échec reste amusant, il ne punit pas la progression.
 
-## État actuel du jeu (v5.13)
+## État actuel du jeu (v6.58)
+
+La v6.58 vient de l'artefact, qui a évolué à part depuis la v5.8 (environ 100 versions, d'où des numéros v5.9 à v5.13 qui ne sont pas ceux du dépôt). Le détail version par version est dans le panneau « Nouveautés » du jeu (catalogue `NEWS`, `js/moteur/mise-a-jour.js`) et dans les commentaires « vX.YY : » du code. Résumé :
 
 ### Monde
 
-- Camp de Halveth : Ancien Corvel (quêtes), Bram le colporteur (achat et vente), Sœur Éline (soins), Hilde la forgeronne (monte un objet au niveau du héros), coffre, pierre de faille, point de passage.
-- Deux mondes jouables, chacun à 2 actes. Monde 1 : Cendres. Monde 2 : Givre éternel (camp Refuge de Brumegel, niveaux de 18 à 38 environ), atteint en acceptant le défi de Valgris ; retour possible par la pierre de faille. Acte I : 8 zones tirées avec la graine de la partie, puis l'Antre de Varsha (les parties commencées avant la v5.11 gardent leurs 5 zones). La première zone est toujours la Plaine des Cendres ; les autres tirent une forme (grande plaine, labyrinthe, grand couloir, arène), un nom et un décor, sans jamais deux formes pareilles de suite ; les 4 formes sont toujours présentes, l'arène une seule fois. Niveaux 1 à 7, antre niveau 10. Points de passage en zones 1, 3, 5, 7 et 8. Acte II : 8 zones tirées (niveaux 11 à 17, noms propres à l'acte II) puis le Sanctuaire de Valgris (niveau 19). On y descend par une sortie qui s'ouvre au fond de l'antre de Varsha une fois celle-ci vaincue.
-- Quêtes : les plaines souillées (12 créatures), les acolytes de Varsha (2 sur 3 brisent le sceau de l'antre, qui reste ouvert), la Mère des Cendres (boss Varsha) ; acte II : les lieutenants de Valgris (2 sur 3 ouvrent le Sanctuaire), puis Valgris.
-- Points de passage, parchemins de portail, sorties entre zones. Depuis la v5.12, marcher sur un portail ne fait rien : on entre en touchant le portail lui-même (son ovale lumineux seulement), ou avec le bouton « Entrer » qui remplace son étiquette quand on est tout près (touche Entrée au clavier). Les sorties entre zones, elles, se prennent toujours en marchant.
-- Failles sans fin : ouvertes après Varsha. 50 monstres puis un gardien. Chaque gardien vaincu ouvre le niveau suivant et donne un point de talent la première fois. Records de temps par faille.
+- 7 mondes, chacun à 2 actes. Les thèmes sont tirés au hasard à chaque nouvelle partie parmi 11 (Cendres, Givre éternel, Marais putride, Pré blême, Fonderie des Saints, Ossuaire des Cloches, Forge céleste, forêt, désert, volcan, abîme) ; une vieille partie garde ses mondes. On passe au monde suivant en acceptant le défi de Valgris.
+- Actes de 8 zones tirées avec la graine (9 formes : grande plaine, labyrinthe, grand couloir, arène, archipel, spirale, descente, cendre qui avance, grande étendue), puis l'antre du boss. Chemins de traverse facultatifs, événements de zone (un par monde au moins), modificateurs de zone, cartes d'épreuve, contrats du jour, mutation de la semaine, Brasiers (v6.58).
+- Camp : Corvel (quêtes), Bram (marchand, « Vendre tout »), Éline, Hilde (forge), le Démolisseur (matériaux), la Joueuse (objets voilés), la lapidaire (orbes), le recruteur (compagnons), coffre, pierre de faille.
+- Portails : on entre en touchant le portail. Une sortie entre zones n'est prise en marchant que si on la visait. Le bouton « Entrer » de la v5.13 du dépôt n'existe plus.
+- Failles sans fin, avec affixes dès la faille 5.
 
-### Monstres
+### Monstres et boss
 
-- Rôdeur cendreux, Charognard, Archer d'os, Sorcier d'os, Ombre geignarde, Brute calcinée, Pleureuse, Varsha (boss), gardiens de faille. Acolytes de Varsha (un par zone tirée, jamais la première) : Ossira la Tisseuse (toiles qui ralentissent), Korr le Brûle-Tombes (charge annoncée, traînée de feu), Méliane la Pleureuse (téléportation, pleureuses). Dans une arène, l'acolyte arrive avec la dernière vague. Grand couloir : embuscades en groupe dans les alcôves. Lieutenants de Valgris (acte II) : le Héraut gris (son étendard le protège à 85 % et renforce les monstres proches, il le replante), Dame Cinéraire (cendre brûlante au sol, éclats à distance), le Forgeron sans visage (armure qui prend les coups ; brisée, il chancelle et devient fragile, puis la reforge). Valgris (niveau 20) : voir Boss du monde 1.
-- Monde 2 : mêmes comportements, nouvelles allures (Loups de givre, Archers gelés, Spectres glacés, Colosses de glace), acolytes et lieutenants renommés (Korr le Brise-Glace, Dame Givrée…), Varsha des Glaces.
-- Champions (bleus), gardiens (violets, salves et invocations).
-- Note de Martin (Varsha trop facile) : renforcée en v5.5. Le robot met environ 1 minute à la battre au lieu de 15 s. À revoir avec les durées cibles.
+- Familles propres à chaque monde, attaques annoncées au sol, champions avec affixes, élites.
+- Varsha (et ses versions par monde) en 2 formes ; Valgris en 3 formes, chacune avec sa barre de vie, puis la révélation finale. Acolytes et lieutenants comme avant, changés selon le monde.
 
 ### Objets
 
-- 10 emplacements : arme, main gauche, casque, armure, gants, bottes, ceinture, amulette, deux anneaux.
-- Raretés : normal (gris), magique (bleu), rare (jaune), légendaire (orange, 11 légendaires avec pouvoir unique).
-- Butin des boss (v5.13, catalogue `BOSSLOOT`) : chaque boss du monde 1 a son légendaire, qui ne tombe que sur lui, marqué « Légendaire de boss » et « Butin de … » dans l'infobulle. Fileuses d'Ossira (gants : les coups ralentissent de 30 %), Semelles du Brûle-Tombes (bottes : traînée de feu), Larme de Méliane (amulette : téléportation sous 35 % de vie), Mue de la Mère des Cendres (armure : salve de 8 braises toutes les 8 s), Pavois du Héraut (bouclier : étendard, +25 % de dégâts et 15 % de dégâts subis en moins), Voile de Cendre vive (casque : les sorts laissent une flaque brûlante), Marteau sans visage (masse : +4 % de dégâts par coup sur le même ennemi, jusqu'à 40 %), Sceau de l'Imbattable (anneau : un coup mortel relève à 50 % de vie, toutes les 2 min). Au monde 2, même objet renommé au thème (Semelles du Brise-Glace…). « Accepter le défi » garantit l'objet de Valgris dans le gros butin d'arrivée.
-- 17 types de bonus (dégâts, vie, armure, critique, vol de vie, vitesse, sorts, découverte d'objets, blocage, +1 à toutes les compétences, etc.). Chaque type a une borne dans le catalogue des objets (v5.12) : un objet ne la dépasse jamais, même forgé, et les objets trop forts des anciennes sauvegardes y sont ramenés au chargement (avec un message).
-- 5 paliers d'allure selon le niveau de l'objet : Cuir (moins de 12), Fer (12 à 27), Acier (28 à 49), Chevalier (50 à 79), Paladin (80 et plus). Le nom, l'icône et l'apparence du héros suivent le palier.
-- Inventaire en grille de 12 × 5 cases. Tailles : anneau, amulette, orbe 1×1 ; ceinture 2×1 ; casque, gants, bottes, bouclier 2×2 ; armure, hache 2×3 ; épée, masse 1×3 ; dague 1×2 ; bâton 1×4.
-- Coffre : 4 onglets de 12 × 8 cases.
-- Comparaison ▲ ▼ en pourcentage de puissance, bouton « Équiper le meilleur ».
+- 23 types de bonus (dont dégâts des attaques et 5 résistances), plafonds selon le niveau de l'objet (`affCap`), objets trop forts des vieilles sauvegardes ramenés au plafond.
+- Légendaires (20, plus 26 légendaires de build qui transforment un talent), ensembles, objets corrompus, orbes de forge, matériaux, essences, Autel des empreintes.
+- Trophées de boss (catalogue `UNIQUES`, fusion de la 6.58 et du butin des boss de la v5.13) : un objet par boss du monde 1, avec son pouvoir. Petite chance (3 %, 2 % pour Varsha, 1,5 % pour Valgris), garanti au 25e combat sans lui (compteur par boss dans la sauvegarde), nom selon le monde où il tombe (noms du Givre), garanti en acceptant le défi de Valgris. Tableau des trophées dans le menu. Les objets de boss des sauvegardes v5.13 deviennent le trophée du même boss.
 
 ### Talents
 
-- 26 talents en 3 branches (Guerre, Pyromancie, Rempart), 7 paliers chacune.
-- Un palier demande un niveau ET des points déjà placés dans la branche :
-  - niveaux : 1, 4, 8, 14, 22, 35, 50
-  - points dans la branche : 0, 3, 8, 15, 25, 40, 60
-- Un ultime par branche (Avatar des Cendres, Cataclysme, Égide divine) et un talent sans fin par branche.
-- Rangs jusqu'à 1 000 000. Points : 1 par niveau, 1 de plus tous les 5 niveaux, 1 par nouvelle faille vaincue.
-- Barre de 4 compétences.
-- Sorts des 4 styles (v5.10) : Boule de feu 170 % (+17 % par rang, 6 mana) ; Nova de givre 130 % (+12 %, 10 mana) ; Chaîne d'éclairs 95 % (+9,5 %, 9 mana), sur 3 ennemis plus 1 tous les 5 rangs, 9 au plus ; Tourbillon 230 % (+23 %, 10 mana).
+- 3 classes (v6.30), 76 talents en 5 branches de 7 paliers (dont l'Archerie et l'Ombre), un ultime et un talent sans fin par branche, synergies, pierres de soutien, fiches de talent.
+- Barre de 6 cases : 4 au départ, une 5e au niveau 15, une 6e au niveau 30. Arme de rechange.
 
 ### Autres
 
-- Sons synthétisés (coupables dans Stats), records de faille, aimant à or.
-- Sauvegarde automatique dans le navigateur, avec conversion des anciennes versions.
+- Compagnons, hauts faits, carnet, guide, copie de secours de la partie, apparence du héros, qualité graphique adaptative, ambiance sonore par monde.
+- Sauvegarde automatique, avec conversion de toutes les anciennes versions (v1, v2, v3 d'avant, v5.13 du dépôt).
 
 ## Règles d'équilibre (chiffres clés)
+
+Attention : la plupart des chiffres ci-dessous datent de la v5.13. La 6.58 en a changé beaucoup : expérience (v6.03), armure contre les petits monstres (v6.02), sorts (Boule de feu 150 %, Tourbillon 150 %, Chaîne d'éclairs 115 % jusqu'à 15 ennemis, Nova de givre 12 mana), monde 2 (vie × 1,6, dégâts × 1,2, boss d'acte × 0,5), Valgris (44 008 points de vie par forme au niveau 20), butin des boss (voir Objets). Le banc d'essai suit la 6.58 : en cas de doute, ses tests font foi. À remettre à jour au prochain chantier d'équilibre.
+
 
 - Courbe de puissance commune : G(L) = (1 + 0,15 × (L − 1)) × 1,05^(L − 1). Elle règle la vie et les dégâts des monstres, les stats des objets et la vie de base du héros.
 - Niveau des monstres d'une faille n : 6 + n.
@@ -236,6 +228,7 @@ Martin va ajouter du contenu sans arrêt (monstre à deux têtes qui crache du f
 ## Feuille de route
 
 0. Transfert vers GitHub et Claude Code (fait, 22 octobre 2026) : découpage en fichiers, tests et robot enregistrés, GitHub Pages.
+0 bis. Portage de la v6.58 de l'artefact dans le dépôt (fait, 28 octobre 2026). Beaucoup d'étapes ci-dessous sont faites dans la 6.58 (formes de Valgris, affixes de champions, nouveaux thèmes, ensembles, gemmes, artisanat, mutation de la semaine) : la feuille de route est à revoir en séance Coach.
 1. Moteur : Mondes et actes (étapes 1 et 2 faites : v5.2 à v5.8)
    - Gabarit d'un monde : 2 actes, zones générées, mini-boss, boss d'acte, porte scellée (fait)
    - Acte II du monde 1 avec Valgris et ses lieutenants (fait, v5.6)
@@ -265,11 +258,16 @@ En attente : tutoriel court au premier lancement.
 7. Après l'étape 4 : chantier d'équilibre des styles (le robot corrigé mesure 33 % d'écart, cible 20 %), réglé avec les nouvelles cibles de durée. Pas avant : régler les styles sur de vieilles cibles serait à refaire.
 8. Le Marais putride en monde 3 (un thème à la fois).
 
+### Prochaine étape (portage 6.58, 28 octobre 2026)
+
+1. Robot à remettre à niveau pour la 6.58 (chantier Moteur et équilibre). Il tourne sans erreur, mais il joue la 6.58 comme la v5.13 : pas de classe, talents d'avant, Chaîne d'éclairs jamais débloquée. Résultat sur 2 heures : niveau 9 ou 10, faille 1, 150 à 195 morts, l'antre en 28 à 62 min, un seul style bat Varsha. Tant qu'il n'est pas corrigé, ses mesures ne disent rien de l'équilibre de la 6.58.
+2. Revoir la feuille de route et les règles d'équilibre en séance Coach, à partir de la 6.58.
+
 ### Notes de Martin à traiter
 
 - [x] (corrigé en v5.12) Portails : vérifier leur fonctionnement. Vu par le robot en v5.11 : dans un Grand couloir, le portail de retour peut se trouver sur le seul chemin, et passer dessus renvoie au camp. Ils empiètent sur l'écran et bloquent les clics ailleurs ; quand un portail apparaît automatiquement, le joueur se retrouve coincé. Il faut distinguer clairement « je veux entrer dans le portail » de « je passe à côté » (ex. entrée seulement sur un geste voulu ou une confirmation).
 - [x] (corrigé en v5.12 ; « 90 000 % » était une exagération de Martin : le vrai sujet est un scaling trop facile, à régler à l'étape 4) Équilibre des objets : plafonner les bonus. Aucun objet ne doit donner des valeurs absurdes (ex. plus de 90 000 % de dégâts). Revoir les formules de génération et ajouter des bornes.
-- [ ] Bouton « Vendre tout » chez le marchand : vendre d'un coup tout l'inventaire, sauf l'équipement porté et les objets verrouillés (prévoir une confirmation).
+- [x] (fait dans la 6.58) Bouton « Vendre tout » chez le marchand : vendre d'un coup tout l'inventaire, sauf l'équipement porté et les objets verrouillés (prévoir une confirmation).
 
 Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change pas le jeu) :
 
@@ -285,6 +283,7 @@ Trouvé par le banc d'essai au transfert (pas corrigé, le transfert ne change p
 
 | Version | Contenu |
 | --- | --- |
+| v6.58 (portage) | La v6.58 de l'artefact, qui avait évolué à part depuis la v5.8, est portée dans le dépôt et découpée en fichiers (outils/portage-6.58, nouveau fichier `js/catalogues/autres-mondes.js`) ; la 6.58 d'un seul fichier devient la référence du banc (`tests/reference/v6.58.html`), et le découpage s'y comporte à l'identique. Du dépôt v5.13 on garde : le butin des boss, fusionné dans les trophées de la 6.58 (garantie au 25e combat, noms du Givre, trophée de Valgris garanti avec le défi, conversion des objets de boss des sauvegardes v5.13) ; les deux corrections de la v5.9 (fioles de la quête 2 plafonnées, message « Talents de ta classe » qui n'est plus effacé à l'entrée au camp). Correction : l'épée de départ a d'emblée son bonus d'attaque. Perdu : le bouton « Entrer » des portails (la 6.58 a son propre geste). Banc adapté aux règles de la 6.58 : 225 tests réussis (7 tests du bouton « Entrer » retirés, 11 ajoutés, dont 7 sur le chargement d'une partie v5.13), 10 images. Robot : tourne sans erreur mais n'est plus adapté (voir Prochaine étape). |
 | v5.13 | Chantier Équipement : butin rare propre à chaque boss. Un légendaire par boss du monde 1 (catalogue `BOSSLOOT`, voir Objets), avec un pouvoir tiré de sa façon de se battre et « Butin de … » dans sa description. 1 chance sur 12 (1 sur 10 pour Varsha et Valgris), garanti au 25e combat sans lui ; renommé au thème du monde 2 ; objet de Valgris garanti avec « Accepter le défi ». Il se sauvegarde, va au coffre et se forge chez Hilde ; les anciennes sauvegardes se chargent sans changement. Robot (graine 1) : failles à 2 h Feu 68, Givre 71, Éclairs 75, Tourbillon 61, Valgris à zéro en 17 à 20 min. Ces écarts avec la mesure précédente (65 / 68 / 79 / 57) viennent surtout du hasard décalé : avec le butin coupé mais le même tirage, Feu, Givre et Éclairs donnent les mêmes chiffres ; seul le robot Tourbillon a trouvé un objet de boss (Marteau sans visage, porté 2 min, Valgris battu plus vite). 221 tests réussis (39 nouveaux, suite « butin-boss »), 10 images (scènes « butin » et « pouvoirs »). |
 | Robot (22 oct.) | Chantier Moteur et équilibre, robot seulement (aucun changement de jeu, pas de nouveau numéro). Le robot visait un monstre proche à vol d'oiseau mais caché derrière un mur ; en faisant le long détour, il le perdait de vue, revenait vers la sortie, le revoyait et tournait en rond. Il laisse maintenant de côté 10 s un monstre hors de vue dont le chemin est bien plus long que la distance (sauf un boss). Givre atteint l'antre en 11 à 13 min sur les graines 1, 2 et 3 (avant : 47 et 88 min avec les graines 2 et 3) ; Feu graine 1 en 9,6 min (avant : 19,8). Il reste 0 à 2 robots « coincés » ou qui « tournent en rond » par partie. Écart entre styles, mesuré sans robots coincés : 33 % sur 3 graines (Éclairs 77, Tourbillon 58). 182 tests réussis, 8 images. |
 | v5.12 | Chantier Moteur et équilibre : portails et bornes des objets. Marcher sur un portail ne téléporte plus (fini le portail de retour sur le seul chemin d'un Grand couloir, ou le rebond au camp) : on entre en touchant le portail lui-même, ou avec le bouton « Entrer » qui apparaît tout près ; le portail ne capte plus les touchers à côté de lui. Chaque type de bonus d'objet a une borne dans le catalogue ; la génération, la forge et le chargement des sauvegardes y ramènent tout objet trop fort (480 000 objets simulés : aucun objet normal ni forgé n'est touché). Robot (graine 1) : actes identiques à la v5.11 à la seconde près, failles à 2 h de 61 à 76 (Feu 63, Givre 65, Éclairs 76, Tourbillon 61) ; sur les graines 2 et 3, mêmes chiffres que la v5.11 à 0 à 4 failles près. 182 tests réussis (37 nouveaux, suite « portails-objets »), 8 images (nouvelle scène « portail »). |
