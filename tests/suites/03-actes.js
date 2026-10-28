@@ -22,10 +22,12 @@ test('acte I : niveaux 1 à 7, points de passage en zones 1, 3, 5, 7 et 8', () =
   nouvellePartie(); egal(actZones(1).slice(0, 8).map(id => zoneDef(id).lvl), [1, 2, 3, 4, 4, 5, 6, 7]);
   egal(actZones(1).slice(0, 8).map(id => zoneDef(id).wp), [true, false, true, false, true, false, true, true]);
 });
-test('acte II : niveaux 11 à 17, noms propres à l’acte II, Sanctuaire niveau 19', () => {
+// La forme « grande étendue » (ouverte) n'a pas de noms par acte : elle prend les noms d'étendue du thème (OPEN_N)
+test('acte II : niveaux 11 à 17, noms propres à l’acte II (ou d’étendue), Sanctuaire niveau 19', () => {
   nouvellePartie(); egal(actZones(2).slice(0, 8).map(id => zoneDef(id).lvl), [11, 12, 13, 14, 14, 15, 16, 17]);
-  const noms2 = Object.values(THEMES.cendres.names2).flat().map(n => n[0]);
-  for (const id of actZones(2).slice(0, 8)) ok(noms2.includes(zoneDef(id).name), zoneDef(id).name);
+  const noms2 = Object.values(THEMES.cendres.names2).flat().map(n => n[0]), etendues = OPEN_N.cendres.map(n => n[0]);
+  ok(!THEMES.cendres.names2.ouverte, 'l’acte II a maintenant ses propres noms d’étendue');
+  for (const id of actZones(2).slice(0, 8)) { const l = actLayout(2)[parseZ(id).i]; ok((l.f === 'ouverte' ? etendues : noms2).includes(zoneDef(id).name), zoneDef(id).name); }
   egal([zoneDef(antre(2)).name, zoneDef(antre(2)).lvl], ['Sanctuaire de Valgris', 19]);
 });
 test('un acolyte par zone tirée, jamais dans la première', () => {
@@ -53,8 +55,13 @@ test('acte II : 8 zones puis le Sanctuaire de Valgris', () => {
 test('8 zones : les noms d’un même acte ne se répètent jamais', () => {
   for (let s = 1; s <= 100; s++) for (const a of [1, 2]) { const l = rollAct(1, a, s * 7919); egal(l.length, 8); egal(new Set(l.map(x => x.f + x.n)).size, 8, `graine ${s}, acte ${a}`); }
 });
-test('8 zones : au plus une arène par acte, et les 4 formes sont toutes présentes', () => {
-  for (let s = 1; s <= 100; s++) for (const a of [1, 2]) { const f = rollAct(1, a, s * 31).map(x => x.f); ok(f.filter(x => x === 'arene').length <= 1, `graine ${s}`); egal(new Set(f).size, 4, `graine ${s}, acte ${a}`); }
+// 6.58 : 9 formes par acte (archipel, spirale, descente, cendre qui avance, grande étendue en plus) ; une forme n'est reprise que quand toutes ont servi, donc 8 formes différentes sur 8 zones
+test('8 zones : au plus une arène par acte, et 8 formes différentes parmi les 9 de l’acte', () => {
+  for (const a of [0, 1]) egal(WORLDS[1].acts[a].formes.length, 9);
+  for (let s = 1; s <= 100; s++) for (const a of [1, 2]) {
+    const f = rollAct(1, a, s * 31).map(x => x.f); ok(f.filter(x => x === 'arene').length <= 1, `graine ${s}`); egal(new Set(f).size, 8, `graine ${s}, acte ${a}`);
+    for (const x of f) ok(WORLDS[1].acts[a - 1].formes.includes(x), x);
+  }
 });
 test('8 zones : point de passage dans la dernière zone avant l’antre', () => {
   nouvellePartie(); ok(zoneDef(lastZone(1)).wp); ok(zoneDef(lastZone(2)).wp); ok(!zoneDef(antre(1)).wp);

@@ -39,9 +39,15 @@ test('2 acolytes brisent le sceau, qui reste ouvert', () => {
   aller(lastZone(1)); const ex = S.cur.objs.find(o => o.type === 'exit' && o.to === antre(1)); ok(tryExit(ex)); egal(S.cur.id, antre(1));
   S.aco = {}; quete('q2', 3); ok(!sealOf(antre(1)), 'le sceau s’est refermé');
 });
-test('Varsha : niveau 12, 1200 points de vie de base ; vaincue, elle ouvre la descente vers l’acte II', () => {
+// v5.21 courbe des monstres, v6.45 boss du début un peu moins solides, v6.56 campagne × 1,5, v6.25 deux formes à 55 % chacune
+test('Varsha : niveau 12, 1200 points de vie de base, deux formes ; vaincue deux fois, elle ouvre la descente vers l’acte II', () => {
   nouvellePartie(); quete('q2', 3); quete('q3', 1); aller(antre(1)); const v = S.cur.mons.find(m => m.bossId === 'varsha');
-  ok(v, 'Varsha absente'); egal([v.lvl, MT.varsha.hp], [12, 1200]); egal(v.hp, Math.round(1200 * G(12)));
-  tuer(v); egal(S.q.q3.s, 2); ok(S.cur.objs.some(o => o.type === 'exit' && o.to === zid(2, 0)), 'pas de sortie vers l’acte II');
+  ok(v, 'Varsha absente'); egal([v.lvl, MT.varsha.hp, v.formN, v.form], [12, 1200, 2, 1]);
+  let hp = Math.round(Math.round(1200 * G(12)) * MON_CURVE(12)); hp = Math.round(hp * (.8 + .2 * 12 / 30)); hp = Math.round(hp * CAMP.boss.hp);
+  egal(v.hp, Math.round(hp * VARSHA2.hp));
+  tuer(v); ok(!v.dead && v.fallen, 'Varsha ne s’effondre pas'); egal(S.q.q3.s, 1, 'quête finie dès la première forme');
+  ok(attendre(() => v.form === 2 && !v.fallen, 10), 'Varsha ne se relève pas'); egal(v.hp, v.maxHp, 'deuxième forme pas pleine');
+  invincible(); tuer(v); ok(v.dead);
+  egal(S.q.q3.s, 2); ok(S.cur.objs.some(o => o.type === 'exit' && o.to === zid(2, 0)), 'pas de sortie vers l’acte II');
   ok(!vivants().length, 'des monstres survivent à Varsha');
 });

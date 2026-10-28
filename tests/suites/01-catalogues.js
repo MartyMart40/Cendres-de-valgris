@@ -36,15 +36,24 @@ test('la fiole : 45 % de vie, 35 % de mana, 15 au plus', () => {
 test('Valgris a ses répliques dans chaque monde', () => {
   for (const w in WORLDS) { const L = REPLIQUES.valgris[w]; ok(L, 'monde ' + w); for (const k of ['phase2', 'phase3', 'fall', 'hero', 'rise', 'ascend', 'notyet']) ok(L[k], `monde ${w} : ${k}`); }
 });
-test('objets : 10 emplacements, 5 paliers, 17 bonus, 11 légendaires', () => {
+// v6.26 : bonus aux dégâts des attaques ; v6.47 : cinq résistances (en plus des autres bonus) ; POWS : 26 pouvoirs légendaires de talents
+test('objets : 10 emplacements, 5 paliers, 23 bonus dont 5 résistances, 46 légendaires', () => {
   egal(SLOTS.length, 10); egal(TIERN, ['Cuir', 'Fer', 'Acier', 'Chevalier', 'Paladin']);
-  egal(Object.keys(AFX).length, 17); egal(LEGS.length, 11);
+  egal(Object.keys(AFX).length, 23); ok(AFX.atk, 'bonus aux dégâts des attaques');
+  egal(Object.keys(AFX).filter(k => AFX[k].extra), ['resF', 'resC', 'resL', 'resP', 'resA'], 'résistances');
+  egal(LEGS.length, 20 + POWS.length); egal(POWS.length, 26); egal(new Set(LEGS.map(l => l.id)).size, LEGS.length, 'légendaires en double');
+  for (const P_ of POWS) for (const k of P_.sk) ok(SK[k], `${P_.id} : talent ${k} inconnu`);
   for (const l of LEGS) ok(TYPES[l.type], l.id);
   for (const t of Object.values(TYPES)) egal(t.names.length, 5, 'noms par palier');
 });
-test('talents : 26 en 3 branches de 7 paliers, un ultime et un sans fin par branche', () => {
-  egal(Object.keys(SK).length, 26); egal(BR.length, 3);
-  for (let b = 0; b < 3; b++) {
+// v6.30 : classes à deux branches ; v6.55 : dix talents de plus par classe ; gemmes (br -1) hors de l'arbre
+test('talents : 76 dont 10 gemmes, 5 branches de 7 paliers, un ultime et un sans fin par branche, 2 branches par classe', () => {
+  egal(Object.keys(SK).length, 76); egal(BR.length, 5);
+  const gem = Object.keys(SK).filter(k => SK[k].br === -1); egal(gem.length, 10); for (const k of gem) ok(SK[k].gem && SK[k].ti == null, k);
+  egal(Object.keys(CLS), ['guerrier', 'mage', 'archer']);
+  for (const c of Object.values(CLS)) { egal(c.br.length, 2, c.n); for (const b of c.br) ok(BR[b], c.n); for (const k of c.bar) ok(k == null || SK[k], c.n + ' : barre ' + k); }
+  egal(new Set(Object.values(CLS).flatMap(c => c.br)).size, 5, 'chaque branche sert une classe');
+  for (let b = 0; b < 5; b++) {
     const ids = Object.keys(SK).filter(k => SK[k].br === b);
     egal([...new Set(ids.map(k => SK[k].ti))].sort(), [0, 1, 2, 3, 4, 5, 6], 'paliers branche ' + b);
     egal(ids.filter(k => SK[k].ult).length, 1, 'ultime branche ' + b); egal(ids.filter(k => SK[k].inf).length, 1, 'sans fin branche ' + b);

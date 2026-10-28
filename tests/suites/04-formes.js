@@ -1,9 +1,11 @@
 // Formes de zone : grand couloir, arène, plaine, labyrinthe.
 function zoneDeForme(f, a = 1) { for (let s = 1; s < 400; s++) { nouvellePartie(s); const i = actLayout(a).findIndex(l => l.f === f); if (i >= 0) return zid(a, i); } throw new Error('aucune zone ' + f); }
 
-test('grand couloir : long et étroit, avec des alcôves', () => {
+// 6.58 : le couloir s'allonge (140 cases au lieu de 112, 10 groupes au lieu de 9)
+test('grand couloir : long et étroit (140 × 30), avec des alcôves', () => {
+  egal([FORMES.couloir.w, FORMES.couloir.h, FORMES.couloir.packs], [140, 30, 10]);
   const id = zoneDeForme('couloir'); aller(id); const z = S.cur;
-  egal([z.w, z.h], [112, 30]); ok(z.alcoves.length >= 5, 'alcôves : ' + z.alcoves.length);
+  egal([z.w, z.h], [140, 30]); ok(z.alcoves.length >= 6, 'alcôves : ' + z.alcoves.length);
 });
 test('grand couloir : embuscades en groupe dans les alcôves', () => {
   const id = zoneDeForme('couloir'); aller(id); const amb = S.cur.mons.filter(m => m.amb);
