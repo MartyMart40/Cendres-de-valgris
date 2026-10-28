@@ -24,7 +24,7 @@ test('catalogue : 8 emplacements différents, types existants, petite chance, ga
   for (const k in UNIQUES) entre(UNIQUES[k].ch, .01, .05, k); egal(BOSS_PITY, 25);
 });
 test('catalogue : noms et pouvoirs écrits, noms du givre pour les acolytes, lieutenants et Varsha, aucun tiret quadratin', () => {
-  ok(!JSON.stringify(UNIQUES).includes('—'), 'tiret quadratin');
+  ok(!JSON.stringify(UNIQUES).includes(String.fromCharCode(0x2014)), 'tiret quadratin');
   for (const k in UNIQUES) { const u = UNIQUES[k]; ok(u.n && u.p.length > 20, k); if (k !== 'valgris') ok(u.nt && u.nt.givre && u.nt.givre !== u.n, 'nom du givre : ' + k); }
   ok(Object.values(UNIQUES).every(u => !LEGS.some(l => l.n === u.n)), 'nom déjà pris');
 });
