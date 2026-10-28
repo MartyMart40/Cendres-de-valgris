@@ -2,7 +2,7 @@
 /* Thèmes : le visage d’un monde (décor de chaque forme, nom du camp) */
 const THEMES={
   cendres:{n:'Cendres',camp:'Camp de Halveth',
-    decor:{plaine:['plain'],labyrinthe:['crypt'],couloir:['crypt','plain'],arene:['lair'],antre:['lair']},
+    decor:{plaine:['plain'],labyrinthe:['crypt'],couloir:['crypt','plain'],arene:['lair'],antre:['lair'],archipel:['lair','plain'],spirale:['crypt'],descente:['crypt','lair'],effondre:['plain']},
     names:{
       plaine:[['Plaine des Cendres','la '],['Lande grise','la '],['Champs calcinés','les '],['Steppe de suie','la ']],
       labyrinthe:[['Crypte oubliée','la '],['Ossuaire muet','l’'],['Catacombes du Glas','les '],['Caveaux des Veilleurs','les ']],
@@ -13,7 +13,7 @@ const THEMES={
       labyrinthe:[['Ossuaire des Rois','l’'],['Cryptes du Silence','les '],['Dédale de suie','le '],['Caveaux du Serment','les ']],
       couloir:[['Route des Damnés','la '],['Couloir du Héraut','le '],['Défilé des Échos','le '],['Chemin des Cendres vives','le ']],
       arene:[['Arène du Serment','l’'],['Fosse des Échos','la '],['Cirque de verre','le '],['Cercle des Cendres','le ']]},
-    pools:[{upTo:2,m:['rodeur','charognard','archer']},{upTo:4,m:['rodeur','ombre','archer','charognard']},{upTo:99,m:['ombre','archer','rodeur','brute','sorcier']}]}
+    pools:[{upTo:2,m:['rodeur','charognard','archer']},{upTo:4,m:['rodeur','ombre','archer','charognard']},{upTo:7,m:['ombre','archer','rodeur','brute','sorcier','ver']},{upTo:12,m:['ombre','archer','rodeur','brute','sorcier','ver','cracheur','rampant']},{upTo:999,m:['ombre','archer','rodeur','brute','sorcier','ver','cracheur','bouclier','rampant','invocateur','lanterne']}]}
 };
 /* Monde 2 : Givre éternel. Mêmes comportements, nouvelles allures, nouveaux noms, nouveau camp. */
 THEMES.givre={n:'Givre éternel',camp:'Refuge de Brumegel',
@@ -30,16 +30,16 @@ THEMES.givre={n:'Givre éternel',camp:'Refuge de Brumegel',
     arene:[['Arène de cristal','l’'],['Fosse des Glaces','la '],['Cirque du Silence','le '],['Cercle du Nord','le ']]},
   antre:{1:['Antre de Varsha des Glaces','l’'],2:['Sanctuaire de Valgris','le ']},
   pools:THEMES.cendres.pools,
-  pal:{plain:{floor:[118,128,142],wall:[170,182,198],dark:.72,amb:'235,242,255',ember:0},
+  pal:{plain:{floor:[118,128,142],wall:[170,182,198],dark:.72,amb:'235,242,255',ember:0,snow:true},
     crypt:{floor:[58,70,90],wall:[104,122,146],dark:.86},
     lair:{floor:[52,70,98],wall:[92,118,152],dark:.82,amb:'190,225,255',snow:true,lavaAdd:[-8,40,90],lavaGlow:['#6ac8ff','rgba(140,215,255,.9)'],lavaLight:'120,200,255'},
     town:{floor:[132,138,148],wall:[112,102,92],dark:.3}},
   npcs:{corvel:{full:'Vieille Maren',short:'Maren',a:'la ',robe:['#7a9ab8','#2a3a4e']},bram:{full:'Torvald le trappeur',robe:['#8a7a5a','#3a3020']},
-    eline:{full:'Sœur Nivé',robe:['#e8eef4','#8a96a4']},hilde:{full:'Kolbe le forgeron',robe:['#5a6a7a','#20262e']}},
+    eline:{full:'Sœur Nivé',robe:['#e8eef4','#8a96a4']},hilde:{full:'Kolbe le forgeron',robe:['#5a6a7a','#20262e']},demol:{full:'Brisegel le démolisseur',robe:['#6a7480','#262a30']},joueuse:{full:'Frida la joueuse',robe:['#7a8ab0','#2a3048']}},
   skins:{
     rodeur:{n:'Rôdeur de givre',col:'#7a9ab8'},charognard:{n:'Loup de givre',fur:['#d0dae4','#5a6a7a','#9aaabb']},
     archer:{n:'Archer gelé',bone:'#cfe4f4'},sorcier:{n:'Sorcier de glace',bone:'#cfe4f4'},ombre:{n:'Spectre glacé',gcol:'#a8d0f0'},
-    brute:{n:'Colosse de glace',col:'#8aaccc'},pleureuse:{n:'Gémisseuse',gcol:'#d8ecff'},
+    brute:{n:'Colosse de glace',col:'#8aaccc'},ver:{n:'Furet de givre',fur:['#e8f0ff','#5a6a8a','#c8d8ff']},cracheur:{n:'Cracheur de grêle',col:'#5a6a7a'},bouclier:{n:'Porte-bouclier gelé',bone:'#cfe4f4'},pleureuse:{n:'Gémisseuse',gcol:'#d8ecff'},
     ossira:{n:'Ossira, Tisseuse de givre',col:'#b8d0e8',wake:'Ossira tisse une toile de givre',death:'Ossira, Tisseuse de givre, est vaincue'},
     korr:{n:'Korr le Brise-Glace',col:'#6a8aa8',wake:'Korr racle la glace',death:'Korr le Brise-Glace est vaincu'},
     meliane:{n:'Méliane la Gelée',gcol:'#e0f0ff',wake:'Méliane pleure des larmes de glace',death:'Méliane la Gelée est vaincue',call:'Méliane gémit : ses gémisseuses accourent.'},
@@ -62,4 +62,5 @@ THEMES.givre={n:'Givre éternel',camp:'Refuge de Brumegel',
     q4c2:'« Le sceau a cédé. Va. Et reviens vivant, cette fois encore. »',
     q5c2:'« Encore plus grand que la dernière fois ? Alors chaque monde n’est qu’une marche de son escalier. »',
     q5end:'Valgris s’est relevé une fois de plus, plus immense encore. Le givre n’était qu’une marche. D’autres t’attendent.'}};
+THEMES.cendres.decor.ouverte=['plain'];
 function themeDecor(th,forme){const d=th.decor[forme];return Array.isArray(d)?d[0]:d;}

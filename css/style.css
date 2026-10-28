@@ -5,23 +5,34 @@
 html,body{height:100%;margin:0;background:var(--ash);color:var(--bone);overflow:hidden;font-family:"Alegreya Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 #c{position:fixed;inset:0;touch-action:none;display:block}
 #hud{position:fixed;inset:0;pointer-events:none}
+/* v6.48 : X des fiches de talent et d’objet ; fenêtre « Au sol » */
+.selbox .selx{float:right;width:40px;height:40px;margin:-4px -8px 4px 10px;padding:0;border-radius:50%;font-size:18px;line-height:38px;background:rgba(34,25,15,.97);color:var(--bone);border:1px solid #6b5535;cursor:pointer;font-family:inherit}
+#ground{position:absolute;right:12px;bottom:120px;max-width:56vw;pointer-events:auto;font-size:14px;display:flex;flex-direction:column-reverse;align-items:flex-end}
+#ground .gchip{background:rgba(20,15,10,.86);border:1px solid #6b5535;color:var(--bone);border-radius:18px;padding:7px 12px;min-height:36px;font-family:inherit;font-size:14px;cursor:pointer}
+#ground .glist{margin:0 0 4px;min-width:180px;background:rgba(20,15,10,.92);border:1px solid #4a3c28;border-radius:6px;max-height:38vh;overflow:auto;padding:4px}
+#ground .glist button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid #2e251a;padding:8px 6px;min-height:36px;font-family:inherit;font-size:14px;cursor:pointer}
 #tl{position:absolute;left:12px;top:calc(env(safe-area-inset-top,0px) + 10px);max-width:58vw}
 #zname{font-family:"Grenze Gotisch",Georgia,serif;font-size:22px;color:var(--gold);text-shadow:0 2px 6px #000}
 #track{font-size:14px;line-height:1.35;color:var(--bone);text-shadow:0 1px 3px #000;margin-top:2px}
 #track b{color:var(--gold);font-weight:700}
 #mini{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 10px);width:150px;height:96px;border:1px solid var(--line);background:rgba(0,0,0,.45);border-radius:3px}
+/* v6.09 : effets de la zone écrits en petit sous la mini-carte ; un toucher montre le détail */
+#zmods{position:absolute;right:10px;top:calc(env(safe-area-inset-top,0px) + 110px);max-width:150px;text-align:right;font-size:11px;line-height:1.3;color:#c8b8a0;text-shadow:0 1px 2px #000;pointer-events:auto;cursor:pointer}
+#zmods .d{display:none;color:#a39680;font-size:11px}#zmods.open .d{display:block}#zmods.open{background:rgba(10,7,5,.6);padding:4px 6px;border-radius:3px;max-width:min(220px,60vw)}
+@media (max-width:520px){#zmods{top:calc(env(safe-area-inset-top,0px) + 86px);max-width:112px}}
 #tbar{position:absolute;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 112px);text-align:center;display:none;min-width:200px}
 #tname{font-size:15px;font-weight:700;text-shadow:0 1px 3px #000}
 .tb{height:7px;background:#2a0f0c;border:1px solid #000;margin-top:3px}
 .tb i{display:block;height:100%;background:var(--blood);width:100%}
-#bottom{position:absolute;left:0;right:0;bottom:0;padding:0 10px calc(env(safe-area-inset-bottom,0px) + 10px);display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+/* v6.08 : barre du bas centrée, les deux bulles toujours entières (bords arrondis et encoches : zones sûres) */
+#bottom{position:absolute;left:0;right:0;bottom:0;padding:0 max(12px,env(safe-area-inset-right,0px)) calc(max(env(safe-area-inset-bottom,0px),4px) + 10px) max(12px,env(safe-area-inset-left,0px));display:flex;align-items:flex-end;justify-content:space-between;gap:8px;box-sizing:border-box}
 .orb{width:74px;height:74px;border-radius:50%;border:2px solid #5d4a30;background:#120c08;position:relative;overflow:hidden;box-shadow:0 0 0 3px #1d150e,0 4px 12px #000;flex:none}
 .orb i{position:absolute;left:0;right:0;bottom:0;height:100%}
 .orb.hp i{background:radial-gradient(circle at 40% 30%,#e4544a,#7d0f0b 70%)}
 .orb.mp i{background:radial-gradient(circle at 40% 30%,#6e8cff,#152a86 70%)}
 .orb::after{content:"";position:absolute;left:18%;top:10%;width:40%;height:28%;border-radius:50%;background:radial-gradient(ellipse,rgba(255,255,255,.35),rgba(255,255,255,0) 70%);pointer-events:none}
 .orb span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;text-shadow:0 1px 2px #000}
-#mid{flex:1;max-width:520px;display:flex;flex-direction:column;gap:6px;align-items:center}
+#mid{flex:1 1 auto;min-width:0;max-width:520px;display:flex;flex-direction:column;gap:6px;align-items:center}
 #xpb{width:100%;height:5px;background:#1b1610;border:1px solid #3a2f20}
 #xpb i{display:block;height:100%;width:0;background:var(--gold)}
 #btns{display:flex;gap:6px;pointer-events:auto;justify-content:center;flex-wrap:wrap}
@@ -41,16 +52,25 @@ html,body{height:100%;margin:0;background:var(--ash);color:var(--bone);overflow:
 .itm img{width:100%;height:100%;object-fit:contain;pointer-events:none;-webkit-user-drag:none}
 .itm .ph{font-weight:700;color:var(--bone)}
 .itm.r0{background:rgba(110,100,80,.22);border-color:#5e5444}.itm.r1{background:rgba(60,80,210,.28);border-color:#5a6cff}
+.itm.set{background:rgba(70,180,90,.24)!important;border-color:#5fd06a!important}
 .itm.r2{background:rgba(210,180,40,.24);border-color:#d8b030}.itm.r3{background:rgba(255,130,30,.3);border-color:#ff9a3a;box-shadow:0 0 6px rgba(255,140,40,.6) inset}
 .itm.sel{outline:2px solid #fff;outline-offset:-1px;z-index:2}
 .upb{position:absolute;top:0;right:1px;font-size:9px;color:#7fd07f;text-shadow:0 0 2px #000}
+.lockb{position:absolute;bottom:0;left:1px;font-size:9px;line-height:1;filter:drop-shadow(0 0 1px #000)}
 .ghost{position:fixed;pointer-events:none;z-index:60;opacity:.9}
 .invbar{display:flex;align-items:center;gap:4px;flex-wrap:wrap;margin:6px 0}.invbar .st{margin-right:auto}
 .stabs{display:flex;gap:4px;margin:0 0 6px}.stabs button{margin:0}
 .selbox{border-top:1px solid #2e251a;margin-top:6px;padding-top:8px}
+.orbrow{margin-top:6px;display:flex;flex-wrap:wrap;align-items:center;gap:2px}.orbrow .min{margin:2px 3px 2px 0}
+.panel .xclose,.fiche .xclose{position:sticky;top:-10px;float:right;z-index:6;width:40px;height:40px;margin:-10px -8px 4px 8px;padding:0;font-size:20px;line-height:38px;border-radius:50%;background:rgba(34,25,15,.97);box-shadow:0 2px 8px #000}
+.laplist{display:flex;flex-direction:column;gap:4px}.panel .lapit{display:grid;grid-template-columns:34px 1fr;grid-template-rows:auto auto;column-gap:8px;text-align:left;margin:0;padding:4px 8px;font-weight:400;font-size:14px}.lapit img{grid-row:1/3;width:34px;height:34px;object-fit:contain;border:1px solid #5e5444;border-radius:3px}.lapit img.r1{border-color:#5a6cff}.lapit img.r2{border-color:#d8b030}.lapit img.r3{border-color:#ff9a3a}.lapit .st{font-size:11px}
+.regl{display:flex;flex-direction:column;align-items:flex-start}
+.panel .tabs{gap:3px;margin:-2px 44px 8px 0}.panel .tabs button{margin:0;padding:4px 8px;font-size:12.5px;font-weight:700;line-height:1.2}
+.matbox{border:1px solid #4f402d;background:rgba(0,0,0,.28);border-radius:3px;padding:7px 9px;margin:6px 0 8px;font-size:13px;line-height:1.45}.matbox>b{color:#e8c46a;font-size:14px}.matbox .st b{color:#d6c9b0;font-weight:700}
 .selhead{display:flex;gap:10px;align-items:center}.selhead img{width:44px;height:44px;object-fit:contain;border:1px solid #5e5444;border-radius:3px;flex:none}
 .selhead img.r1{border-color:#5a6cff;background:rgba(60,80,210,.28)}.selhead img.r2{border-color:#d8b030;background:rgba(210,180,40,.24)}.selhead img.r3{border-color:#ff9a3a;background:rgba(255,130,30,.3)}
 .lines{margin:6px 0 4px;font-size:13.5px;line-height:1.45}
+.tree.b4 .tal{width:36px;height:36px;font-size:17px}.tree.b4 .tier{gap:2px}.tree.b5 .tal{width:31px;height:31px;font-size:15px}.tree.b5 .brh{font-size:11px}
 .tree{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:6px 0}
 .brn{border:1px solid #2e251a;border-radius:3px;background:rgba(0,0,0,.25);padding:3px 2px}
 .brh{text-align:center;font-weight:700;font-size:13px;display:flex;flex-direction:column;line-height:1.1;margin-bottom:2px}.brh .st{font-size:10px;font-weight:400}
@@ -67,7 +87,13 @@ html,body{height:100%;margin:0;background:var(--ash);color:var(--bone);overflow:
 #btns button:focus-visible,.panel button:focus-visible,.ov button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #btns button kbd{display:none;font:inherit;color:var(--dim);font-size:10px}
 @media (hover:hover) and (pointer:fine){#btns button kbd{display:block}}
-@media (max-width:520px){#btns{display:grid;grid-template-columns:repeat(4,46px);gap:4px}#btns button{width:46px;height:44px}.orb{width:62px;height:62px}#mini{width:112px;height:72px}#zname{font-size:19px}#track{font-size:13px}}
+@media (max-width:520px){#btns{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;width:100%}#btns button{flex:0 0 calc((100% - 16px) / 5);max-width:46px;width:auto;min-width:0;height:44px;font-size:10px;letter-spacing:-.2px;overflow:hidden;white-space:nowrap}.orb{width:clamp(52px,15vw,62px);height:clamp(52px,15vw,62px);flex:none}#bottom{gap:6px}#mini{width:112px;height:72px}#zname{font-size:19px}#track{font-size:13px}}
+/* v6.08 : nom de la compétence touchée, écrit en transparence au-dessus du bouton ; au toucher long, coût, recharge et effet. Ne bloque aucun toucher. */
+#sktip{position:fixed;z-index:5;pointer-events:none;opacity:0;transition:opacity .35s;text-align:center;color:rgba(242,230,204,.82);text-shadow:0 1px 3px #000,0 0 8px rgba(0,0,0,.8);font-size:14px;line-height:1.3;max-width:min(300px,86vw);transform:translateX(-50%)}
+#sktip b{font-family:"Grenze Gotisch",Georgia,serif;font-size:19px;color:rgba(232,196,106,.9);font-weight:700}
+#sktip.long{font-size:13px;background:rgba(10,7,5,.35);padding:6px 9px;border-radius:4px}
+#cinetxt{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);width:min(88vw,560px);z-index:50;pointer-events:none;opacity:0;text-align:center;font-family:"Grenze Gotisch",Georgia,serif;font-weight:700;font-size:clamp(22px,6.4vw,34px);line-height:1.25;color:#fff4dc;text-shadow:0 0 18px #ffb060,0 2px 4px #000,0 0 3px #000}
+body.cine #hud{opacity:0;transition:opacity .6s}
 #toast{position:fixed;left:50%;top:38%;transform:translateX(-50%);font-family:"Grenze Gotisch",Georgia,serif;font-size:26px;color:var(--gold);text-shadow:0 2px 8px #000;pointer-events:none;opacity:0;transition:opacity .4s;text-align:center;width:90vw}
 #msg{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 150px);transform:translateX(-50%);font-size:15px;color:var(--bone);text-shadow:0 1px 3px #000;pointer-events:none;text-align:center;width:90vw}
 .panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);width:min(440px,92vw);max-height:78vh;overflow:auto;background:var(--panel);border:1px solid var(--line);box-shadow:0 0 0 4px #120d09,0 20px 50px #000;padding:18px 18px 14px;border-radius:3px}
@@ -85,4 +111,31 @@ html,body{height:100%;margin:0;background:var(--ash);color:var(--bone);overflow:
 .ov{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;background:radial-gradient(ellipse at 50% 60%,rgba(80,30,10,.35),rgba(0,0,0,.92) 70%);padding:20px}
 .ov h1{font-family:"Grenze Gotisch",Georgia,serif;font-weight:700;font-size:clamp(44px,11vw,92px);line-height:.95;margin:0;color:#d9b468;text-shadow:0 0 30px rgba(224,106,43,.45),0 4px 0 #2a1408}
 .ov .sub{font-size:18px;color:var(--dim);margin:10px 0 26px}
+.fiche{position:fixed;z-index:40;font-family:inherit;left:50%;top:50%;transform:translate(-50%,-50%);width:min(420px,92vw);max-height:82vh;overflow:auto;background:linear-gradient(#211910,#140f09);border:1px solid #8a6a3a;border-radius:6px;box-shadow:0 8px 40px rgba(0,0,0,.8);padding:14px 16px 16px;color:var(--bone);font-size:15px}
+.fiche h2{margin:0 30px 4px 0;font-size:21px}.fiche .lines{line-height:1.45;margin:8px 0}.fgrid{display:grid;grid-template-columns:auto 1fr;gap:3px 12px;margin:8px 0;font-size:14px}.fgrid span{color:var(--dim)}
+.fiche .xclose{color:var(--bone);border:1px solid #6b5535;cursor:pointer;font-family:inherit}
+button.fst{background:none;border:none;padding:0;margin:0;color:var(--dim);font:inherit;text-align:left;cursor:pointer;text-decoration:underline dotted}
+.newconf{max-width:380px;margin-top:14px;padding:12px 14px;background:rgba(20,14,8,.92);border:1px solid #6b5535;border-radius:4px;color:var(--bone);font-size:15px;line-height:1.45}.newconf p{margin:0 0 10px}
 .ov .help{max-width:420px;font-size:14px;color:var(--dim);line-height:1.5;margin-top:22px}
+
+/* v6.37 : lisibilité au téléphone. Plus de texte sous 10 px, petits boutons d’au moins 36 px de haut. */
+.slot .lbl{font-size:10.5px}
+.upb,.lockb{font-size:11px}
+.brh .st{font-size:11.5px}
+.tier{min-height:56px;flex-wrap:wrap}
+.tier .req{font-size:10px}
+.tal i{font-size:11.5px;line-height:15px}
+.lapit .st{font-size:12px}
+.panel button.min{padding:8px 11px;min-height:36px}
+.panel .tabs button{padding:8px 10px;min-height:36px}
+.tabs button{min-height:36px}
+
+/* v6.44 : la description de l’objet ou du talent touché reste collée en bas du panneau, sans faire défiler */
+.panel .selbox{position:sticky;bottom:-14px;z-index:4;background:var(--panel);margin:6px -18px -14px;padding:8px 18px 12px;max-height:42vh;overflow:auto;box-shadow:0 -8px 12px rgba(0,0,0,.45);border-top:1px solid #4a3c28}
+/* v6.52 : rangée « Barre » en haut de la fiche du talent et dans la fiche complète, toujours visible ; fiche collée opaque */
+.panel .selbox{background:#140f0b}
+.barrow{clear:both;display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin:6px 0 4px;font-size:14px;color:var(--dim)}
+.barrow>span{margin-right:2px}
+.barrow button,.panel .barrow button{min-width:42px;min-height:42px;margin:0;padding:4px 6px;font:inherit;font-size:15px;font-weight:700;line-height:1.1;background:linear-gradient(#3a2c1d,#22190f);color:var(--bone);border:1px solid #6b5535;border-radius:4px;cursor:pointer}
+.barrow button.on,.panel .barrow button.on{border-color:var(--gold);color:var(--gold);box-shadow:0 0 0 1px var(--gold) inset}
+.barrow button small{font-size:12px;font-weight:400;opacity:.85;margin-left:3px}

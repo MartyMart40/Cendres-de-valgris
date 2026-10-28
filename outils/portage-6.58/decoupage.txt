@@ -1,0 +1,44 @@
+# Découpage de la v6.58 (tests/reference/v6.58.html, l'artefact d'un seul fichier) en fichiers.
+# Une ligne = fichier, première ligne, dernière ligne (numéros de la v6.58).
+# L'ordre des fichiers est l'ordre de chargement dans index.html : c'est l'ordre du fichier d'origine,
+# sauf demarrage.js (la boucle), chargé en dernier comme au transfert de la v5.8.
+css/style.css 11 151
+js/base.js 197 217
+js/catalogues/decors.js 218 230
+js/catalogues/formes.js 231 244
+js/catalogues/themes.js 245 309
+js/catalogues/monstres.js 310 366
+js/catalogues/boss.js 367 383
+js/catalogues/mondes.js 384 405
+js/catalogues/quetes.js 406 439
+js/catalogues/fioles.js 440 441
+js/catalogues/repliques.js 442 468
+js/catalogues/failles.js 469 471
+js/catalogues/autres-mondes.js 472 936
+js/moteur/mondes-zones.js 937 1320
+js/moteur/generation.js 1321 1640
+js/catalogues/objets.js 1641 1752
+js/moteur/objets.js 1753 2049
+js/catalogues/talents.js 2050 2180
+js/moteur/talents.js 2181 2246
+js/moteur/stats.js 2247 2321
+js/moteur/grilles.js 2322 2363
+js/moteur/apparence.js 2364 2481
+js/moteur/icones.js 2482 2551
+js/moteur/sons.js 2552 2596
+js/moteur/forge.js 2597 2603
+js/moteur/sauvegarde.js 2604 2661
+js/moteur/zones.js 2662 2842
+js/moteur/actions.js 2843 2966
+js/moteur/combat.js 2967 3079
+js/moteur/effets.js 3080 3085
+js/moteur/mise-a-jour.js 3086 3624
+js/catalogues/comportements.js 3625 4002
+js/moteur/valgris.js 4003 4169
+js/moteur/monde.js 4170 4267
+js/moteur/rendu.js 4268 5026
+js/interface/hud.js 5027 5072
+js/interface/panneaux.js 5073 5449
+js/interface/entrees.js 5450 5497
+js/interface/inventaire.js 5525 5666
+js/demarrage.js 5498 5524

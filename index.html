@@ -14,6 +14,8 @@
 <div id="hud" class="hidden">
   <div id="tl"><div id="zname"></div><div id="track"></div></div>
   <canvas id="mini" width="300" height="192"></canvas>
+  <div id="ground" class="hidden"></div>
+  <div id="zmods" class="hidden" role="button" aria-label="Effets de la zone"></div>
   <div id="tbar"><div id="tname"></div><div class="tb"><i id="thp"></i></div></div>
   <div id="bottom">
     <div class="orb hp"><i id="hpf"></i><span id="hpt"></span></div>
@@ -24,6 +26,9 @@
         <button data-b="s1" id="sk1" aria-label="Compétence 2"></button>
         <button data-b="s2" id="sk2" aria-label="Compétence 3"></button>
         <button data-b="s3" id="sk3" aria-label="Compétence 4"></button>
+        <button data-b="s4" id="sk4" aria-label="Compétence 5" class="hidden"></button>
+        <button data-b="s5" id="sk5" aria-label="Compétence 6" class="hidden"></button>
+        <button data-b="swap" id="swapb" class="hidden" aria-label="Changer d’arme"><span class="g">⇄</span>Arme<kbd>X</kbd></button>
         <button data-b="pot" aria-label="Boire une fiole"><span class="g">🧪</span><span id="potn">Fiole</span><kbd>R</kbd></button>
         <button data-b="tp" aria-label="Ouvrir un portail"><span class="g">🌀</span><span id="tpn">Portail</span><kbd>T</kbd></button>
         <button data-b="menu" aria-label="Menu" style="position:relative"><span class="g">🎒</span>Menu<kbd>I / K</kbd><i id="menuBadge" class="badge hidden">+</i></button>
@@ -32,13 +37,18 @@
     <div class="orb mp"><i id="mpf"></i><span id="mpt"></span></div>
   </div>
 </div>
+<div id="sktip" aria-hidden="true"></div>
+<div id="cinetxt" aria-live="polite"></div>
 <div id="toast"></div>
 <div id="msg"></div>
 <div id="panel" class="panel hidden" role="dialog"></div>
+<div id="fiche" class="fiche hidden" role="dialog"></div>
 <div id="title" class="ov">
   <h1>Les Cendres<br>de Valgris</h1>
   <div class="sub">Les mondes de Valgris et les failles sans fin</div>
+  <div class="sub" id="mutline" style="margin-top:-18px;font-size:15px;color:#e06a2b"></div>
   <div><button id="bNew">Nouvelle partie</button><button id="bCont" class="hidden">Continuer</button></div>
+  <div id="newConf" class="newconf hidden"><p id="newConfT"></p><button id="bNewYes">Oui, recommencer</button><button id="bNewNo">Annuler</button></div>
   <div class="help">Touche le sol pour marcher, touche un ennemi pour frapper. Les boutons de compétence visent l’ennemi le plus proche. Sur ordinateur : clic gauche pour marcher et frapper, clic droit pour la compétence 1, touches 1, 2 et 3.</div>
 </div>
 <script src="js/base.js"></script>
@@ -52,12 +62,12 @@
 <script src="js/catalogues/fioles.js"></script>
 <script src="js/catalogues/repliques.js"></script>
 <script src="js/catalogues/failles.js"></script>
-<script src="js/catalogues/objets.js"></script>
-<script src="js/catalogues/talents.js"></script>
-<script src="js/catalogues/comportements.js"></script>
+<script src="js/catalogues/autres-mondes.js"></script>
 <script src="js/moteur/mondes-zones.js"></script>
 <script src="js/moteur/generation.js"></script>
+<script src="js/catalogues/objets.js"></script>
 <script src="js/moteur/objets.js"></script>
+<script src="js/catalogues/talents.js"></script>
 <script src="js/moteur/talents.js"></script>
 <script src="js/moteur/stats.js"></script>
 <script src="js/moteur/grilles.js"></script>
@@ -71,6 +81,7 @@
 <script src="js/moteur/combat.js"></script>
 <script src="js/moteur/effets.js"></script>
 <script src="js/moteur/mise-a-jour.js"></script>
+<script src="js/catalogues/comportements.js"></script>
 <script src="js/moteur/valgris.js"></script>
 <script src="js/moteur/monde.js"></script>
 <script src="js/moteur/rendu.js"></script>

@@ -11,7 +11,7 @@ const QUESTS={
     track:{1:()=>`Acolytes vaincus : ${acoCount()} / 3 (${acoNeed()} suffisent)`,2:()=>'Le sceau est brisé. Retourne voir Corvel.'},
     corvel:{1:()=>({say:'« Le sceau tient encore. Les acolytes rôdent sur le chemin de l’Antre, chacun dans son repaire. »',st:acoList()}),
       2:()=>({say:'« Je l’ai senti d’ici : le sceau s’est brisé. Là-dessous, Varsha couve ses rejetons. Tue-la, et la plaine respirera. »',st:acoList(),btn:'Recevoir la récompense',act:'qret'})},
-    ret:()=>{S.q.q2.s=3;S.q.q3.s=Math.max(S.q.q3.s,1);gainXp(500);p.gold+=150;p.pot=Math.min(POTIONS.fiole.max,p.pot+3);save();npcDialog('corvel');toast('+150 or · 3 fioles');}},
+    ret:()=>{S.q.q2.s=3;S.q.q3.s=Math.max(S.q.q3.s,1);gainXp(500);p.gold+=150;p.pot+=3;save();npcDialog('corvel');toast('+150 or · 3 fioles');}},
   q3:{n:'La Mère des Cendres',d:'Descends dans l’Antre et abats Varsha.',act:1,
     track:{1:()=>`Descends dans l’Antre, au bout ${zoneDe(lastZone())}.`,2:()=>'Annonce la nouvelle à Corvel.'},
     corvel:{1:()=>({say:`« L’Antre s’ouvre au bout ${zoneDe(lastZone())}. Prends des fioles et un parchemin de portail. »`}),
@@ -30,6 +30,6 @@ QUESTS.q5={n:'Valgris',d:'Descends dans le Sanctuaire et affronte Valgris.',act:
   corvel:{1:()=>({say:`« Le Sanctuaire s’ouvre au bout ${zoneDe(lastZone(2))}. On dit que Valgris n’est jamais tombé. »`}),
     2:()=>({say:'« Tu l’as vu tomber, et il s’est relevé plus grand que le ciel ? … Alors personne ne l’a jamais vaincu. Il choisit qui passe. Et il t’a choisi. »',btn:'Terminer l’acte',act:'qret'})},
   ret:()=>{S.q.q5.s=3;gainXp(4000);save();
-    openPanel(`<h2>Acte II terminé</h2><p>${qt('q5end','Tu as cru l’abattre. Valgris s’est relevé, immense, et t’a dit que ce n’était qu’un test. D’autres t’attendent, plus loin, là où les cendres changent de visage.')}</p><p class="st">Le passage vers le monde suivant arrive dans une prochaine version. En attendant, Valgris se refarme dans son Sanctuaire et les failles restent ouvertes.</p><button data-a="close">Continuer</button>`);}};
+    openPanel(`<h2>Acte II terminé</h2><p>${qt('q5end','Tu as cru l’abattre. Valgris s’est relevé, immense, et t’a dit que ce n’était qu’un test. D’autres t’attendent, plus loin, là où les cendres changent de visage.')}</p><p class="st">${WORLDS[S.world+1]?`Retourne au Sanctuaire : à terre, Valgris te proposera son défi, qui mène au monde ${S.world+1}.`:'Le monde suivant arrive dans une prochaine version. En attendant, Valgris se refarme dans son Sanctuaire et les failles restent ouvertes.'}</p><button data-a="close">Continuer</button>`);}};
 const QDEF=QUESTS;
 const txt=v=>typeof v==='function'?v():v;

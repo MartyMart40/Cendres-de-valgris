@@ -2,11 +2,11 @@
 const $=s=>document.querySelector(s);
 const cv=$('#c'),ctx=cv.getContext('2d');
 const lc=document.createElement('canvas'),lctx=lc.getContext('2d');
-const mm=$('#mini'),mctx=mm.getContext('2d');
+const mm=$('#mini'),mctx=mm.getContext('2d');mm.style.cursor='pointer';mm.addEventListener('click',e=>{e.stopPropagation();if(typeof S!=='undefined'&&S&&S.cur&&!p.dead)bigMap();});
 let W=0,H=0,DPR=1,Z=1;
-const TW=64,TH=32,SAVE='cendres-valgris-v3',SAVE_V2='cendres-valgris-v2',SAVE_OLD='cendres-valgris-v1',GAME_VER='5.13';
+const TW=64,TH=32,SAVE='cendres-valgris-v3',SAVE_V2='cendres-valgris-v2',SAVE_OLD='cendres-valgris-v1',GAME_VER='6.58';
 function resize(){DPR=Math.min(2,window.devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=lc.width=Math.round(W*DPR);cv.height=lc.height=Math.round(H*DPR);cv.style.width=W+'px';cv.style.height=H+'px';Z=W<640?0.85:1;}
-addEventListener('resize',resize);resize();
+addEventListener('resize',resize);resize();addEventListener('resize',()=>{try{const g=document.getElementById('ground');if(g&&!g.classList.contains('hidden'))groundPos(g);}catch(e){}});
 
 const rnd=(a,b)=>a+Math.random()*(b-a);
 const ri=(a,b)=>Math.floor(rnd(a,b+1));
