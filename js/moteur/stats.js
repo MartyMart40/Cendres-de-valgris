@@ -3,7 +3,7 @@
 function newPlayer(){return{trophies:{},mats:{},cards:[],x:0,y:0,lvl:1,xp:0,hp:60,mp:30,gold:30,pot:4,scroll:2,bag:[],eq:{},sk:{fire:1,nova:1},pts:0,tv:2,bar:['fire','nova',null,null,null,null],
   path:null,target:null,targetObj:null,cd:0,swing:0,face:0,moving:false,hurt:0,tpCd:0,dead:false,cds:{},buff:0,spin:0};}
 function starterGear(L){const eq={};
-  eq.weapon=refreshName({id:itemId++,type:'sword',slot:'weapon',rar:0,ilvl:L,d:[Math.round(3*G(L)),Math.round(8*G(L))],spd:1,aff:{},val:6});
+  eq.weapon=refreshName({id:itemId++,type:'sword',slot:'weapon',rar:0,ilvl:L,d:[Math.round(3*G(L)),Math.round(8*G(L))],spd:1,aff:{atk:TYPES.sword.atk},val:6});/* Portage 6.58 : l’épée de départ a d’emblée le bonus de base de son type (v6.26), comme toute épée */
   eq.armor=refreshName({id:itemId++,type:'armor',slot:'armor',rar:0,ilvl:L,a:Math.round(12*G(L)),aff:{},val:6});return eq;}
 /* v6.03 : courbe plus raide au début, et l’expérience suit l’écart de niveau avec le monstre. */
 function xpNextOld(l){return Math.floor(50*Math.pow(l,1.6));}

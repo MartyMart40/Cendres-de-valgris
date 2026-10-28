@@ -7,7 +7,7 @@ const { roulerRendu } = require('./rendu');
 (async () => {
   const reference = process.argv.includes('--reference'), court = process.argv.includes('--court');
   const t0 = Date.now();
-  console.log(`Banc d'essai${reference ? ' (v5.8 de référence)' : ''}…`);
+  console.log(`Banc d'essai${reference ? ' (v6.58 de référence)' : ''}…`);
   const banc = await roulerBanc({ reference, silence: true });
   for (const r of banc.resultats.filter(r => !r.ok)) console.log(`  ÉCHEC ${r.suite} · ${r.nom}\n         ${r.msg}`);
   console.log(`  ${banc.reussis} réussis sur ${banc.n}`);

@@ -11,7 +11,7 @@ const QUESTS={
     track:{1:()=>`Acolytes vaincus : ${acoCount()} / 3 (${acoNeed()} suffisent)`,2:()=>'Le sceau est brisé. Retourne voir Corvel.'},
     corvel:{1:()=>({say:'« Le sceau tient encore. Les acolytes rôdent sur le chemin de l’Antre, chacun dans son repaire. »',st:acoList()}),
       2:()=>({say:'« Je l’ai senti d’ici : le sceau s’est brisé. Là-dessous, Varsha couve ses rejetons. Tue-la, et la plaine respirera. »',st:acoList(),btn:'Recevoir la récompense',act:'qret'})},
-    ret:()=>{S.q.q2.s=3;S.q.q3.s=Math.max(S.q.q3.s,1);gainXp(500);p.gold+=150;p.pot+=3;save();npcDialog('corvel');toast('+150 or · 3 fioles');}},
+    ret:()=>{S.q.q2.s=3;S.q.q3.s=Math.max(S.q.q3.s,1);gainXp(500);p.gold+=150;p.pot=Math.min(POTIONS.fiole.max,p.pot+3);save();npcDialog('corvel');toast('+150 or · 3 fioles');}},
   q3:{n:'La Mère des Cendres',d:'Descends dans l’Antre et abats Varsha.',act:1,
     track:{1:()=>`Descends dans l’Antre, au bout ${zoneDe(lastZone())}.`,2:()=>'Annonce la nouvelle à Corvel.'},
     corvel:{1:()=>({say:`« L’Antre s’ouvre au bout ${zoneDe(lastZone())}. Prends des fioles et un parchemin de portail. »`}),

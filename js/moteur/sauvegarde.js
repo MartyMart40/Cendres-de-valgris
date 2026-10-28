@@ -46,14 +46,18 @@ function startGame(sv){
   if(!p.stash)p.stash=[[],[],[],[]];S.stab=0;
   while(p.bar.length<6)p.bar.push(null);
   {const back=classPrune();if(back>0){const C_=CLS[p.cls];S.pend.push({t:3.2,fn:()=>openPanel(`<h2>Talents de ta classe</h2><p>Un ${C_.n.toLowerCase()} n’a plus accès qu’à ses propres branches : ${C_.br.map(b=>BR[b].n).join(' et ')}. Les talents que tu avais pris ailleurs t’ont été remboursés : <b>${back}</b> points de plus à placer. Ta classe a aussi dix nouveaux talents.</p><button data-a="tab" data-t="comp">Voir mes talents</button><button data-a="close">Plus tard</button>`)});}}
-  if(sv&&sv.p.tv!==2){resetTree();S.pend.push({t:1.2,fn:()=>openPanel(`<h2>Nouvel arbre de talents</h2><p>Les compétences sont maintenant un arbre de 26 talents en trois branches, avec des ultimes et des talents sans fin. Tes points ont été remboursés : tu en as <b>${p.pts}</b> à placer.</p><p class="st">Menu, onglet Talents.</p><button data-a="tab" data-t="comp">Voir l’arbre</button><button data-a="close">Plus tard</button>`)});}
+  /* Portage 6.58 (correction v5.9) : très vieil arbre remboursé sans message à part, « Talents remboursés » (plus bas) l’annonce déjà. */
+  if(sv&&sv.p.tv!==2)resetTree();
   S.riftSel=S.riftMax;
   recalc();p.hp=p.maxHp;p.mp=p.maxMp;
   $('#title').classList.add('hidden');$('#hud').classList.remove('hidden');
   S.portal=null;if(sv&&sv.portal&&sv.portal.zone&&resumable(sv.portal.zone))S.portal={zone:sv.portal.zone,x:null,y:null};
   const tvFix=!!(sv&&lockedActive());if(tvFix)resetTree();
   const pwFix=!!(sv&&verNum(sv.ver||'0')<verNum('6.45'));if(pwFix&&!tvFix)resetTree();
+  /* Portage 6.58 (correction v5.9) : l’entrée en zone vide les messages en attente ; ceux mis en attente plus haut (« Talents de ta classe ») sont remis après. */
+  const early=S.pend;
   if(sv&&sv.here&&resumable(sv.here)&&!sealOf(sv.here)){enterZone(sv.here,'spawn');S.pend.push({t:.8,fn:()=>toast('Reprise : '+zoneName(sv.here))});}else enterZone('town','spawn');
+  for(const e of early)if(!S.pend.includes(e))S.pend.push(e);
   if(pwFix&&!tvFix){S.pend.push({t:1.4,fn:()=>openPanel(`<h2>Talents remboursés</h2><p>La puissance vient maintenant surtout de l’équipement : les compétences frappent un peu moins fort d’elles-mêmes, et les bonus des objets grandissent avec leur niveau. Pour t’adapter, tes <b>${p.pts}</b> points de talent te sont rendus, gratuitement.</p><button data-a="close">D’accord</button>`)});}
   if(tvFix){S.pend.push({t:1.4,fn:()=>openPanel(`<h2>Talents remboursés</h2><p>Certains talents de départ étaient actifs avant d’avoir atteint leur palier. L’arbre a été corrigé : tes <b>${p.pts}</b> points te sont rendus, gratuitement, pour les replacer.</p><button data-a="close">D’accord</button>`)});}
   if(!sv)S.pend.push({t:.4,fn:()=>classPanel(true)});
