@@ -16,8 +16,11 @@ test('sac plein : l’objet reste au sol', () => {
   aller(zid(1, 0)); S.cur.mons = []; const it = objet('armor'); S.cur.items.push({ kind: 'item', it, x: p.x, y: p.y }); avancer(.2);
   egal(p.bag.length, n); ok(S.cur.items.some(o => o.it === it), 'objet disparu');
 });
-test('marcher sur un objet le ramasse ; « Ignorer le normal » laisse les objets gris', () => {
+// v6.48 : les objets ne se ramassent plus en passant, sauf avec le réglage « ramassage automatique » (p.autoPick).
+test('marcher sur un objet le laisse au sol ; avec le ramassage automatique, il est pris ; « Ignorer le normal » laisse les objets gris', () => {
   sacVide(); aller(zid(1, 0)); S.cur.mons = [];
+  const z = { kind: 'item', it: objet('helm', 1), x: p.x, y: p.y }; S.cur.items.push(z); avancer(.2); ok(!p.bag.includes(z.it) && S.cur.items.includes(z), 'ramassé sans le réglage');
+  S.cur.items.splice(S.cur.items.indexOf(z), 1); p.autoPick = true;
   const a = objet('helm', 1); S.cur.items.push({ kind: 'item', it: a, x: p.x, y: p.y }); avancer(.2); ok(p.bag.includes(a), 'pas ramassé');
   p.skipWhite = true; const b = objet('helm', 0); S.cur.items.push({ kind: 'item', it: b, x: p.x, y: p.y }); avancer(.2); ok(!p.bag.includes(b), 'objet gris ramassé');
 });

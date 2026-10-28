@@ -1,4 +1,4 @@
-// Équilibre des 4 styles (v5.10) : dégâts et cibles des sorts, coûts, textes des talents fidèles au code.
+// Équilibre des 4 styles (réglages de la v6.58) : dégâts et cibles des sorts, coûts, textes des talents fidèles au code.
 // Espionne les coups portés par un sort : [monstre, multiplicateur] pour chaque coup.
 function coupsDe(id, cible) {
   const vrai = hitMon, coups = []; hitMon = (m, mult, ...r) => { coups.push([m, mult]); return vrai(m, mult, ...r); };
@@ -8,9 +8,9 @@ function coupsDe(id, cible) {
 // Un groupe de monstres solides autour du héros, sur des cases libres différentes, le plus proche en premier
 function rangee(n) {
   const z = S.cur, l = [], pris = new Set(), x0 = Math.floor(p.x), y0 = Math.floor(p.y);
-  for (let r = 1; r < 6 && l.length < n; r++) for (let dy = -r; dy <= r && l.length < n; dy++) for (let dx = -r; dx <= r && l.length < n; dx++) {
+  for (let r = 1; r < 7 && l.length < n; r++) for (let dy = -r; dy <= r && l.length < n; dy++) for (let dx = -r; dx <= r && l.length < n; dx++) {
     if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || isWall(z, x0 + dx, y0 + dy) || pris.has(dx + ',' + dy)) continue;
-    pris.add(dx + ',' + dy); l.push(spawnMon(z, 'rodeur', x0 + dx + .5, y0 + dy + .5, false, 60));
+    pris.add(dx + ',' + dy); const m = spawnMon(z, 'rodeur', x0 + dx + .5, y0 + dy + .5, false, 60); m.hp = m.maxHp = 1e15; l.push(m);
   }
   return l;
 }
@@ -18,10 +18,11 @@ function preparer(id, rang) { nouvellePartie(); heros(60); aller(zid(1, 0)); inv
 // Pourcentage écrit dans le texte du talent (le dernier nombre suivi de « % »)
 function pctTexte(id, l) { const t = SK[id].d(l).replace(/\s/g, ''); const m = t.match(/(\d+)%/g); return +m[m.length - 1].replace('%', ''); }
 
-test('boule de feu : 170 % au rang 1, +17 % par rang', () => {
+test('boule de feu : 150 % au rang 1, +15 % par rang', () => {
+  // v6.45 : le projectile porte déjà le coefficient des compétences (SKILL_K) et les synergies ; on retrouve la base en les retirant
   const l = preparer('fire', 1); const m = monstre('rodeur', 3, 60); castSkill('fire', m.x, m.y);
-  proche(S.proj[S.proj.length - 1].mult, 1.7 + .17 * (l - 1), 1e-9);
-  const l2 = preparer('fire', 10); castSkill('fire', p.x + 3, p.y); proche(S.proj[S.proj.length - 1].mult, 1.7 + .17 * (l2 - 1), 1e-9);
+  proche(S.proj[S.proj.length - 1].mult / (SKILL_K * synMult('fire')), 1.5 + .15 * (l - 1), 1e-9);
+  const l2 = preparer('fire', 10); castSkill('fire', p.x + 3, p.y); proche(S.proj[S.proj.length - 1].mult / (SKILL_K * synMult('fire')), 1.5 + .15 * (l2 - 1), 1e-9);
 });
 test('boule de feu : l’explosion frappe la cible à plein et les voisins à 60 %', () => {
   preparer('fire', 1); const [a, b] = rangee(2); const vrai = hitMon, coups = [];
@@ -29,52 +30,54 @@ test('boule de feu : l’explosion frappe la cible à plein et les voisins à 60
   try { explode({ from: 'p', x: a.x, y: a.y, mult: 2 }); } finally { hitMon = vrai; }
   egal(coups.find(c => c[0] === a)[1], 2); const vb = coups.find(c => c[0] === b); if (vb) proche(vb[1], 1.2, 1e-9);
 });
-test('tourbillon : 230 % au rang 1 sur tous les ennemis autour', () => {
+test('tourbillon : 150 % au rang 1 sur tous les ennemis autour', () => {
   const l = preparer('whirl', 1); const ms = [monstre('rodeur', 1, 60), monstre('rodeur', -1, 60)];
   const c = coupsDe('whirl', ms[0]); egal(ms.every(m => c.some(x => x[0] === m)), true, 'un voisin oublié');
-  for (const x of c) proche(x[1], 2.3 + .23 * (l - 1), 1e-9);
+  for (const x of c) proche(x[1], 1.5 + .15 * (l - 1), 1e-9);
 });
-test('tourbillon : +23 % par rang', () => {
-  const l = preparer('whirl', 15); const m = monstre('rodeur', 1, 60); const c = coupsDe('whirl', m); proche(c[0][1], 2.3 + .23 * (l - 1), 1e-9);
+test('tourbillon : +15 % par rang', () => {
+  const l = preparer('whirl', 15); const m = monstre('rodeur', 1, 60); const c = coupsDe('whirl', m); proche(c[0][1], 1.5 + .15 * (l - 1), 1e-9);
 });
-test('chaîne d’éclairs : 95 % au rang 1, sur 3 ennemis', () => {
+test('chaîne d’éclairs : 115 % au rang 1, sur 3 ennemis', () => {
   const l = preparer('chain', 1); const ms = rangee(8); const c = coupsDe('chain', ms[0]);
-  egal(c.length, 3 + Math.min(6, Math.floor(l / 5))); egal(new Set(c.map(x => x[0])).size, c.length, 'un ennemi frappé deux fois');
-  for (const x of c) proche(x[1], .95 + .095 * (l - 1), 1e-9);
+  egal(c.length, 3 + Math.min(12, Math.floor(l / 3))); egal(new Set(c.map(x => x[0])).size, c.length, 'un ennemi frappé deux fois');
+  for (const x of c) proche(x[1], 1.15 + .11 * (l - 1), 1e-9);
 });
-test('chaîne d’éclairs : une cible de plus tous les 5 rangs', () => {
-  for (const r of [5, 10, 15]) { const l = preparer('chain', r); const ms = rangee(12); egal(coupsDe('chain', ms[0]).length, 3 + Math.min(6, Math.floor(l / 5)), 'rang ' + r); }
+test('chaîne d’éclairs : une cible de plus tous les 3 rangs', () => {
+  for (const r of [3, 10, 20]) { const l = preparer('chain', r); const ms = rangee(16); egal(coupsDe('chain', ms[0]).length, 3 + Math.min(12, Math.floor(l / 3)), 'rang ' + r); }
 });
-test('chaîne d’éclairs : 9 ennemis au plus, même à très haut rang', () => {
-  for (const r of [30, 60, 500]) { preparer('chain', r); const ms = rangee(14); egal(coupsDe('chain', ms[0]).length, 9, 'rang ' + r); }
+// v6.13 : rendements décroissants, il faut un rang brut d’environ 87 pour atteindre le rang effectif 36 (15 ennemis)
+test('chaîne d’éclairs : 15 ennemis au plus, même à très haut rang', () => {
+  for (const r of [90, 200, 500]) { preparer('chain', r); const ms = rangee(20); egal(coupsDe('chain', ms[0]).length, 15, 'rang ' + r); }
 });
 test('chaîne d’éclairs : sur une cible seule, deux rebonds à moitié', () => {
-  const l = preparer('chain', 4); const m = monstre('rodeur', 2, 60); const c = coupsDe('chain', m); const v = .95 + .095 * (l - 1);
+  const l = preparer('chain', 4); const m = monstre('rodeur', 2, 60); const c = coupsDe('chain', m); const v = 1.15 + .11 * (l - 1);
   egal(c.length, 3); proche(c[0][1], v, 1e-9); proche(c[1][1], v / 2, 1e-9); proche(c[2][1], v / 2, 1e-9);
 });
 test('chaîne d’éclairs : pas de saut vers un ennemi trop loin', () => {
   preparer('chain', 1); const a = monstre('rodeur', 1.5, 60); const loin = monstre('rodeur', 12, 60); const c = coupsDe('chain', a);
   ok(!c.some(x => x[0] === loin), 'l’éclair a sauté à 10 cases');
 });
-test('nova de givre : coûte 10 mana, 130 % au rang 1, ralentit', () => {
-  const l = preparer('nova', 1); egal(SK.nova.cost, 10); const m = monstre('rodeur', 1.5, 60); const mp = p.mp; p.cd = 0;
+test('nova de givre : coûte 12 mana, 115 % au rang 1, ralentit', () => {
+  const l = preparer('nova', 1); egal(SK.nova.cost, 12); const m = monstre('rodeur', 1.5, 60); const mp = p.mp; p.cd = 0;
   const vrai = hitMon, coups = []; hitMon = (x, mult, ...r) => { coups.push([x, mult]); return vrai(x, mult, ...r); };
-  try { ok(castSkill('nova', m.x, m.y)); } finally { hitMon = vrai; }
-  egal(p.mp, mp - 10); proche(coups[0][1], 1.3 + .12 * (l - 1), 1e-9); ok(m.slow > 0, 'pas ralenti');
+  // v6.58 : la nova est un anneau qui s’élargit, elle touche l’ennemi quelques instants après le lancer
+  try { ok(castSkill('nova', m.x, m.y)); egal(p.mp, mp - 12); attendre(() => coups.length > 0, 1); } finally { hitMon = vrai; }
+  ok(coups.length > 0, 'l’anneau n’a touché personne'); proche(coups[0][1] / (SKILL_K * synMult('nova')), 1.15 + .11 * (l - 1), 1e-9); ok(m.slow > 0, 'pas ralenti');
 });
 test('coûts en mana des 4 sorts de style', () => {
-  egal([SK.fire.cost, SK.nova.cost, SK.chain.cost, SK.whirl.cost], [6, 10, 9, 10]);
+  egal([SK.fire.cost, SK.nova.cost, SK.chain.cost, SK.whirl.cost], [5, 12, 9, 10]);
 });
 test('textes des talents : le pourcentage affiché est celui du code', () => {
   for (const l of [1, 2, 7, 20, 101]) {
-    egal(pctTexte('fire', l), Math.round((1.7 + .17 * (l - 1)) * 100), 'feu rang ' + l);
-    egal(pctTexte('whirl', l), Math.round((2.3 + .23 * (l - 1)) * 100), 'tourbillon rang ' + l);
-    egal(pctTexte('chain', l), Math.round((.95 + .095 * (l - 1)) * 100), 'éclairs rang ' + l);
-    egal(pctTexte('nova', l), Math.round((1.3 + .12 * (l - 1)) * 100), 'givre rang ' + l);
+    egal(pctTexte('fire', l), Math.round((1.5 + .15 * (l - 1)) * 100), 'feu rang ' + l);
+    egal(pctTexte('whirl', l), Math.round((1.5 + .15 * (l - 1)) * 100), 'tourbillon rang ' + l);
+    egal(pctTexte('chain', l), Math.round((1.15 + .11 * (l - 1)) * 100), 'éclairs rang ' + l);
+    egal(pctTexte('nova', l), Math.round((1.15 + .11 * (l - 1)) * 100), 'givre rang ' + l);
   }
 });
 test('texte de la chaîne d’éclairs : le nombre d’ennemis affiché est celui du code', () => {
-  for (const l of [1, 5, 14, 30, 1000]) egal(+SK.chain.d(l).match(/Saute sur (\d+)/)[1], 3 + Math.min(6, Math.floor(l / 5)), 'rang ' + l);
+  for (const l of [1, 5, 14, 30, 1000]) egal(+SK.chain.d(l).match(/Saute sur (\d+)/)[1], 3 + Math.min(12, Math.floor(l / 3)), 'rang ' + l);
 });
 test('la chaîne d’éclairs s’ouvre au niveau 8 avec 8 points en Pyromancie', () => {
   nouvellePartie(); heros(8); ok(!unlocked('chain'), 'ouverte sans points'); rankUp('fire', 3); rankUp('mind', 3); ok(unlocked('chain'), 'fermée avec 8 points');
